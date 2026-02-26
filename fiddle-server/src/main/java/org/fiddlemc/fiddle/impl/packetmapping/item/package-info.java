@@ -1,18 +1,9 @@
 /**
- * <h1>Module: Item mapping - Implementation</h1>
+ * <h1>Item mapping - Implementation part</h1>
  *
  * <p>
- * Implements the mapping of items in packets.
- * </p>
- *
- * <p>
- * <h3>Minecraft changes</h3>
- * <ul>
- *     <li>{@link net.minecraft.server.dedicated.DedicatedServer} - To fire the pipeline compose event.</li>
- *     <li>{@link net.minecraft.world.item.ItemStack} - To call the mapping pipeline during encoding.</li>
- *     <li>{@link net.minecraft.world.item.crafting.Ingredient} - To call the mapping pipeline during encoding.</li>
- *     <li>{@link net.minecraft.world.item.Item} - To call the mapping pipeline during encoding.</li>
- * </ul>
+ * Provides implementations of {@link org.fiddlemc.fiddle.api.packetmapping.item}
+ * and {@link org.fiddlemc.fiddle.api.packetmapping.item.nms}.
  * </p>
  */
 @NullMarked

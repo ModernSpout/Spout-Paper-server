@@ -1,5 +1,5 @@
 /**
- * <h1>Module: Item mapping - API</h1>
+ * <h1>Item mapping - API part</h1>
  *
  * <p>
  * Adds APIs to map items in packets.

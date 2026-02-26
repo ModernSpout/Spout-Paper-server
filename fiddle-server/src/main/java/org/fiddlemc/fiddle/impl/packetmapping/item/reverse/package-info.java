@@ -1,5 +1,5 @@
 /**
- * <h1>Module: Item mapping - Reverse</h1>
+ * <h1>Item mapping - Reverse</h1>
  *
  * <p>
  * Allows for the original server-side item to be retrieved from the item stacks sent to the client,
@@ -12,19 +12,6 @@
  * For example, the client of creative mode players simply tells the server which item stack (including
  * all data attached to it) should be in a certain slot, so if a creative mode player moves an item in their
  * inventory, the server will replace the server-side item stack with the received client-side version.
- * </p>
- *
- * <p>
- * <h3>Minecraft changes</h3>
- * <ul>
- *     <li>{@link net.minecraft.world.item.ItemStack} - To reverse-map the item stacks in received packets.</li>
- *     <li>{@link net.minecraft.network.HashedStack} - To reverse-map the hashed stacks in received packets.</li>
- *     <li>
- *         {@link net.minecraft.network.Connection} - To store a
- *         {@link org.fiddlemc.fiddle.impl.packetmapping.item.reverse.ItemMappingReverser instance}.
- *     </li>
- *     <li>{@link net.minecraft.server.level.ServerPlayer} - To expose the hashed item stack hashing mechanism.</li>
- * </ul>
  * </p>
  */
 @NullMarked

@@ -1,8 +1,8 @@
 /**
- * <h1>Module: Abstract mapping - API part</h1>
+ * <h1>Abstract mapping</h1>
  *
  * <p>
- * Adds API for mapping data.
+ * Adds base classes for API to map data.
  * </p>
  */
 @NullMarked

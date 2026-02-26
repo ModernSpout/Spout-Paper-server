@@ -1,8 +1,8 @@
 /**
- * <h1>Module: Item mapping - Built-in - Implementation</h1>
+ * <h1>Item mapping - Built-in steps</h1>
  *
  * <p>
- * Implements built-in item mappings.
+ * Implements built-in item mapping steps.
  * </p>
  */
 @NullMarked

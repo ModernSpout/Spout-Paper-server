@@ -1,5 +1,5 @@
 /**
- * <h1>Module: Client view</h1>
+ * <h1>Client view - Implementation part</h1>
  *
  * <p>
  * Provides implementations of {@link org.fiddlemc.fiddle.api.clientview.ClientView}.

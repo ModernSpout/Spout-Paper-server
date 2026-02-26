@@ -1,5 +1,5 @@
 /**
- * <h1>Module: More data-driven - Paper registry API - NMS</h1>
+ * <h1>More data-driven - Paper registry API - API part - NMS</h1>
  *
  * <p>
  * Adds APIs to define custom blocks and items by Minecraft internals.

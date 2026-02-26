@@ -1,5 +1,5 @@
 /**
- * <h1>Module: Block mapping - API</h1>
+ * <h1>Block mapping - API</h1>
  *
  * <p>
  * Adds APIs to map blocks in packets.

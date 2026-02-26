@@ -1,5 +1,5 @@
 /**
- * <h1>Module: Block mapping - API - NMS</h1>
+ * <h1>Block mapping - API part - NMS</h1>
  *
  * <p>
  * Adds APIs to define block mappings by Minecraft internals.

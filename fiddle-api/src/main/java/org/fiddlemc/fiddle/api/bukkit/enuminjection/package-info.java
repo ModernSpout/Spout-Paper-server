@@ -1,5 +1,5 @@
 /**
- * <h1>Module: Bukkit enum injection - API</h1>
+ * <h1>Bukkit enum injection - API part</h1>
  *
  * <p>
  * Provides API for hooking into Bukkit enum injection,

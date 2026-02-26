@@ -1,5 +1,5 @@
 /**
- * <h1>Module: Server-side translations - API</h1>
+ * <h1>Server-side translations - API part</h1>
  *
  * <p>
  * Adds the ability to register server-side translations.

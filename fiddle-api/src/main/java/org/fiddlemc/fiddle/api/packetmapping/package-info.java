@@ -1,8 +1,8 @@
 /**
- * <h1>Module: Packet data mapping - API</h1>
+ * <h1>Packet data mapping - API part</h1>
  *
  * <p>
- * Adds APIs to map data in packets.
+ * Provides base API classes for mapping data in packets.
  * </p>
  */
 @NullMarked

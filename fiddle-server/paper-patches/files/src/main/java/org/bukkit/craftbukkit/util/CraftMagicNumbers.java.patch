@@ -8,12 +8,12 @@
 -    private static final Map<Item, Material> ITEM_MATERIAL = new HashMap<>();
 -    private static final Map<Material, Item> MATERIAL_ITEM = new HashMap<>();
 -    private static final Map<Material, Block> MATERIAL_BLOCK = new HashMap<>();
-+    // Fiddle start - Material injection - Make public
++    // Fiddle start - Material injection - Implementation part - Make public
 +    public static final Map<Block, Material> BLOCK_MATERIAL = new HashMap<>();
 +    public static final Map<Item, Material> ITEM_MATERIAL = new HashMap<>();
 +    public static final Map<Material, Item> MATERIAL_ITEM = new HashMap<>();
 +    public static final Map<Material, Block> MATERIAL_BLOCK = new HashMap<>();
-+    // Fiddle end - Material injection - Make public
++    // Fiddle end - Material injection - Implementation part - Make public
  
      static {
          for (Block block : BuiltInRegistries.BLOCK) {

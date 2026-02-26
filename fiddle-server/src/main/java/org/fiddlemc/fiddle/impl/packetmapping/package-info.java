@@ -1,8 +1,8 @@
 /**
- * <h1>Module: Packet data mapping - Implementation</h1>
+ * <h1>Packet data mapping - Implementation part</h1>
  *
  * <p>
- * Provides an abstract implementation for the mapping of data in packets.
+ * Provides base classes for the implementation of mapping of data in packets.
  * </p>
  */
 @NullMarked

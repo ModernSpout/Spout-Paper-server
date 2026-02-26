@@ -1,5 +1,5 @@
 /**
- * <h1>Module: Bukkit enum injection</h1>
+ * <h1>Bukkit enum injection - Implementation part</h1>
  *
  * <p>
  * Bukkit enums are based on other values.

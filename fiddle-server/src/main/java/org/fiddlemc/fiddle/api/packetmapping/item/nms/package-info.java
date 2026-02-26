@@ -1,5 +1,5 @@
 /**
- * <h1>Module: Item mapping - API - NMS</h1>
+ * <h1>Item mapping - API part - NMS</h1>
  *
  * <p>
  * Adds APIs to define item mappings by Minecraft internals.

@@ -1,15 +1,8 @@
 /**
- * <h1>Module: Server-side translations - Implementation</h1>
+ * <h1>Server-side translations - Implementation part</h1>
  *
  * <p>
- * Implements the application of server-side registered translations.
- * </p>
- *
- * <p>
- * <h3>Minecraft changes</h3>
- * <ul>
- *     <li>{@link net.minecraft.server.dedicated.DedicatedServer} - To fire the registrar compose event.</li>
- * </ul>
+ * Provides implementations of {@link org.fiddlemc.fiddle.api.packetmapping.component.translatable}.
  * </p>
  */
 @NullMarked

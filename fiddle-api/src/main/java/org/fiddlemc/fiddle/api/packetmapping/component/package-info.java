@@ -1,5 +1,5 @@
 /**
- * <h1>Module: Component mapping - API</h1>
+ * <h1>Component mapping - API part</h1>
  *
  * <p>
  * Adds APIs to map components in packets.

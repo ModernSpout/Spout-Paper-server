@@ -1,5 +1,5 @@
 /**
- * <h1>Module: More data-driven - Paper registry API - API part</h1>
+ * <h1>More data-driven - Paper registry API - API part</h1>
  *
  * <p>
  * Extends the Paper registry API to include the block and item registries.
