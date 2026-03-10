@@ -38,3 +38,72 @@
          }
  
          public int getDirectSignal(BlockGetter level, BlockPos pos, Direction direction) {
+@@ -1103,34 +_,35 @@
+ 
+     public static class Properties {
+         public static final Codec<BlockBehaviour.Properties> CODEC = MapCodec.unitCodec(() -> of());
++        // Fiddle start - More data-driven - Data pack - Transform to and from definitions - Make properties fields public
+         Function<BlockState, MapColor> mapColor = state -> MapColor.NONE;
+-        boolean hasCollision = true;
++        public boolean hasCollision = true;
+         SoundType soundType = SoundType.STONE;
+         ToIntFunction<BlockState> lightEmission = state -> 0;
+-        float explosionResistance;
+-        float destroyTime;
+-        boolean requiresCorrectToolForDrops;
+-        boolean isRandomlyTicking;
+-        float friction = 0.6F;
+-        float speedFactor = 1.0F;
+-        float jumpFactor = 1.0F;
++        public float explosionResistance;
++        public float destroyTime;
++        public boolean requiresCorrectToolForDrops;
++        public boolean isRandomlyTicking;
++        public float friction = 0.6F;
++        public float speedFactor = 1.0F;
++        public float jumpFactor = 1.0F;
+         private @Nullable ResourceKey<Block> id;
+         private DependantName<Block, Optional<ResourceKey<LootTable>>> drops = key -> Optional.of(
+             ResourceKey.create(Registries.LOOT_TABLE, key.identifier().withPrefix("blocks/"))
+         );
+         private DependantName<Block, String> descriptionId = key -> Util.makeDescriptionId("block", key.identifier());
+-        boolean canOcclude = true;
+-        boolean isAir;
+-        boolean ignitedByLava;
+-        @Deprecated
+-        boolean liquid;
+-        @Deprecated
+-        boolean forceSolidOff;
+-        boolean forceSolidOn;
++        public boolean canOcclude = true;
++        public boolean isAir;
++        public boolean ignitedByLava;
++        @Deprecated
++        public boolean liquid;
++        @Deprecated
++        public boolean forceSolidOff;
++        public boolean forceSolidOn;
+         PushReaction pushReaction = PushReaction.NORMAL;
+-        boolean spawnTerrainParticles = true;
++        public boolean spawnTerrainParticles = true;
+         NoteBlockInstrument instrument = NoteBlockInstrument.HARP;
+-        boolean replaceable;
++        public boolean replaceable;
+         BlockBehaviour.StateArgumentPredicate<EntityType<?>> isValidSpawn = (state, level, pos, random) -> state.isFaceSturdy(level, pos, Direction.UP)
+             && state.getLightEmission() < 14;
+         BlockBehaviour.StatePredicate isRedstoneConductor = (state, level, pos) -> state.isCollisionShapeFullBlock(level, pos);
+@@ -1138,11 +_,12 @@
+         BlockBehaviour.StatePredicate isViewBlocking = this.isSuffocating;
+         BlockBehaviour.StatePredicate hasPostProcess = (state, level, pos) -> false;
+         BlockBehaviour.StatePredicate emissiveRendering = (state, level, pos) -> false;
+-        boolean dynamicShape;
++        public boolean dynamicShape;
+         FeatureFlagSet requiredFeatures = FeatureFlags.VANILLA_SET;
+         BlockBehaviour.@Nullable OffsetFunction offsetFunction;
++        // Fiddle end - More data-driven - Data pack - Transform to and from definitions - Make properties fields public
+ 
+-        private Properties() {
++        public Properties() { // Fiddle - More data-driven - Data pack - Transform to and from definitions - Make properties constructor public
+         }
+ 
+         public static BlockBehaviour.Properties of() {

@@ -142,6 +142,7 @@ public class TestPluginBootstrap implements PluginBootstrap {
                 builder.toDefaultStateOf(BlockType.LIGHT_GRAY_CONCRETE_POWDER);
             });
             event.registerStateToState(ClientView.AwarenessLevel.VANILLA, PluginBlockTypes.ASH_STAIRS.get(), BlockType.ANDESITE_STAIRS);
+            event.registerStateToState(ClientView.AwarenessLevel.VANILLA, PluginBlockTypes.MAPLE_LEAVES.get(), BlockType.CHERRY_LEAVES);
 
             event.register(builder -> {
                 builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);

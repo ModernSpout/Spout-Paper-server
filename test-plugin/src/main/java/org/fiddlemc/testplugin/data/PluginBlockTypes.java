@@ -12,6 +12,7 @@ import java.util.function.Supplier;
 public final class PluginBlockTypes {
     public static Supplier<BlockType> ASH_BLOCK = blockType("example:ash_block");
     public static Supplier<BlockType> ASH_STAIRS = blockType("example:ash_stairs");
+    public static Supplier<BlockType> MAPLE_LEAVES = blockType("example:maple_leaves");
 
     private static Supplier<BlockType> blockType(String key) {
         return Suppliers.memoize(() -> Registry.BLOCK.get(Key.key(key)));

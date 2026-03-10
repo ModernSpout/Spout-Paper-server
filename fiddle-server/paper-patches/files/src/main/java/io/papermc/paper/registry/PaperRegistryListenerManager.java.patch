@@ -1,0 +1,15 @@
+--- a/src/main/java/io/papermc/paper/registry/PaperRegistryListenerManager.java
++++ b/src/main/java/io/papermc/paper/registry/PaperRegistryListenerManager.java
+@@ -157,6 +_,12 @@
+     }
+ 
+     public <M, T extends Keyed, B extends PaperRegistryBuilder<M, T>> void runFreezeListeners(final ResourceKey<? extends Registry<M>> resourceKey, final Conversions conversions) {
++        // Fiddle start - More data-driven - Data pack - Before freeze - Delay freezing
++        Registry<?> registry = BuiltInRegistries.REGISTRY.getValue(resourceKey.identifier());
++        if (registry instanceof org.fiddlemc.fiddle.impl.moredatadriven.datapack.beforefreeze.DelayedFreezeRegistry && !org.fiddlemc.fiddle.impl.moredatadriven.datapack.beforefreeze.DelayedFreezing.runFreezeListeners(resourceKey, conversions)) {
++            return;
++        }
++        // Fiddle end - More data-driven - Data pack - Before freeze - Delay freezing
+         final RegistryEntry<M, T> entry = PaperRegistries.getEntry(resourceKey);
+         if (entry == null || !entry.meta().modificationApiSupport().canAdd() || !this.composeEventType.hasHandlers(entry.apiKey())) {
+             return;

@@ -11,6 +11,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import org.fiddlemc.fiddle.impl.moredatadriven.datapack.beforefreeze.DelayedFreezeRegistry;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -20,7 +21,7 @@ import org.jspecify.annotations.Nullable;
  * A single instance of this class shall exist: {@link #INSTANCE}.
  * </p>
  */
-public final class ItemRegistry extends DefaultedMappedRegistry<Item> {
+public final class ItemRegistry extends DefaultedMappedRegistry<Item> implements DelayedFreezeRegistry {
 
     private static @Nullable ItemRegistry INSTANCE;
 

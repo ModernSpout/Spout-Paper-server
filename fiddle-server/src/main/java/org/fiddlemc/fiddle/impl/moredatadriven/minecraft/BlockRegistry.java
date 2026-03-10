@@ -14,6 +14,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import org.fiddlemc.fiddle.impl.moredatadriven.datapack.beforefreeze.DelayedFreezeRegistry;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -23,7 +24,7 @@ import org.jspecify.annotations.Nullable;
  * A single instance of this class shall exist: {@link #INSTANCE}.
  * </p>
  */
-public final class BlockRegistry extends DefaultedMappedRegistry<Block> {
+public final class BlockRegistry extends DefaultedMappedRegistry<Block> implements DelayedFreezeRegistry {
 
     private static @Nullable BlockRegistry INSTANCE;
 
