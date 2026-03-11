@@ -7,7 +7,10 @@ import org.fiddlemc.fiddle.api.resourcepack.construct.FiddleResourcePackConstruc
 import org.fiddlemc.fiddle.api.resourcepack.construct.FiddleResourcePackPath;
 import org.jspecify.annotations.Nullable;
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -61,8 +64,12 @@ public final class FiddleResourcePackConstructEventImpl implements PaperLifecycl
         ZipOutputStream zip = new ZipOutputStream(outputStream);
         zip.setLevel(Deflater.BEST_COMPRESSION);
 
-        // Add each file
-        for (Map.Entry<String, FiddleResourcePackPathImpl> pathEntry : paths.entrySet()) {
+        // Sort the files (for better compression)
+        List<Map.Entry<String, FiddleResourcePackPathImpl>> pathEntries = new ArrayList<>(paths.entrySet());
+        pathEntries.sort(Map.Entry.comparingByKey());
+
+        // Add the files
+        for (Map.Entry<String, FiddleResourcePackPathImpl> pathEntry : pathEntries) {
 
             // Skip if no file exists at the path
             FiddleResourcePackPathImpl file = pathEntry.getValue();
