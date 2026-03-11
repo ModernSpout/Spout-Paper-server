@@ -42,7 +42,7 @@
  
      public static class Properties {
          public static final Codec<BlockBehaviour.Properties> CODEC = MapCodec.unitCodec(() -> of());
-+        // Fiddle start - More data-driven - Data pack - Transform to and from definitions - Make properties fields public
++        // Fiddle start - More data-driven - Minecraft registries - Definitions - Transform to and from definitions - Make properties fields public
          Function<BlockState, MapColor> mapColor = state -> MapColor.NONE;
 -        boolean hasCollision = true;
 +        public boolean hasCollision = true;
@@ -100,10 +100,10 @@
 +        public boolean dynamicShape;
          FeatureFlagSet requiredFeatures = FeatureFlags.VANILLA_SET;
          BlockBehaviour.@Nullable OffsetFunction offsetFunction;
-+        // Fiddle end - More data-driven - Data pack - Transform to and from definitions - Make properties fields public
++        // Fiddle end - More data-driven - Minecraft registries - Definitions - Transform to and from definitions - Make properties fields public
  
 -        private Properties() {
-+        public Properties() { // Fiddle - More data-driven - Data pack - Transform to and from definitions - Make properties constructor public
++        public Properties() { // Fiddle - More data-driven - Minecraft registries - Definitions - Transform to and from definitions - Make properties constructor public
          }
  
          public static BlockBehaviour.Properties of() {

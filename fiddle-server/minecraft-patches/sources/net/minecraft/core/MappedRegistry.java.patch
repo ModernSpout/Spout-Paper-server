@@ -9,15 +9,16 @@
      private @Nullable Map<T, Holder.Reference<T>> unregisteredIntrusiveHolders;
      // Paper start - support pre-filling in registry mod API
      private final Map<Identifier, T> temporaryUnfrozenMap = new HashMap<>();
-@@ -287,6 +_,11 @@
+@@ -287,6 +_,12 @@
  
      @Override
      public Registry<T> freeze() {
-+        // Fiddle start - More data-driven - Data pack - Before freeze - Delay freezing registries
-+        if (this instanceof org.fiddlemc.fiddle.impl.moredatadriven.datapack.beforefreeze.DelayedFreezeRegistry && !org.fiddlemc.fiddle.impl.moredatadriven.datapack.beforefreeze.DelayedFreezing.freeze(this)) {
++        // Fiddle start - More data-driven - Data pack - Delayed frozen registries - Delay freezing registries
++        if (!org.fiddlemc.fiddle.impl.moredatadriven.datapack.delayedfrozenregistries.DelayedRegistryFreezing.isFreezingAllowed(this)) {
++            org.fiddlemc.fiddle.impl.moredatadriven.datapack.delayedfrozenregistries.DelayedRegistryFreezing.freezeLater(this);
 +            return this;
 +        }
-+        // Fiddle end - More data-driven - Data pack - Before freeze - Delay freezing registries
++        // Fiddle end - More data-driven - Data pack - Delayed frozen registries - Delay freezing registries
          if (this.frozen) {
              return this;
          } else {

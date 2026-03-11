@@ -5,13 +5,15 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import org.fiddlemc.fiddle.impl.branding.FiddleNamespace;
+import org.fiddlemc.fiddle.impl.moredatadriven.minecraft.definition.BlockDefinition;
+import org.fiddlemc.fiddle.impl.moredatadriven.minecraft.definition.ItemDefinition;
 
 /**
- * Analogous to {@link Registries}, but specifically for Fiddle data pack resource registries.
+ * Analogous to {@link Registries}, but specifically for Fiddle registries populated from data packs.
  */
-public final class FiddleDataPackResourceRegistries {
+public final class FiddleDataPackRegistries {
 
-    private FiddleDataPackResourceRegistries() {
+    private FiddleDataPackRegistries() {
         throw new UnsupportedOperationException();
     }
 

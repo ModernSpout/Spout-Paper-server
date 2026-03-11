@@ -1,0 +1,20 @@
+--- a/net/minecraft/core/Registry.java
++++ b/net/minecraft/core/Registry.java
+@@ -128,6 +_,17 @@
+ 
+     Registry<T> freeze();
+ 
++    // Fiddle start - More data-driven - Data pack - Delayed frozen registries - Allow marking registries as being delayed frozen
++    /**
++     * @return Whether this registry's {@link #freeze} will be delayed.
++     * Currently, this can only return true for registries that are added to the
++     * {@link net.minecraft.core.registries.BuiltInRegistries#REGISTRY}.
++     */
++    default boolean isFreezingDelayed() {
++        return false;
++    }
++    // Fiddle end - More data-driven - Data pack - Delayed frozen registries - Allow marking registries as being delayed frozen
++
+     Holder.Reference<T> createIntrusiveHolder(T value);
+ 
+     Optional<Holder.Reference<T>> get(int index);

@@ -1,17 +1,20 @@
-package org.fiddlemc.fiddle.impl.moredatadriven.datapack;
+package org.fiddlemc.fiddle.impl.moredatadriven.minecraft.definition;
 
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.RecordBuilder;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import org.fiddlemc.fiddle.impl.util.mojang.codec.CodecUtil;
 import java.util.Optional;
 
 /**
- * A definition of a block, which can be used to add a block.
+ * A definition of a {@link Block} resource, which can be serialized.
  */
-public final class BlockDefinition implements Definition {
+public final class BlockDefinition implements Definition<Block> {
 
     public static final Codec<BlockDefinition> CODEC = new Codec<>() {
 
@@ -142,6 +145,56 @@ public final class BlockDefinition implements Definition {
         this.spawnTerrainParticles = spawnTerrainParticles;
         this.replaceable = replaceable;
         this.dynamicShape = dynamicShape;
+    }
+
+    @Override
+    public Block toResource(ResourceKey<Block> id) {
+        BlockBehaviour.Properties properties = new BlockBehaviour.Properties();
+        this.hasCollision.ifPresent(hasCollision -> properties.hasCollision = hasCollision);
+        this.explosionResistance.ifPresent(explosionResistance -> properties.explosionResistance = explosionResistance);
+        this.destroyTime.ifPresent(destroyTime -> properties.destroyTime = destroyTime);
+        this.requiresCorrectToolForDrops.ifPresent(requiresCorrectToolForDrops -> properties.requiresCorrectToolForDrops = requiresCorrectToolForDrops);
+        this.isRandomlyTicking.ifPresent(isRandomlyTicking -> properties.isRandomlyTicking = isRandomlyTicking);
+        this.friction.ifPresent(friction -> properties.friction = friction);
+        this.speedFactor.ifPresent(speedFactor -> properties.speedFactor = speedFactor);
+        this.jumpFactor.ifPresent(jumpFactor -> properties.jumpFactor = jumpFactor);
+        this.canOcclude.ifPresent(canOcclude -> properties.canOcclude = canOcclude);
+        this.isAir.ifPresent(isAir -> properties.isAir = isAir);
+        this.ignitedByLava.ifPresent(ignitedByLava -> properties.ignitedByLava = ignitedByLava);
+        this.liquid.ifPresent(liquid -> properties.liquid = liquid);
+        this.forceSolidOff.ifPresent(forceSolidOff -> properties.forceSolidOff = forceSolidOff);
+        this.forceSolidOn.ifPresent(forceSolidOn -> properties.forceSolidOn = forceSolidOn);
+        this.spawnTerrainParticles.ifPresent(spawnTerrainParticles -> properties.spawnTerrainParticles = spawnTerrainParticles);
+        this.replaceable.ifPresent(replaceable -> properties.replaceable = replaceable);
+        this.dynamicShape.ifPresent(dynamicShape -> properties.dynamicShape = dynamicShape);
+        properties.setId(id);
+        return new Block(properties);
+    }
+
+    /**
+     * @return A definition for the given {@link Block}.
+     */
+    public static BlockDefinition fromResource(Block block) {
+        BlockBehaviour.Properties properties = block.properties();
+        return new BlockDefinition(
+            Optional.of(properties.hasCollision),
+            Optional.of(properties.explosionResistance),
+            Optional.of(properties.destroyTime),
+            Optional.of(properties.requiresCorrectToolForDrops),
+            Optional.of(properties.isRandomlyTicking),
+            Optional.of(properties.friction),
+            Optional.of(properties.speedFactor),
+            Optional.of(properties.jumpFactor),
+            Optional.of(properties.canOcclude),
+            Optional.of(properties.isAir),
+            Optional.of(properties.ignitedByLava),
+            Optional.of(properties.liquid),
+            Optional.of(properties.forceSolidOff),
+            Optional.of(properties.forceSolidOn),
+            Optional.of(properties.spawnTerrainParticles),
+            Optional.of(properties.replaceable),
+            Optional.of(properties.dynamicShape)
+        );
     }
 
 }

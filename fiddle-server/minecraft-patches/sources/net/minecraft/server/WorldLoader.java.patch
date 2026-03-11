@@ -1,21 +1,23 @@
 --- a/net/minecraft/server/WorldLoader.java
 +++ b/net/minecraft/server/WorldLoader.java
-@@ -37,6 +_,18 @@
+@@ -37,6 +_,20 @@
              Pair<WorldDataConfiguration, CloseableResourceManager> pair = initConfig.packConfig.createResourceManager();
              CloseableResourceManager closeableResourceManager = pair.getSecond();
              LayeredRegistryAccess<RegistryLayer> layeredRegistryAccess = RegistryLayer.createRegistryAccess();
-+            // Fiddle start - More data-driven - Data pack - Before freeze - Load registries early, then freeze delayed registries
-+            // Load the early registries
-+            RegistryAccess.Frozen earlyLoadRegistryAccess = RegistryDataLoader.load(closeableResourceManager, java.util.Collections.emptyList(), org.fiddlemc.fiddle.impl.moredatadriven.datapack.beforefreeze.LoadBeforeFreezeBuiltInRegistries.REGISTRIES);
-+            // Extract the loaded registries
-+            org.fiddlemc.fiddle.impl.moredatadriven.datapack.beforefreeze.LoadBeforeFreezeBuiltInRegistries.BLOCK_DEFINITION = earlyLoadRegistryAccess.lookupOrThrow(org.fiddlemc.fiddle.impl.moredatadriven.datapack.FiddleDataPackResourceRegistries.BLOCK_DEFINITION);
-+            org.fiddlemc.fiddle.impl.moredatadriven.datapack.beforefreeze.LoadBeforeFreezeBuiltInRegistries.ITEM_DEFINITION = earlyLoadRegistryAccess.lookupOrThrow(org.fiddlemc.fiddle.impl.moredatadriven.datapack.FiddleDataPackResourceRegistries.ITEM_DEFINITION);
-+            // Create blocks and items for their definitions
-+            org.fiddlemc.fiddle.impl.moredatadriven.datapack.BlockDefinitionRegistryToBlockRegistry.apply();
-+            org.fiddlemc.fiddle.impl.moredatadriven.datapack.ItemDefinitionRegistryToItemRegistry.apply();
-+            // Freeze the delayed registries
-+            org.fiddlemc.fiddle.impl.moredatadriven.datapack.beforefreeze.DelayedFreezing.allowFreezing();
-+            // Fiddle end - More data-driven - Data pack - Before freeze - Load registries early, then freeze delayed registries
++            RegistryAccess.Frozen beforeDelayedFreezingRegistryAccess = RegistryDataLoader.load(closeableResourceManager, java.util.Collections.emptyList(), org.fiddlemc.fiddle.impl.moredatadriven.datapack.delayedfrozenregistries.DataPackRegistriesToLoadBeforeDelayedRegistryFreeze.REGISTRIES); // Fiddle - More data-driven - Data pack - Delayed frozen registries - Load some registries before
++            // Fiddle start - More data-driven - Data pack - Create blocks and items for their definitions
++            org.fiddlemc.fiddle.impl.moredatadriven.minecraft.definition.AddResourcesForDefinitions.addDefinitionsToResourceRegistry(
++                beforeDelayedFreezingRegistryAccess.lookupOrThrow(org.fiddlemc.fiddle.impl.moredatadriven.datapack.FiddleDataPackRegistries.BLOCK_DEFINITION),
++                net.minecraft.core.registries.BuiltInRegistries.BLOCK
++            );
++            org.fiddlemc.fiddle.impl.moredatadriven.minecraft.definition.AddResourcesForDefinitions.addDefinitionsToResourceRegistry(
++                beforeDelayedFreezingRegistryAccess.lookupOrThrow(org.fiddlemc.fiddle.impl.moredatadriven.datapack.FiddleDataPackRegistries.ITEM_DEFINITION),
++                net.minecraft.core.registries.BuiltInRegistries.ITEM
++            );
++            // Fiddle end - More data-driven - Data pack - Create blocks and items for their definitions
++            // Fiddle start - More data-driven - Data pack - Delayed frozen registries - Freeze delayed registries
++            org.fiddlemc.fiddle.impl.moredatadriven.datapack.delayedfrozenregistries.DelayedRegistryFreezing.freezeDelayedRegistries();
++            // Fiddle end - More data-driven - Data pack - Delayed frozen registries - Freeze delayed registries
              List<Registry.PendingTags<?>> list = TagLoader.loadTagsForExistingRegistries(
                  closeableResourceManager, layeredRegistryAccess.getLayer(RegistryLayer.STATIC), io.papermc.paper.plugin.lifecycle.event.registrar.ReloadableRegistrarEvent.Cause.INITIAL // Paper - tag lifecycle - add cause
              );
