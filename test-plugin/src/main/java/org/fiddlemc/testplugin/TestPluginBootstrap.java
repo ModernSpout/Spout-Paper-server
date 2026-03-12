@@ -1,5 +1,6 @@
 package org.fiddlemc.testplugin;
 
+import com.google.gson.JsonParser;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
@@ -37,6 +38,7 @@ public class TestPluginBootstrap implements PluginBootstrap {
         setBasicItemMappings(context);
         setComplexItemMappings(context);
         setTranslations(context);
+        configureResourcePack(context);
         customizeEnumNameForAnItem(context);
     }
 
@@ -141,13 +143,19 @@ public class TestPluginBootstrap implements PluginBootstrap {
                 builder.fromEveryStateOf(PluginBlockTypes.ASH_BLOCK.get());
                 builder.toDefaultStateOf(BlockType.LIGHT_GRAY_CONCRETE_POWDER);
             });
-            event.registerStateToState(ClientView.AwarenessLevel.VANILLA, PluginBlockTypes.ASH_STAIRS.get(), BlockType.ANDESITE_STAIRS);
-            event.registerStateToState(ClientView.AwarenessLevel.VANILLA, PluginBlockTypes.MAPLE_LEAVES.get(), BlockType.CHERRY_LEAVES);
+            event.registerStateToState(ClientView.AwarenessLevel.getThatDoNotAlwaysUnderstandsAllServerSideBlocks(), PluginBlockTypes.ASH_STAIRS.get(), BlockType.ANDESITE_STAIRS);
+            event.registerStateToState(ClientView.AwarenessLevel.getThatDoNotAlwaysUnderstandsAllServerSideBlocks(), PluginBlockTypes.MAPLE_LEAVES.get(), BlockType.CHERRY_LEAVES);
 
             event.register(builder -> {
                 builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
                 builder.fromEveryStateOf(BlockType.BIRCH_LEAVES);
                 builder.toDefaultStateOf(BlockType.WAXED_COPPER_GRATE);
+            });
+
+            event.register(builder -> {
+                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
+                builder.fromEveryStateOf(PluginBlockTypes.ASH_BLOCK.get());
+                builder.toDefaultStateOf(BlockType.NOTE_BLOCK);
             });
 
         });
@@ -280,6 +288,20 @@ public class TestPluginBootstrap implements PluginBootstrap {
 
             event.register(BlockType.BOOKSHELF.translationKey(), "Booky Bookshelf");
 
+        });
+    }
+
+    private void configureResourcePack(@NotNull BootstrapContext context) {
+        context.getLifecycleManager().registerEventHandler(FiddleEvents.RESOURCE_PACK, event -> {
+            event.getAssetPath(ClientView.AwarenessLevel.RESOURCE_PACK, "blockstates", BlockType.BOOKSHELF.getKey(), "json").setJsonObjectMutable(JsonParser.parseString("""
+            {
+              "variants": {
+                "": {
+                  "model": "minecraft:block/purple_wool"
+                }
+              }
+            }
+            """).getAsJsonObject());
         });
     }
 

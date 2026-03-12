@@ -1,18 +1,19 @@
 --- a/net/minecraft/network/Connection.java
 +++ b/net/minecraft/network/Connection.java
-@@ -55,7 +_,15 @@
+@@ -55,7 +_,16 @@
  import org.slf4j.Marker;
  import org.slf4j.MarkerFactory;
  
 -public class Connection extends SimpleChannelInboundHandler<Packet<?>> {
 +public class Connection extends SimpleChannelInboundHandler<Packet<?>> implements org.fiddlemc.fiddle.impl.clientview.lookup.ClientViewLookup { // Fiddle - Client view - Lookup - Implement for Connection
-+    private org.fiddlemc.fiddle.api.clientview.@Nullable ClientView clientView; // Fiddle - Client view - Set - Field
++    public org.fiddlemc.fiddle.api.clientview.@Nullable ClientView clientView; // Fiddle - Client view - Set - Field
 +    // Fiddle start - Client view - Lookup - Implement for Connection - Getter
 +    @Override
 +    public org.fiddlemc.fiddle.api.clientview.@Nullable ClientView getClientView() {
 +        return this.clientView;
 +    }
 +    // Fiddle end - Client view - Lookup - Implement for Connection - Getter
++    public final org.fiddlemc.fiddle.impl.clientview.set.ClientViewSetter clientViewSetter; // Fiddle - Client view - Set - Setter
 +    public final org.fiddlemc.fiddle.impl.packetmapping.item.reverse.ItemMappingReverser itemMappingReverser; // Fiddle - Item mapping - Reverse - Store reverser in Connection
      private static final float AVERAGE_PACKETS_SMOOTHING = 0.75F;
      private static final Logger LOGGER = LogUtils.getLogger();
@@ -21,7 +22,7 @@
  
      public Connection(PacketFlow receiving) {
          this.receiving = receiving;
-+        this.clientView = new org.fiddlemc.fiddle.impl.clientview.JavaDefaultClientViewImpl(this)/* TODO determine actual view */; // Fiddle - Client view - Set - Field
++        this.clientViewSetter = new org.fiddlemc.fiddle.impl.clientview.set.ClientViewSetter(this); // Fiddle - Client view - Set - Setter
 +        this.itemMappingReverser = new org.fiddlemc.fiddle.impl.packetmapping.item.reverse.ItemMappingReverser(); // Fiddle - Item mapping - Reverse - Store reverser in Connection
      }
  

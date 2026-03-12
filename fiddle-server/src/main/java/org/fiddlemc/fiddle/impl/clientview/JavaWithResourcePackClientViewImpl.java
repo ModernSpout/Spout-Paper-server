@@ -5,17 +5,17 @@ import org.fiddlemc.fiddle.api.clientview.ClientView;
 
 /**
  * A simple implementation of {@link ClientView}
- * for {@link ClientView.AwarenessLevel#VANILLA} clients.
+ * for {@link AwarenessLevel#RESOURCE_PACK} clients.
  */
-public class JavaDefaultClientViewImpl extends ConnectionClientViewImpl {
+public class JavaWithResourcePackClientViewImpl extends ConnectionClientViewImpl {
 
-    public JavaDefaultClientViewImpl(Connection connection) {
+    public JavaWithResourcePackClientViewImpl(Connection connection) {
         super(connection);
     }
 
     @Override
     public AwarenessLevel getAwarenessLevel() {
-        return AwarenessLevel.VANILLA;
+        return AwarenessLevel.RESOURCE_PACK;
     }
 
 }

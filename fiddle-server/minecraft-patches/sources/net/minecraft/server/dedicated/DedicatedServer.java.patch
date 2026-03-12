@@ -8,7 +8,7 @@
          this.server.spark.enableEarlyIfRequested(); // Paper - spark
          // Paper start - fix converting txt to json file; convert old users earlier after PlayerList creation but before file load/save
          if (this.convertOldUsers()) {
-@@ -275,6 +_,12 @@
+@@ -275,6 +_,17 @@
          com.destroystokyo.paper.Metrics.PaperMetrics.startMetrics(); // Paper - start metrics
          com.destroystokyo.paper.VersionHistoryManager.INSTANCE.getClass(); // Paper - load version history now
  
@@ -16,7 +16,12 @@
 +        org.fiddlemc.fiddle.impl.packetmapping.component.ComponentMappingsImpl.get().fireComposeEvent(); // Fiddle - Component mapping - Implementation part - Fire compose event to register mappings
 +        org.fiddlemc.fiddle.impl.packetmapping.block.BlockMappingsImpl.get().fireComposeEvent(); // Fiddle - Block mapping - Implementation part - Fire compose event to register mappings
 +        org.fiddlemc.fiddle.impl.packetmapping.item.ItemMappingsImpl.get().fireComposeEvent(); // Fiddle - Item mapping - Implementation part - Fire compose event to register mappings
-+        org.fiddlemc.fiddle.impl.resourcepack.construct.FiddleResourcePackConstructionImpl.get().fireComposeEvent(); // Fiddle - Resource pack - Construction - Fire compose event
++        // Fiddle start - Resource pack - Construction - Fire compose event
++        org.fiddlemc.fiddle.impl.resourcepack.construct.FiddleResourcePackConstructionImpl resourcePackConstruction = org.fiddlemc.fiddle.impl.resourcepack.construct.FiddleResourcePackConstructionImpl.get();
++        if (resourcePackConstruction.isEnabled()) {
++            resourcePackConstruction.fireComposeEvent();
++        }
++        // Fiddle end - Resource pack - Construction - Fire compose event
 +
          // this.worldData.setGameType(properties.gameMode.get()); // CraftBukkit - moved to world loading
          LOGGER.info("Default game type: {}", properties.gameMode.get());

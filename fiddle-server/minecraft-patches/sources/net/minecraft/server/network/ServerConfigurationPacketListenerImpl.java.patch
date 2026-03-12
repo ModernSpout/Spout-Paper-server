@@ -1,0 +1,41 @@
+--- a/net/minecraft/server/network/ServerConfigurationPacketListenerImpl.java
++++ b/net/minecraft/server/network/ServerConfigurationPacketListenerImpl.java
+@@ -102,6 +_,18 @@
+     public void startConfiguration() {
+         new io.papermc.paper.event.connection.configuration.PlayerConnectionInitialConfigureEvent(this.paperConnection).callEvent(); // Paper
+         this.send(new ClientboundCustomPayloadPacket(new BrandPayload(this.server.getServerModName())));
++        // Fiddle start - Client view - Set - Offer resource pack
++        net.minecraft.network.protocol.common.@Nullable ClientboundResourcePackPushPacket fiddleResourcePackPacket = this.connection.clientViewSetter.getPacket();
++        if (fiddleResourcePackPacket != null) {
++            this.connection.clientViewSetter.isWaitingForResourcePackPacketResponse = true;
++            this.send(fiddleResourcePackPacket);
++        } else {
++            this.continueConfigurationAfterOfferingFiddlerResourcePack();
++        }
++    }
++
++    public void continueConfigurationAfterOfferingFiddlerResourcePack() {
++        // Fiddle end - Client view - Set - Offer resource pack
+         ServerLinks serverLinks = this.server.serverLinks();
+         if (!serverLinks.isEmpty()) {
+             // Paper start
+@@ -167,6 +_,19 @@
+         if (packet.action().isTerminal() && packet.id().equals(this.server.getServerResourcePack().map(MinecraftServer.ServerResourcePackInfo::id).orElse(null))) { // Paper - Ignore resource pack requests that are not vanilla
+             this.finishCurrentTask(ServerResourcePackConfigurationTask.TYPE);
+         }
++        // Fiddle start - Client view - Set - Offer resource pack
++        if (this.connection.clientViewSetter.isWaitingForResourcePackPacketResponse) {
++            if (packet.action() != net.minecraft.network.protocol.common.ServerboundResourcePackPacket.Action.ACCEPTED && packet.action() != net.minecraft.network.protocol.common.ServerboundResourcePackPacket.Action.DOWNLOADED) {
++                this.connection.clientViewSetter.isWaitingForResourcePackPacketResponse = false;
++                if (packet.action() == net.minecraft.network.protocol.common.ServerboundResourcePackPacket.Action.SUCCESSFULLY_LOADED) {
++                    this.connection.clientViewSetter.markAcceptedResourcePack();
++                } else {
++                    this.connection.clientViewSetter.markDeniedResourcePack();
++                }
++                this.continueConfigurationAfterOfferingFiddlerResourcePack();
++            }
++        }
++        // Fiddle end - Client view - Set - Offer resource pack
+     }
+ 
+     @Override
