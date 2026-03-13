@@ -113,12 +113,12 @@ You can join *sucraft.org* (Minecraft 1.19.2) and do `/warp Demo` to see it in a
 ## Soon
 
 The next goals of the project are:
+* Improve resource pack API
+* Unused block state claiming API
 * Support block display entities
 * Support falling block entities
-* Automatically generate a resource pack
-* Plugins can add resource pack contents
-* Automatically server the resource pack
-* Automatic block/item mapping API
+* Provide more ways to serve the resource pack
+* Send blocks and items to client mod
 
 Please feel free to join the project as a developer and contribute toward these goals!
 
