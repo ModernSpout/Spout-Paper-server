@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "quark:diorite_bricks_from_diorite_stonecutting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_diorite": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:diorite"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_diorite"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "quark:diorite_bricks_from_diorite_stonecutting"
+    ]
+  }
+}

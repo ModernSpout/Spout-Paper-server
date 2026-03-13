@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": "example:ash_block",
-  "result": {
-    "count": 1,
-    "id": "example:ash_stairs"
-  }
-}

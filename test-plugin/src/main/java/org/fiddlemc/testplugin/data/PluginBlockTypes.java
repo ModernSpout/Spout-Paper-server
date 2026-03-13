@@ -10,9 +10,10 @@ import java.util.function.Supplier;
  * Don't call {@link Supplier#get} on a field of this class before its block type has been registered.
  */
 public final class PluginBlockTypes {
-    public static Supplier<BlockType> ASH_BLOCK = blockType("example:ash_block");
-    public static Supplier<BlockType> ASH_STAIRS = blockType("example:ash_stairs");
-    public static Supplier<BlockType> MAPLE_LEAVES = blockType("example:maple_leaves");
+    public static Supplier<BlockType> BIRCH_BOOKSHELF = blockType("quark:birch_bookshelf");
+    public static Supplier<BlockType> DIORITE_BRICKS = blockType("quark:diorite_bricks");
+    public static Supplier<BlockType> DIORITE_BRICKS_SLAB = blockType("quark:diorite_bricks_slab");
+    public static Supplier<BlockType> DIORITE_BRICKS_STAIRS = blockType("quark:diorite_bricks_stairs");
 
     private static Supplier<BlockType> blockType(String key) {
         return Suppliers.memoize(() -> Registry.BLOCK.get(Key.key(key)));

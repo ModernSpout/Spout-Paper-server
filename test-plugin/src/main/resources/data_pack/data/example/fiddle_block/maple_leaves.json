@@ -1,8 +1,0 @@
-{
-  "explosion_resistance": 0.2,
-  "destroy_time": 0.2,
-  "requires_correct_tool_for_drops": true,
-  "is_randomly_ticking": true,
-  "can_occlude": false,
-  "ignited_by_lava": true
-}

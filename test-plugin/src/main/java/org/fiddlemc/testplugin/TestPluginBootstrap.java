@@ -7,23 +7,20 @@ import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.registry.TypedKey;
 import net.kyori.adventure.key.Key;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
-import org.bukkit.NamespacedKey;
+import org.bukkit.Instrument;
+import org.bukkit.Note;
 import org.bukkit.block.BlockType;
-import org.bukkit.block.PistonMoveReaction;
+import org.bukkit.block.data.type.NoteBlock;
 import org.bukkit.inventory.ItemType;
 import org.fiddlemc.fiddle.api.FiddleEvents;
 import org.fiddlemc.fiddle.api.clientview.ClientView;
+import org.fiddlemc.fiddle.api.moredatadriven.paper.registry.ItemRegistryEntry;
 import org.fiddlemc.fiddle.api.packetmapping.component.translatable.ServerSideTranslations;
 import org.fiddlemc.testplugin.data.PluginBlockTypes;
 import org.fiddlemc.testplugin.data.PluginItemTypes;
 import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.stream.Stream;
 
 @SuppressWarnings("unused")
 public class TestPluginBootstrap implements PluginBootstrap {
@@ -33,13 +30,10 @@ public class TestPluginBootstrap implements PluginBootstrap {
         loadIncludedDataPack(context);
         addCustomBlocks(context);
         addCustomItems(context);
-        setBasicBlockMappings(context);
-        setComplexBlockMappings(context);
-        setBasicItemMappings(context);
-        setComplexItemMappings(context);
+        setBlockMappings(context);
+        setItemMappings(context);
         setTranslations(context);
         configureResourcePack(context);
-        customizeEnumNameForAnItem(context);
     }
 
     /**
@@ -58,35 +52,47 @@ public class TestPluginBootstrap implements PluginBootstrap {
 
     /**
      * Adds our custom blocks.
-     *
-     * <p>
-     * We register the following blocks:
-     * <ul>
-     *     <li><code>example:ash_block</code></li>
-     *     <li><code>example:ash_stairs</code></li>
-     * </ul>
-     * We add some server-side properties to <code>example:ash_block</code> as a demo.
-     * </p>
      */
     private void addCustomBlocks(@NotNull BootstrapContext context) {
         context.getLifecycleManager().registerEventHandler(FiddleEvents.BLOCK, event -> {
 
-            event.registry().register(TypedKey.create(RegistryKey.BLOCK, Key.key("example:ash_block")), builder -> {
+            event.registry().register(TypedKey.create(RegistryKey.BLOCK, Key.key("quark:birch_bookshelf")), builder -> {
                 builder
-                    .mapColor(BlockType.LIGHT_GRAY_WOOL) // It shows up light gray on maps
-                    .strength(0.5f) // It breaks like sand
-                    .pushReaction(PistonMoveReaction.BREAK) // It breaks when pushed by a piston
-                    .requiresCorrectToolForDrops(); // It drops nothing unless broken with the right tool (a shovel, as defined in the included data pack)
+                    .mapColor(BlockType.BIRCH_LEAVES)
+                    .instrument(Instrument.BASS_GUITAR)
+                    .destroyTime(1.5f)
+                    .explosionResistance(1.5f)
+                    .sound(BlockType.OAK_PLANKS)
+                    .ignitedByLava();
             });
 
-            event.registry().register(TypedKey.create(RegistryKey.BLOCK, Key.key("example:ash_stairs")), builder -> {
+            event.registry().register(TypedKey.create(RegistryKey.BLOCK, Key.key("quark:diorite_bricks")), builder -> {
                 builder
-                    .inheritsFromStairs(PluginBlockTypes.ASH_BLOCK.get()) // It's a stair block
-                    // Add the same properties as above
-                    .mapColor(BlockType.LIGHT_GRAY_WOOL)
-                    .strength(0.5f)
-                    .pushReaction(PistonMoveReaction.BREAK)
-                    .requiresCorrectToolForDrops();
+                    .mapColor(BlockType.DIORITE)
+                    .instrument(Instrument.BASS_DRUM)
+                    .requiresCorrectToolForDrops()
+                    .destroyTime(1.5f)
+                    .explosionResistance(6.0f);
+            });
+
+            event.registry().register(TypedKey.create(RegistryKey.BLOCK, Key.key("quark:diorite_bricks_slab")), builder -> {
+                builder
+                    .inheritsFromSlab()
+                    .mapColor(BlockType.DIORITE)
+                    .instrument(Instrument.BASS_DRUM)
+                    .requiresCorrectToolForDrops()
+                    .destroyTime(1.5f)
+                    .explosionResistance(6.0f);
+            });
+
+            event.registry().register(TypedKey.create(RegistryKey.BLOCK, Key.key("quark:diorite_bricks_stairs")), builder -> {
+                builder
+                    .inheritsFromStairs(PluginBlockTypes.DIORITE_BRICKS.get()) // It's a stair block
+                    .mapColor(BlockType.DIORITE)
+                    .instrument(Instrument.BASS_DRUM)
+                    .requiresCorrectToolForDrops()
+                    .destroyTime(1.5f)
+                    .explosionResistance(6.0f);
             });
 
         });
@@ -94,170 +100,120 @@ public class TestPluginBootstrap implements PluginBootstrap {
 
     /**
      * Adds our custom items.
-     *
-     * <p>
-     * We register the following items:
-     * <ul>
-     *     <li><code>example:ash</code></li>
-     *     <li><code>example:ash_block</code></li>
-     *     <li><code>example:ash_stairs</code></li>
-     * </ul>
-     * We add some server-side properties to <code>example:ash_block</code> as a demo.
-     * </p>
      */
     private void addCustomItems(@NotNull BootstrapContext context) {
         context.getLifecycleManager().registerEventHandler(FiddleEvents.ITEM, event -> {
 
-            event.registry().register(TypedKey.create(RegistryKey.ITEM, Key.key("example:ash")), builder -> {
+            event.registry().register(TypedKey.create(RegistryKey.ITEM, Key.key("quark:clear_shard")), builder -> {
             });
-
-            event.registry().register(TypedKey.create(RegistryKey.ITEM, Key.key("example:ash_block")), builder ->
-                builder.inheritsFromBlock() // It's a block item
-                    .stacksTo(32) // It stacks to 32
-                    .fireResistant() // It is resistant to fire
-                    .craftRemainder(PluginItemTypes.ASH.get()) // It leaves ash when used in a crafting recipe
-            );
-
-            event.registry().register(TypedKey.create(RegistryKey.ITEM, Key.key("example:ash_stairs")), builder ->
-                builder.inheritsFromBlock() // It's a block item
-            );
+            event.registry().register(TypedKey.create(RegistryKey.ITEM, Key.key("quark:birch_bookshelf")), ItemRegistryEntry.Builder::inheritsFromBlock);
+            event.registry().register(TypedKey.create(RegistryKey.ITEM, Key.key("quark:diorite_bricks")), ItemRegistryEntry.Builder::inheritsFromBlock);
+            event.registry().register(TypedKey.create(RegistryKey.ITEM, Key.key("quark:diorite_bricks_slab")), ItemRegistryEntry.Builder::inheritsFromBlock);
+            event.registry().register(TypedKey.create(RegistryKey.ITEM, Key.key("quark:diorite_bricks_stairs")), ItemRegistryEntry.Builder::inheritsFromBlock);
 
         });
     }
 
     /**
-     * Configures the basic server-to-client mappings for blocks,
-     * with a simple syntax.
-     *
-     * <p>
-     * This maps our custom blocks,
-     * and also maps the vanilla {@code minecraft:birch_leaves} to {@code minecraft:copper_grate},
-     * to show that you can also map vanilla blocks.
-     * </p>
+     * Configures the server-to-client mappings for blocks.
      */
-    private void setBasicBlockMappings(@NotNull BootstrapContext context) {
+    private void setBlockMappings(@NotNull BootstrapContext context) {
         context.getLifecycleManager().registerEventHandler(FiddleEvents.BLOCK_MAPPING, event -> {
 
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
-                builder.fromEveryStateOf(PluginBlockTypes.ASH_BLOCK.get());
-                builder.toDefaultStateOf(BlockType.LIGHT_GRAY_CONCRETE_POWDER);
-            });
-            event.registerStateToState(ClientView.AwarenessLevel.getThatDoNotAlwaysUnderstandsAllServerSideBlocks(), PluginBlockTypes.ASH_STAIRS.get(), BlockType.ANDESITE_STAIRS);
-            event.registerStateToState(ClientView.AwarenessLevel.getThatDoNotAlwaysUnderstandsAllServerSideBlocks(), PluginBlockTypes.MAPLE_LEAVES.get(), BlockType.CHERRY_LEAVES);
-
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
-                builder.fromEveryStateOf(BlockType.BIRCH_LEAVES);
-                builder.toDefaultStateOf(BlockType.WAXED_COPPER_GRATE);
-            });
-
+            event.registerStateToState(
+                ClientView.AwarenessLevel.VANILLA,
+                PluginBlockTypes.BIRCH_BOOKSHELF.get(),
+                BlockType.BOOKSHELF
+            );
+            event.registerStateToState(
+                ClientView.AwarenessLevel.VANILLA,
+                PluginBlockTypes.DIORITE_BRICKS.get(),
+                BlockType.POLISHED_DIORITE
+            );
+            NoteBlock dioriteBricksNoteBlockState = BlockType.NOTE_BLOCK.createBlockData();
+            dioriteBricksNoteBlockState.setInstrument(Instrument.BELL);
+            dioriteBricksNoteBlockState.setNote(Note.natural(0, Note.Tone.G));
             event.register(builder -> {
                 builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.fromEveryStateOf(PluginBlockTypes.ASH_BLOCK.get());
-                builder.toDefaultStateOf(BlockType.NOTE_BLOCK);
+                builder.fromEveryStateOf(PluginBlockTypes.DIORITE_BRICKS.get());
+                builder.to(dioriteBricksNoteBlockState);
             });
+            event.register(builder -> {
+                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
+                builder.from(dioriteBricksNoteBlockState);
+                builder.to(BlockType.NOTE_BLOCK.createBlockData());
+            });
+            event.registerStateToState(
+                ClientView.AwarenessLevel.VANILLA,
+                PluginBlockTypes.DIORITE_BRICKS_SLAB.get(),
+                BlockType.POLISHED_DIORITE_SLAB
+            );
+            event.registerStateToState(
+                ClientView.AwarenessLevel.RESOURCE_PACK,
+                PluginBlockTypes.DIORITE_BRICKS_SLAB.get(),
+                BlockType.WAXED_CUT_COPPER_SLAB
+            );
+            event.registerStateToState(
+                ClientView.AwarenessLevel.RESOURCE_PACK,
+                BlockType.WAXED_CUT_COPPER_SLAB,
+                BlockType.CUT_COPPER_SLAB
+            );
+            event.registerStateToState(
+                ClientView.AwarenessLevel.VANILLA,
+                PluginBlockTypes.DIORITE_BRICKS_STAIRS.get(),
+                BlockType.POLISHED_DIORITE_STAIRS
+            );
+            event.registerStateToState(
+                ClientView.AwarenessLevel.RESOURCE_PACK,
+                PluginBlockTypes.DIORITE_BRICKS_STAIRS.get(),
+                BlockType.WAXED_CUT_COPPER_STAIRS
+            );
+            event.registerStateToState(
+                ClientView.AwarenessLevel.RESOURCE_PACK,
+                BlockType.WAXED_CUT_COPPER_STAIRS,
+                BlockType.CUT_COPPER_STAIRS
+            );
 
         });
     }
 
     /**
-     * Configures more customized server-to-client mappings for blocks,
-     * as a demo that this is possible when needed.
-     *
-     * <p>
-     * We make gras followed a tiled pattern with moss by making its mapping depend on the coordinates.
-     * </p>
+     * Configures the server-to-client mappings for items.
      */
-    private void setComplexBlockMappings(@NotNull BootstrapContext context) {
-        context.getLifecycleManager().registerEventHandler(FiddleEvents.BLOCK_MAPPING, event -> {
+    private void setItemMappings(@NotNull BootstrapContext context) {
+        context.getLifecycleManager().registerEventHandler(FiddleEvents.ITEM_MAPPING, event -> {
+
+            event.register(builder -> {
+                builder.from(PluginItemTypes.CLEAR_SHARD.get());
+                builder.to(ItemType.PRISMARINE_SHARD);
+            });
             event.register(builder -> {
                 builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
-                builder.from(BlockType.GRASS_BLOCK.createBlockData());
-                builder.to(handle -> {
-                    if (!handle.getContext().isStateOfPhysicalBlockInWorld()) return;
-                    int coordinatesXor = handle.getContext().getPhysicalBlockX() ^ handle.getContext().getPhysicalBlockY() ^ handle.getContext().getPhysicalBlockZ();
-                    if ((coordinatesXor & 1) == 0) return;
-                    handle.set(BlockType.MOSS_BLOCK.createBlockData());
-                }, true);
-            });
-        });
-    }
-
-    /**
-     * Configures the basic server-to-client mappings for items,
-     * with a simple syntax.
-     *
-     * <p>
-     * This maps our custom items,
-     * and also maps the vanilla {@code minecraft:iron_axe} to {@code minecraft:echo_shard},
-     * to show that you can also map vanilla items.
-     * </p>
-     */
-    private void setBasicItemMappings(@NotNull BootstrapContext context) {
-        context.getLifecycleManager().registerEventHandler(FiddleEvents.ITEM_MAPPING, event -> {
-
-            event.register(builder -> {
-                builder.from(PluginItemTypes.ASH.get());
-                builder.to(ItemType.GUNPOWDER);
+                builder.from(PluginItemTypes.BIRCH_BOOKSHELF.get());
+                builder.to(ItemType.BOOKSHELF);
             });
             event.register(builder -> {
-                builder.from(PluginItemTypes.ASH_BLOCK.get());
-                builder.to(ItemType.LIGHT_GRAY_CONCRETE_POWDER);
+                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
+                builder.from(PluginItemTypes.BIRCH_BOOKSHELF.get());
+                builder.to(ItemType.BARRIER);
             });
             event.register(builder -> {
-                builder.from(PluginItemTypes.ASH_STAIRS.get());
-                builder.to(ItemType.ANDESITE_STAIRS);
+                builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
+                builder.from(PluginItemTypes.DIORITE_BRICKS.get());
+                builder.to(ItemType.POLISHED_DIORITE);
             });
-
             event.register(builder -> {
-                builder.from(ItemType.IRON_AXE);
-                builder.to(ItemType.ECHO_SHARD);
+                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
+                builder.from(PluginItemTypes.DIORITE_BRICKS.get());
+                builder.to(ItemType.BARRIER);
             });
-
-        });
-    }
-
-    /**
-     * Configures more customized server-to-client mappings for items,
-     * as a demo that this is possible when needed.
-     *
-     * <p>
-     * We add the following mappings:
-     * <ul>
-     *     <li>We add extra lore to a vanilla item, <code>example:crafting_table</code></li>
-     *     <li>We also change some random stuff of one of our custom items, <code>example:ash_stairs</code></li>
-     * </ul>
-     * </p>
-     */
-    private void setComplexItemMappings(@NotNull BootstrapContext context) {
-        context.getLifecycleManager().registerEventHandler(FiddleEvents.ITEM_MAPPING, event -> {
-
             event.register(builder -> {
-                builder.everyAwarenessLevel();
-                builder.from(ItemType.CRAFTING_TABLE);
-                builder.to(handle -> {
-                    var newLines = Stream.of(
-                        Component.text("This is a very important block for beginners!"),
-                        Component.text("For example, it can be used to craft ").append(Component.translatable(PluginItemTypes.ASH_BLOCK.get()))
-                    ).map(line -> line.decoration(TextDecoration.ITALIC, false).color(TextColor.color(5526612))).toList();
-                    var lore = handle.getImmutable().lore();
-                    if (lore == null) {
-                        lore = new ArrayList<>();
-                    }
-                    lore.addAll(newLines);
-                    handle.getMutable().lore(lore);
-                });
+                builder.from(PluginItemTypes.DIORITE_BRICKS_SLAB.get());
+                builder.to(ItemType.POLISHED_DIORITE_SLAB);
             });
-
             event.register(builder -> {
-                builder.from(PluginItemTypes.ASH_STAIRS.get());
-                builder.to(handle -> {
-                    handle.getMutable().editMeta(meta -> {
-                        meta.itemName(meta.itemName().decorate(TextDecoration.BOLD));
-                        meta.setEnchantmentGlintOverride(true); // Give it an enchantment glint
-                    });
-                });
+                builder.from(PluginItemTypes.DIORITE_BRICKS_STAIRS.get());
+                builder.to(ItemType.POLISHED_DIORITE_STAIRS);
             });
 
         });
@@ -265,63 +221,271 @@ public class TestPluginBootstrap implements PluginBootstrap {
 
     /**
      * Configures the translations of names of blocks and items.
-     *
-     * <p>
-     * We set a generic name for our custom blocks and items,
-     * as well as a Japanese name for <code>example:ash</code> that will be visible to clients
-     * that use Japanese as their display language.
-     * </p>
-     *
-     * <p>
-     * We can also use this to change existing vanilla texts.
-     * To demonstrate this, we change the name of <code>minecraft:bookshelf</code>.
-     * </p>
      */
     private void setTranslations(@NotNull BootstrapContext context) {
         context.getLifecycleManager().registerEventHandler(FiddleEvents.SERVER_SIDE_TRANSLATION, event -> {
 
-            event.register(PluginItemTypes.ASH.get().translationKey(), "Ash");
-            event.register(PluginItemTypes.ASH_BLOCK.get().translationKey(), "Ash block");
-            event.register(PluginItemTypes.ASH_STAIRS.get().translationKey(), "Ash stairs");
+            event.register(PluginItemTypes.CLEAR_SHARD.get().translationKey(), "Glass Shard");
+            event.register(PluginItemTypes.CLEAR_SHARD.get().translationKey(), "ガラスの破片", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
+            event.register(PluginBlockTypes.BIRCH_BOOKSHELF.get().translationKey(), "Birch Bookshelf");
+            event.register(PluginBlockTypes.BIRCH_BOOKSHELF.get().translationKey(), "シラカバの本棚", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
+            event.register(PluginBlockTypes.DIORITE_BRICKS.get().translationKey(), "Diorite Bricks");
+            event.register(PluginBlockTypes.DIORITE_BRICKS.get().translationKey(), "閃緑岩レンガ", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
+            event.register(PluginBlockTypes.DIORITE_BRICKS_SLAB.get().translationKey(), "Diorite Brick Slab");
+            event.register(PluginBlockTypes.DIORITE_BRICKS_SLAB.get().translationKey(), "閃緑岩レンガのハーフブロック", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
+            event.register(PluginBlockTypes.DIORITE_BRICKS_STAIRS.get().translationKey(), "Diorite Brick Stairs");
+            event.register(PluginBlockTypes.DIORITE_BRICKS_STAIRS.get().translationKey(), "閃緑岩レンガの階段", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
 
-            event.register(PluginItemTypes.ASH.get().translationKey(), "灰", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
-
-            event.register(BlockType.BOOKSHELF.translationKey(), "Booky Bookshelf");
+            event.register(BlockType.BOOKSHELF.translationKey(), "Oak Bookshelf");
+            event.register(BlockType.BOOKSHELF.translationKey(), "オークの本棚", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
 
         });
     }
 
     private void configureResourcePack(@NotNull BootstrapContext context) {
         context.getLifecycleManager().registerEventHandler(FiddleEvents.RESOURCE_PACK_CONSTRUCT, event -> {
-            event.getAssetPath(ClientView.AwarenessLevel.RESOURCE_PACK, "blockstates", BlockType.BOOKSHELF.getKey(), "json").setJsonObjectMutable(JsonParser.parseString("""
-            {
-              "variants": {
-                "": {
-                  "model": "minecraft:block/purple_wool"
+            event.getAssetPath(ClientView.AwarenessLevel.RESOURCE_PACK, "blockstates", BlockType.NOTE_BLOCK.getKey(), "json").setJsonObjectMutable(JsonParser.parseString("""
+                {
+                  "variants": {
+                       "instrument=bell,note=1,powered=false": { "model": "quark:block/diorite_bricks" },
+                       "instrument=bell,note=1,powered=true": { "model": "quark:block/diorite_bricks" }
+                     }
                 }
-              }
-            }
-            """).getAsJsonObject());
-        });
-    }
-
-    /**
-     * Sets a custom enum name <code>ASHES_TO_DUST</code> for the <code>example:ash</code> item,
-     * purely as a demo.
-     *
-     * <p>
-     * This is just intended as a demo that this is possible.
-     * Please don't do this yourself unless you really know what you are doing!
-     * </p>
-     */
-    private void customizeEnumNameForAnItem(@NotNull BootstrapContext context) {
-        context.getLifecycleManager().registerEventHandler(FiddleEvents.MATERIAL_ENUM_NAME, event -> {
-            event.register(handle -> {
-                var key = handle.getSourceValue().getLeft();
-                if (key.equals(NamespacedKey.fromString("example:ash"))) {
-                    handle.set("ASHES_TO_DUST");
+                """).getAsJsonObject());
+            event.getAssetPath(ClientView.AwarenessLevel.RESOURCE_PACK, "blockstates", BlockType.WAXED_CUT_COPPER_SLAB.getKey(), "json").setJsonObjectMutable(JsonParser.parseString("""
+                {
+                  "variants": {
+                    "type=bottom": {
+                      "model": "minecraft:block/tuff_brick_slab"
+                    },
+                    "type=double": {
+                      "model": "minecraft:block/tuff_bricks"
+                    },
+                    "type=top": {
+                      "model": "minecraft:block/tuff_brick_slab_top"
+                    }
+                  }
                 }
-            });
+                """).getAsJsonObject());
+            event.getAssetPath(ClientView.AwarenessLevel.RESOURCE_PACK, "blockstates", BlockType.WAXED_CUT_COPPER_STAIRS.getKey(), "json").setJsonObjectMutable(JsonParser.parseString("""
+                {
+                  "variants": {
+                    "facing=east,half=bottom,shape=inner_left": {
+                      "model": "minecraft:block/tuff_brick_stairs_inner",
+                      "uvlock": true,
+                      "y": 270
+                    },
+                    "facing=east,half=bottom,shape=inner_right": {
+                      "model": "minecraft:block/tuff_brick_stairs_inner"
+                    },
+                    "facing=east,half=bottom,shape=outer_left": {
+                      "model": "minecraft:block/tuff_brick_stairs_outer",
+                      "uvlock": true,
+                      "y": 270
+                    },
+                    "facing=east,half=bottom,shape=outer_right": {
+                      "model": "minecraft:block/tuff_brick_stairs_outer"
+                    },
+                    "facing=east,half=bottom,shape=straight": {
+                      "model": "minecraft:block/tuff_brick_stairs"
+                    },
+                    "facing=east,half=top,shape=inner_left": {
+                      "model": "minecraft:block/tuff_brick_stairs_inner",
+                      "uvlock": true,
+                      "x": 180
+                    },
+                    "facing=east,half=top,shape=inner_right": {
+                      "model": "minecraft:block/tuff_brick_stairs_inner",
+                      "uvlock": true,
+                      "x": 180,
+                      "y": 90
+                    },
+                    "facing=east,half=top,shape=outer_left": {
+                      "model": "minecraft:block/tuff_brick_stairs_outer",
+                      "uvlock": true,
+                      "x": 180
+                    },
+                    "facing=east,half=top,shape=outer_right": {
+                      "model": "minecraft:block/tuff_brick_stairs_outer",
+                      "uvlock": true,
+                      "x": 180,
+                      "y": 90
+                    },
+                    "facing=east,half=top,shape=straight": {
+                      "model": "minecraft:block/tuff_brick_stairs",
+                      "uvlock": true,
+                      "x": 180
+                    },
+                    "facing=north,half=bottom,shape=inner_left": {
+                      "model": "minecraft:block/tuff_brick_stairs_inner",
+                      "uvlock": true,
+                      "y": 180
+                    },
+                    "facing=north,half=bottom,shape=inner_right": {
+                      "model": "minecraft:block/tuff_brick_stairs_inner",
+                      "uvlock": true,
+                      "y": 270
+                    },
+                    "facing=north,half=bottom,shape=outer_left": {
+                      "model": "minecraft:block/tuff_brick_stairs_outer",
+                      "uvlock": true,
+                      "y": 180
+                    },
+                    "facing=north,half=bottom,shape=outer_right": {
+                      "model": "minecraft:block/tuff_brick_stairs_outer",
+                      "uvlock": true,
+                      "y": 270
+                    },
+                    "facing=north,half=bottom,shape=straight": {
+                      "model": "minecraft:block/tuff_brick_stairs",
+                      "uvlock": true,
+                      "y": 270
+                    },
+                    "facing=north,half=top,shape=inner_left": {
+                      "model": "minecraft:block/tuff_brick_stairs_inner",
+                      "uvlock": true,
+                      "x": 180,
+                      "y": 270
+                    },
+                    "facing=north,half=top,shape=inner_right": {
+                      "model": "minecraft:block/tuff_brick_stairs_inner",
+                      "uvlock": true,
+                      "x": 180
+                    },
+                    "facing=north,half=top,shape=outer_left": {
+                      "model": "minecraft:block/tuff_brick_stairs_outer",
+                      "uvlock": true,
+                      "x": 180,
+                      "y": 270
+                    },
+                    "facing=north,half=top,shape=outer_right": {
+                      "model": "minecraft:block/tuff_brick_stairs_outer",
+                      "uvlock": true,
+                      "x": 180
+                    },
+                    "facing=north,half=top,shape=straight": {
+                      "model": "minecraft:block/tuff_brick_stairs",
+                      "uvlock": true,
+                      "x": 180,
+                      "y": 270
+                    },
+                    "facing=south,half=bottom,shape=inner_left": {
+                      "model": "minecraft:block/tuff_brick_stairs_inner"
+                    },
+                    "facing=south,half=bottom,shape=inner_right": {
+                      "model": "minecraft:block/tuff_brick_stairs_inner",
+                      "uvlock": true,
+                      "y": 90
+                    },
+                    "facing=south,half=bottom,shape=outer_left": {
+                      "model": "minecraft:block/tuff_brick_stairs_outer"
+                    },
+                    "facing=south,half=bottom,shape=outer_right": {
+                      "model": "minecraft:block/tuff_brick_stairs_outer",
+                      "uvlock": true,
+                      "y": 90
+                    },
+                    "facing=south,half=bottom,shape=straight": {
+                      "model": "minecraft:block/tuff_brick_stairs",
+                      "uvlock": true,
+                      "y": 90
+                    },
+                    "facing=south,half=top,shape=inner_left": {
+                      "model": "minecraft:block/tuff_brick_stairs_inner",
+                      "uvlock": true,
+                      "x": 180,
+                      "y": 90
+                    },
+                    "facing=south,half=top,shape=inner_right": {
+                      "model": "minecraft:block/tuff_brick_stairs_inner",
+                      "uvlock": true,
+                      "x": 180,
+                      "y": 180
+                    },
+                    "facing=south,half=top,shape=outer_left": {
+                      "model": "minecraft:block/tuff_brick_stairs_outer",
+                      "uvlock": true,
+                      "x": 180,
+                      "y": 90
+                    },
+                    "facing=south,half=top,shape=outer_right": {
+                      "model": "minecraft:block/tuff_brick_stairs_outer",
+                      "uvlock": true,
+                      "x": 180,
+                      "y": 180
+                    },
+                    "facing=south,half=top,shape=straight": {
+                      "model": "minecraft:block/tuff_brick_stairs",
+                      "uvlock": true,
+                      "x": 180,
+                      "y": 90
+                    },
+                    "facing=west,half=bottom,shape=inner_left": {
+                      "model": "minecraft:block/tuff_brick_stairs_inner",
+                      "uvlock": true,
+                      "y": 90
+                    },
+                    "facing=west,half=bottom,shape=inner_right": {
+                      "model": "minecraft:block/tuff_brick_stairs_inner",
+                      "uvlock": true,
+                      "y": 180
+                    },
+                    "facing=west,half=bottom,shape=outer_left": {
+                      "model": "minecraft:block/tuff_brick_stairs_outer",
+                      "uvlock": true,
+                      "y": 90
+                    },
+                    "facing=west,half=bottom,shape=outer_right": {
+                      "model": "minecraft:block/tuff_brick_stairs_outer",
+                      "uvlock": true,
+                      "y": 180
+                    },
+                    "facing=west,half=bottom,shape=straight": {
+                      "model": "minecraft:block/tuff_brick_stairs",
+                      "uvlock": true,
+                      "y": 180
+                    },
+                    "facing=west,half=top,shape=inner_left": {
+                      "model": "minecraft:block/tuff_brick_stairs_inner",
+                      "uvlock": true,
+                      "x": 180,
+                      "y": 180
+                    },
+                    "facing=west,half=top,shape=inner_right": {
+                      "model": "minecraft:block/tuff_brick_stairs_inner",
+                      "uvlock": true,
+                      "x": 180,
+                      "y": 270
+                    },
+                    "facing=west,half=top,shape=outer_left": {
+                      "model": "minecraft:block/tuff_brick_stairs_outer",
+                      "uvlock": true,
+                      "x": 180,
+                      "y": 180
+                    },
+                    "facing=west,half=top,shape=outer_right": {
+                      "model": "minecraft:block/tuff_brick_stairs_outer",
+                      "uvlock": true,
+                      "x": 180,
+                      "y": 270
+                    },
+                    "facing=west,half=top,shape=straight": {
+                      "model": "minecraft:block/tuff_brick_stairs",
+                      "uvlock": true,
+                      "x": 180,
+                      "y": 180
+                    }
+                  }
+                }
+                """).getAsJsonObject());
+            event.getAssetPath(ClientView.AwarenessLevel.RESOURCE_PACK, "models/block", PluginBlockTypes.DIORITE_BRICKS.get().getKey(), "json").setJsonObjectMutable(JsonParser.parseString("""
+                {
+                  "parent": "minecraft:block/cube_all",
+                  "textures": {
+                    "all": "minecraft:block/purple_wool"
+                  }
+                }
+                """).getAsJsonObject());
         });
     }
 

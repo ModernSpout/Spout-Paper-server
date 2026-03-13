@@ -52,7 +52,7 @@ public final class TestPlugin extends JavaPlugin implements Listener {
         if (event.getEntity() instanceof Player player) {
             // Plugins can use the custom blocks and items as a Material
             Material type = event.getItem().getItemStack().getType();
-            if (type.key().namespace().equals("example")) {
+            if (!type.key().namespace().equals(NamespacedKey.MINECRAFT_NAMESPACE)) {
                 player.sendMessage(Component.text("You picked up a custom item: ").append(Component.translatable(type)));
             }
         }
