@@ -19,7 +19,7 @@ public class ItemMappingHandleNMSImpl extends SimpleWithContextMappingFunctionHa
      */
     private @Nullable BukkitHandle bukkitHandle;
 
-    public ItemMappingHandleNMSImpl(final ItemStack data, final ItemMappingFunctionContext context, boolean isDataMutable) {
+    public ItemMappingHandleNMSImpl(ItemStack data, ItemMappingFunctionContext context, boolean isDataMutable) {
         super(data, context, isDataMutable);
     }
 
@@ -28,7 +28,7 @@ public class ItemMappingHandleNMSImpl extends SimpleWithContextMappingFunctionHa
         return data.copy();
     }
 
-    private static class BukkitHandle extends CrossMappedWithContextMutableMappingFunctionHandleImpl<org.bukkit.inventory.ItemStack, org.bukkit.inventory.ItemStack, ItemMappingFunctionContext, ItemStack, ItemStack, ItemMappingHandleNMSImpl> implements ItemMappingHandle {
+    public static class BukkitHandle extends CrossMappedWithContextMutableMappingFunctionHandleImpl<org.bukkit.inventory.ItemStack, org.bukkit.inventory.ItemStack, ItemMappingFunctionContext, ItemStack, ItemStack, ItemMappingHandleNMSImpl> implements ItemMappingHandle {
 
         public BukkitHandle(ItemMappingHandleNMSImpl internal) {
             super(internal);

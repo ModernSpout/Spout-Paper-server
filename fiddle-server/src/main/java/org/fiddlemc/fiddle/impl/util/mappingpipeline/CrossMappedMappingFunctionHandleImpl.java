@@ -11,7 +11,7 @@ import org.fiddlemc.fiddle.api.util.mapping.WithOriginalMappingFunctionHandle;
  */
 public abstract class CrossMappedMappingFunctionHandleImpl<T, IT, IH extends MappingFunctionHandle<IT>> implements WithOriginalMappingFunctionHandle<T> {
 
-    protected final IH internal;
+    public final IH internal;
 
     public CrossMappedMappingFunctionHandleImpl(IH internal) {
         this.internal = internal;

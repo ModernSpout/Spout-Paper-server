@@ -101,6 +101,11 @@ public interface FiddleResourcePackPath {
     void updateJsonElement(Function<@Nullable JsonElement, @Nullable JsonElement> function);
 
     /**
+     * Convenience method for {@link #setJsonElementMutable(JsonElement)}.
+     */
+    void setJsonParsedFromString(String json);
+
+    /**
      * @return Whether {@link #exists()} is true and the contents of the file represent a valid {@link JsonObject}.
      */
     boolean isJsonObject();

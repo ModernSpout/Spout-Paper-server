@@ -6,6 +6,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
+import org.bukkit.craftbukkit.inventory.CraftItemType;
+import org.bukkit.inventory.ItemType;
+import org.fiddlemc.fiddle.api.packetmapping.item.ItemMappingHandle;
+import org.fiddlemc.fiddle.api.packetmapping.item.ItemMappingUtilities;
 import org.fiddlemc.fiddle.api.packetmapping.item.nms.ItemMappingHandleNMS;
 import org.fiddlemc.fiddle.api.packetmapping.item.nms.ItemMappingUtilitiesNMS;
 import org.fiddlemc.fiddle.impl.util.java.serviceloader.NoArgsConstructorServiceProviderImpl;
@@ -13,24 +17,37 @@ import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 
 /**
- * The implementation for {@link ItemMappingUtilitiesNMS}.
+ * The implementation for {@link ItemMappingUtilities} and {@link ItemMappingUtilitiesNMS}.
  */
-public final class ItemMappingUtilitiesNMSImpl implements ItemMappingUtilitiesNMS {
+public final class ItemMappingUtilitiesImpl implements ItemMappingUtilitiesNMS {
 
-    public static final class ServiceProviderImpl extends NoArgsConstructorServiceProviderImpl<ItemMappingUtilitiesNMS, ItemMappingUtilitiesNMSImpl> implements ServiceProvider {
+    public static final class ServiceProviderImpl extends NoArgsConstructorServiceProviderImpl<ItemMappingUtilities, ItemMappingUtilitiesImpl> implements ItemMappingUtilities.ServiceProvider {
 
         public ServiceProviderImpl() {
-            super(ItemMappingUtilitiesNMSImpl.class);
+            super(ItemMappingUtilitiesImpl.class);
         }
 
     }
 
-    public static ItemMappingUtilitiesNMSImpl get() {
-        return (ItemMappingUtilitiesNMSImpl) ItemMappingUtilitiesNMS.get();
+    public static final class ServiceProviderNMSImpl extends NoArgsConstructorServiceProviderImpl<ItemMappingUtilitiesNMS, ItemMappingUtilitiesImpl> implements ItemMappingUtilitiesNMS.ServiceProvider {
+
+        public ServiceProviderNMSImpl() {
+            super(ItemMappingUtilitiesImpl.class);
+        }
+
+    }
+
+    public static ItemMappingUtilitiesImpl get() {
+        return (ItemMappingUtilitiesImpl) ItemMappingUtilitiesNMS.get();
     }
 
     @Override
-    public boolean setItemWhilePreservingRest(final ItemMappingHandleNMS handle, final Item newItem) {
+    public boolean setItemTypeWhilePreservingRest(ItemMappingHandle handle, ItemType newItemType) {
+        return this.setItemWhilePreservingRest(((ItemMappingHandleNMSImpl.BukkitHandle) handle).internal, ((CraftItemType<?>) newItemType).getHandle());
+    }
+
+    @Override
+    public boolean setItemWhilePreservingRest(ItemMappingHandleNMS handle, Item newItem) {
 
         // Don't make changes if the item is already present
         ItemStack immutable = handle.getImmutable();

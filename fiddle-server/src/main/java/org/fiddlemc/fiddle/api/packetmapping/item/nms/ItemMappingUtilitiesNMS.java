@@ -2,13 +2,14 @@ package org.fiddlemc.fiddle.api.packetmapping.item.nms;
 
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import org.fiddlemc.fiddle.api.packetmapping.item.ItemMappingUtilities;
 import org.fiddlemc.fiddle.impl.java.serviceloader.GenericServiceProvider;
 import java.util.ServiceLoader;
 
 /**
- * Some utilities for the mapping of items.
+ * An extension to {@link ItemMappingUtilities} using Minecraft internals.
  */
-public interface ItemMappingUtilitiesNMS {
+public interface ItemMappingUtilitiesNMS extends ItemMappingUtilities {
 
     /**
      * An internal interface to get the {@link ItemMappingUtilitiesNMS} instance.

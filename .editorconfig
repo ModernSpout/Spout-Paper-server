@@ -40,7 +40,10 @@ ij_java_use_fq_class_names = true
 [fiddle-server/src/minecraft/resources/data/**/*.json]
 indent_size = 2
 
-[test-plugin/src/main/resources/data_pack/data/**/*.json]
+[test-plugin/src/main/resources/*pack*/**/*.json]
+indent_size = 2
+
+[test-plugin/src/main/resources/data_pack/pack.mcmeta]
 indent_size = 2
 
 [paper-api/src/generated/java/**/*.java]

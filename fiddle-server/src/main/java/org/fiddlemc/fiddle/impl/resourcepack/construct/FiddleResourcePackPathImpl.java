@@ -190,6 +190,11 @@ public final class FiddleResourcePackPathImpl implements FiddleResourcePackPath 
         }
     }
 
+    @Override
+    public void setJsonParsedFromString(String json) {
+        this.setJsonElementMutable(JsonParser.parseString(json));
+    }
+
     private void trySetJsonObjectFromContents() {
         if (this.bytes != null || this.string != null || this.jsonElement != null) {
             if (this.isJsonElement()) {
