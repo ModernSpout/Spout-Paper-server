@@ -15,3 +15,13 @@
      public static final Registry<Potion> POTION = registerSimple(Registries.POTION, Potions::bootstrap);
      public static final Registry<ParticleType<?>> PARTICLE_TYPE = registerSimple(Registries.PARTICLE_TYPE, registry -> ParticleTypes.BLOCK);
      public static final Registry<BlockEntityType<?>> BLOCK_ENTITY_TYPE = registerSimpleWithIntrusiveHolders(
+@@ -278,7 +_,8 @@
+     public static final Registry<MapCodec<? extends DensityFunction>> DENSITY_FUNCTION_TYPE = registerSimple(
+         Registries.DENSITY_FUNCTION_TYPE, DensityFunctions::bootstrap
+     );
+-    public static final Registry<MapCodec<? extends Block>> BLOCK_TYPE = registerSimple(Registries.BLOCK_TYPE, BlockTypes::bootstrap);
++    public static final Registry<org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec<?>> FIDDLE_BLOCK_TYPE = registerSimple(Registries.FIDDLE_BLOCK_TYPE, BlockTypes::bootstrap); // Fiddle - More data-driven - Minecraft registries - Types - Adapt existing block type registry
++    public static final Registry<org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.nms.WrappedItemCodec<?>> FIDDLE_ITEM_TYPE = registerSimple(Registries.FIDDLE_ITEM_TYPE, org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.ItemTypes::bootstrap); // Fiddle - More data-driven - Minecraft registries - Types - Add item type registry
+     public static final Registry<StructureProcessorType<?>> STRUCTURE_PROCESSOR = registerSimple(
+         Registries.STRUCTURE_PROCESSOR, registry -> StructureProcessorType.BLOCK_IGNORE
+     );

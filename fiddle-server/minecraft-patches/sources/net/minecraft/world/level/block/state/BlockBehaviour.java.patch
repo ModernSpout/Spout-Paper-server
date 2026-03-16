@@ -1,5 +1,44 @@
 --- a/net/minecraft/world/level/block/state/BlockBehaviour.java
 +++ b/net/minecraft/world/level/block/state/BlockBehaviour.java
+@@ -84,7 +_,15 @@
+ import net.minecraft.world.phys.shapes.VoxelShape;
+ import org.jspecify.annotations.Nullable;
+ 
+-public abstract class BlockBehaviour implements FeatureElement {
++// Fiddle start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key
++public abstract class BlockBehaviour implements FeatureElement, org.fiddlemc.fiddle.impl.moredatadriven.datapack.CopyResourcesFromDataPackRegistryToInternalRegistry.DelayedResourceKeyAttachable<Block> {
++    @Override
++    public void attachResourceKey(ResourceKey<Block> resourceKey) {
++        this.properties.setId(resourceKey);
++        this.drops = properties.effectiveDrops();
++        this.descriptionId = properties.effectiveDescriptionId();
++    }
++    // Fiddle end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key
+     protected static final Direction[] UPDATE_SHAPE_ORDER = new Direction[]{
+         Direction.WEST, Direction.EAST, Direction.NORTH, Direction.SOUTH, Direction.DOWN, Direction.UP
+     };
+@@ -98,13 +_,19 @@
+     protected final boolean dynamicShape;
+     protected final FeatureFlagSet requiredFeatures;
+     protected final BlockBehaviour.Properties properties;
+-    protected final Optional<ResourceKey<LootTable>> drops;
+-    protected final String descriptionId;
++    // Fiddle start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key - Make dependent fields non-final
++    protected Optional<ResourceKey<LootTable>> drops;
++    protected String descriptionId;
++    // Fiddle end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key - Make dependent fields non-final
+ 
+     public BlockBehaviour(BlockBehaviour.Properties properties) {
+         this.hasCollision = properties.hasCollision;
++        // Fiddle start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key - Don't set dependent fields without a key
++        if (properties.id != null) {
+         this.drops = properties.effectiveDrops();
+         this.descriptionId = properties.effectiveDescriptionId();
++        }
++        // Fiddle end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key - Don't set dependent fields without a key
+         this.explosionResistance = properties.explosionResistance;
+         this.isRandomlyTicking = properties.isRandomlyTicking;
+         this.soundType = properties.soundType;
 @@ -350,12 +_,20 @@
      }
  
@@ -38,10 +77,12 @@
          }
  
          public int getDirectSignal(BlockGetter level, BlockPos pos, Direction direction) {
-@@ -1103,34 +_,35 @@
+@@ -1102,35 +_,36 @@
+     }
  
      public static class Properties {
-         public static final Codec<BlockBehaviour.Properties> CODEC = MapCodec.unitCodec(() -> of());
+-        public static final Codec<BlockBehaviour.Properties> CODEC = MapCodec.unitCodec(() -> of());
++        public static final Codec<BlockBehaviour.Properties> CODEC = org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockCodecs.PROPERTIES_CODEC; // Fiddle - More data-driven - Minecraft registries - Types - Adapt existing block type registry - Add missing properties codec implementation
 +        // Fiddle start - More data-driven - Minecraft registries - Definitions - Transform to and from definitions - Make properties fields public
          Function<BlockState, MapColor> mapColor = state -> MapColor.NONE;
 -        boolean hasCollision = true;

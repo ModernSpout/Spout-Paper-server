@@ -5,16 +5,16 @@
              CloseableResourceManager closeableResourceManager = pair.getSecond();
              LayeredRegistryAccess<RegistryLayer> layeredRegistryAccess = RegistryLayer.createRegistryAccess();
 +            RegistryAccess.Frozen beforeDelayedFreezingRegistryAccess = RegistryDataLoader.load(closeableResourceManager, java.util.Collections.emptyList(), org.fiddlemc.fiddle.impl.moredatadriven.datapack.delayedfrozenregistries.DataPackRegistriesToLoadBeforeDelayedRegistryFreeze.REGISTRIES); // Fiddle - More data-driven - Data pack - Delayed frozen registries - Load some registries before
-+            // Fiddle start - More data-driven - Data pack - Create blocks and items for their definitions
-+            org.fiddlemc.fiddle.impl.moredatadriven.minecraft.definition.AddResourcesForDefinitions.addDefinitionsToResourceRegistry(
-+                beforeDelayedFreezingRegistryAccess.lookupOrThrow(org.fiddlemc.fiddle.impl.moredatadriven.datapack.FiddleDataPackRegistries.BLOCK_DEFINITION),
++            // Fiddle start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries
++            org.fiddlemc.fiddle.impl.moredatadriven.datapack.CopyResourcesFromDataPackRegistryToInternalRegistry.copy(
++                beforeDelayedFreezingRegistryAccess.lookupOrThrow(org.fiddlemc.fiddle.impl.moredatadriven.datapack.FiddleDataPackRegistries.BLOCK_FROM_DATA_PACK),
 +                net.minecraft.core.registries.BuiltInRegistries.BLOCK
 +            );
-+            org.fiddlemc.fiddle.impl.moredatadriven.minecraft.definition.AddResourcesForDefinitions.addDefinitionsToResourceRegistry(
-+                beforeDelayedFreezingRegistryAccess.lookupOrThrow(org.fiddlemc.fiddle.impl.moredatadriven.datapack.FiddleDataPackRegistries.ITEM_DEFINITION),
++            org.fiddlemc.fiddle.impl.moredatadriven.datapack.CopyResourcesFromDataPackRegistryToInternalRegistry.copy(
++                beforeDelayedFreezingRegistryAccess.lookupOrThrow(org.fiddlemc.fiddle.impl.moredatadriven.datapack.FiddleDataPackRegistries.ITEM_FROM_DATA_PACK),
 +                net.minecraft.core.registries.BuiltInRegistries.ITEM
 +            );
-+            // Fiddle end - More data-driven - Data pack - Create blocks and items for their definitions
++            // Fiddle end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries
 +            // Fiddle start - More data-driven - Data pack - Delayed frozen registries - Freeze delayed registries
 +            org.fiddlemc.fiddle.impl.moredatadriven.datapack.delayedfrozenregistries.DelayedRegistryFreezing.freezeDelayedRegistries();
 +            // Fiddle end - More data-driven - Data pack - Delayed frozen registries - Freeze delayed registries

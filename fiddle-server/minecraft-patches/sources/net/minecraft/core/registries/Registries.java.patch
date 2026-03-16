@@ -1,0 +1,28 @@
+--- a/net/minecraft/core/registries/Registries.java
++++ b/net/minecraft/core/registries/Registries.java
+@@ -145,7 +_,7 @@
+     public static final ResourceKey<Registry<BlockEntityType<?>>> BLOCK_ENTITY_TYPE = createRegistryKey("block_entity_type");
+     public static final ResourceKey<Registry<BlockPredicateType<?>>> BLOCK_PREDICATE_TYPE = createRegistryKey("block_predicate_type");
+     public static final ResourceKey<Registry<BlockStateProviderType<?>>> BLOCK_STATE_PROVIDER_TYPE = createRegistryKey("worldgen/block_state_provider_type");
+-    public static final ResourceKey<Registry<MapCodec<? extends Block>>> BLOCK_TYPE = createRegistryKey("block_type");
++    public static final ResourceKey<Registry<org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec<?>>> FIDDLE_BLOCK_TYPE = createRegistryKey("fiddle:block_type"); // Fiddle - More data-driven - Minecraft registries - Types - Adapt existing block type registry
+     public static final ResourceKey<Registry<Block>> BLOCK = createRegistryKey("block");
+     public static final ResourceKey<Registry<WorldCarver<?>>> CARVER = createRegistryKey("worldgen/carver");
+     public static final ResourceKey<Registry<MapCodec<? extends ChunkGenerator>>> CHUNK_GENERATOR = createRegistryKey("worldgen/chunk_generator");
+@@ -191,6 +_,7 @@
+     public static final ResourceKey<Registry<HeightProviderType<?>>> HEIGHT_PROVIDER_TYPE = createRegistryKey("height_provider_type");
+     public static final ResourceKey<Registry<MapCodec<? extends InputControl>>> INPUT_CONTROL_TYPE = createRegistryKey("input_control_type");
+     public static final ResourceKey<Registry<IntProviderType<?>>> INT_PROVIDER_TYPE = createRegistryKey("int_provider_type");
++    public static final ResourceKey<Registry<org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.nms.WrappedItemCodec<?>>> FIDDLE_ITEM_TYPE = createRegistryKey("fiddle:item_type"); // Fiddle - More data-driven - Minecraft registries - Types - Add item type registry
+     public static final ResourceKey<Registry<Item>> ITEM = createRegistryKey("item");
+     public static final ResourceKey<Registry<MapCodec<? extends SlotSource>>> SLOT_SOURCE_TYPE = createRegistryKey("slot_source_type");
+     public static final ResourceKey<Registry<LootItemConditionType>> LOOT_CONDITION_TYPE = createRegistryKey("loot_condition_type");
+@@ -305,7 +_,7 @@
+     }
+ 
+     private static <T> ResourceKey<Registry<T>> createRegistryKey(String name) {
+-        return ResourceKey.createRegistryKey(Identifier.withDefaultNamespace(name));
++        return ResourceKey.createRegistryKey(Identifier.parse(name)); // Fiddle - More data-driven - Minecraft registries - Allow other namespace
+     }
+ 
+     public static String elementsDirPath(ResourceKey<? extends Registry<?>> registryKey) {

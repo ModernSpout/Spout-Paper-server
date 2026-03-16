@@ -13,6 +13,8 @@ import org.fiddlemc.fiddle.api.bukkit.enuminjection.BukkitEnumNamesComposeEvent;
 import org.fiddlemc.fiddle.api.bukkit.enuminjection.material.MaterialEnumNames;
 import org.fiddlemc.fiddle.api.moredatadriven.paper.registry.BlockRegistryEntry;
 import org.fiddlemc.fiddle.api.moredatadriven.paper.registry.ItemRegistryEntry;
+import org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.FiddleBlockTypeRegistryEntry;
+import org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.FiddleItemTypeRegistryEntry;
 import org.fiddlemc.fiddle.api.packetmapping.block.BlockMappings;
 import org.fiddlemc.fiddle.api.packetmapping.block.BlockMappingsComposeEvent;
 import org.fiddlemc.fiddle.api.packetmapping.component.ComponentMappings;
@@ -37,6 +39,8 @@ public final class FiddleEvents {
         throw new UnsupportedOperationException();
     }
 
+    public static final LifecycleEventType.Prioritizable<BootstrapContext, RegistryComposeEvent<?, FiddleBlockTypeRegistryEntry.Builder>> BLOCK_TYPE = (LifecycleEventType.Prioritizable) RegistryEvents.BLOCK_TYPE.compose();
+    public static final LifecycleEventType.Prioritizable<BootstrapContext, RegistryComposeEvent<?, FiddleItemTypeRegistryEntry.Builder>> ITEM_TYPE = (LifecycleEventType.Prioritizable) RegistryEvents.ITEM_TYPE.compose();
     public static final LifecycleEventType.Prioritizable<BootstrapContext, RegistryComposeEvent<BlockType, BlockRegistryEntry.Builder>> BLOCK = RegistryEvents.BLOCK.compose();
     public static final LifecycleEventType.Prioritizable<BootstrapContext, RegistryComposeEvent<ItemType, ItemRegistryEntry.Builder>> ITEM = RegistryEvents.ITEM.compose();
     public static final ComposableEventType<FiddleResourcePackConstructEvent> RESOURCE_PACK_CONSTRUCT = FiddleResourcePackConstruction.get().compose();

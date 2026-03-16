@@ -61,11 +61,11 @@ public class TestPluginBootstrap implements PluginBootstrap {
 
             event.registry().register(TypedKey.create(RegistryKey.BLOCK, Key.key("quark:birch_bookshelf")), builder -> {
                 builder
-                    .mapColor(BlockType.BIRCH_LEAVES)
+                    .mapColor(BlockType.BIRCH_PLANKS)
                     .instrument(Instrument.BASS_GUITAR)
                     .destroyTime(1.5f)
                     .explosionResistance(1.5f)
-                    .sound(BlockType.OAK_PLANKS)
+                    .sound(BlockType.BIRCH_PLANKS)
                     .ignitedByLava();
             });
 

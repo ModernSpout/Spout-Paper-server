@@ -1,0 +1,21 @@
+--- a/net/minecraft/world/level/block/BlockTypes.java
++++ b/net/minecraft/world/level/block/BlockTypes.java
+@@ -9,9 +_,16 @@
+ import net.minecraft.world.level.block.piston.PistonHeadBlock;
+ 
+ public class BlockTypes {
+-    public static final MapCodec<Block> CODEC = BuiltInRegistries.BLOCK_TYPE.byNameCodec().dispatchMap(Block::codec, Function.identity());
++    // Fiddle start - More data-driven - Minecraft registries - Types - Adapt existing block type registry
++    public static final MapCodec<Block> CODEC = BuiltInRegistries.FIDDLE_BLOCK_TYPE.byNameCodec().dispatchMap(block -> org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.WrappedBlockCodecImpl.wrap(block.codec()), org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec::getCodec);
+ 
+-    public static MapCodec<? extends Block> bootstrap(Registry<MapCodec<? extends Block>> registry) {
++    public static org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec<?> bootstrap(Registry<org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec<? extends net.minecraft.world.level.block.Block>> registry) {
++        class Registry {
++            static org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec<?> register(net.minecraft.core.Registry<org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec<? extends net.minecraft.world.level.block.Block>> registry, String name, MapCodec<? extends Block> value) {
++                return net.minecraft.core.Registry.register(registry, name, org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.WrappedBlockCodecImpl.wrap(value));
++            }
++        }
++        // Fiddle end - More data-driven - Minecraft registries - Types - Adapt existing block type registry
+         Registry.register(registry, "block", Block.CODEC);
+         Registry.register(registry, "air", AirBlock.CODEC);
+         Registry.register(registry, "amethyst", AmethystBlock.CODEC);

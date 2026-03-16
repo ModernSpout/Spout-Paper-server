@@ -40,17 +40,12 @@ public abstract class ItemRegistryEntryImpl implements ItemRegistryEntry, Settab
     protected @Nullable Identifier key;
 
     public ItemRegistryEntryImpl(
-        final Conversions conversions,
-        final @Nullable Item internal
+        Conversions conversions,
+        @Nullable Item internal
     ) {
-        if (internal == null) {
-            return;
+        if (internal != null) {
+            this.key = internal.keyInItemRegistry;
         }
-    }
-
-    @Override
-    public NamespacedKey getKey() {
-        return new NamespacedKey(this.key.getNamespace(), this.key.getPath());
     }
 
     @Override
@@ -63,7 +58,7 @@ public abstract class ItemRegistryEntryImpl implements ItemRegistryEntry, Settab
         private @Nullable Function<Item.Properties, Item> nmsFactory;
         private Item.@Nullable Properties nmsProperties;
 
-        public BuilderImpl(final Conversions conversions, final @Nullable Item internal) {
+        public BuilderImpl(Conversions conversions, @Nullable Item internal) {
             super(conversions, internal);
         }
 

@@ -1,0 +1,15 @@
+--- a/net/minecraft/world/item/BlockItem.java
++++ b/net/minecraft/world/item/BlockItem.java
+@@ -33,6 +_,12 @@
+     @Deprecated
+     private final Block block;
+ 
++    // Fiddle start - More data-driven - Minecraft registries - Types - Add codec for items
++    public com.mojang.serialization.MapCodec<? extends net.minecraft.world.item.BlockItem> codec() {
++        return org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.ItemCodecs.BLOCK_ITEM_CODEC;
++    }
++    // Fiddle end - More data-driven - Minecraft registries - Types - Add codec for items
++
+     public BlockItem(Block block, Item.Properties properties) {
+         super(properties);
+         this.block = block;

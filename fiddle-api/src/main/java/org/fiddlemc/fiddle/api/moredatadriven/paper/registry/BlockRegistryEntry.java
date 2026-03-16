@@ -18,10 +18,11 @@ import java.util.function.ToIntFunction;
 public interface BlockRegistryEntry {
 
     /**
-     * A mutable builder for the {@link BlockRegistryEntry} plugins may change in applicable registry events.
+     * A mutable builder for the {@link BlockRegistryEntry},
+     * that plugins may change in applicable registry events.
      *
      * <p>
-     * Currently, this must be cast to {@code NMSBlockRegistryEntryBuilder} to be used.
+     * Additional functionality is available by casting this instance to {@code BlockRegistryEntryBuilderNMS}.
      * </p>
      */
     @ApiStatus.Experimental

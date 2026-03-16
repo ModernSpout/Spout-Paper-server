@@ -1,6 +1,22 @@
 --- a/net/minecraft/world/item/Item.java
 +++ b/net/minecraft/world/item/Item.java
-@@ -101,7 +_,24 @@
+@@ -95,13 +_,39 @@
+ import org.jspecify.annotations.Nullable;
+ import org.slf4j.Logger;
+ 
+-public class Item implements FeatureElement, ItemLike {
++// Fiddle start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key
++public class Item implements FeatureElement, ItemLike, org.fiddlemc.fiddle.impl.moredatadriven.datapack.CopyResourcesFromDataPackRegistryToInternalRegistry.DelayedResourceKeyAttachable<Item> {
++    @Override
++    public void attachResourceKey(ResourceKey<Item> resourceKey) {
++        Item.Properties properties = new Item.Properties();
++        properties.setId(resourceKey);
++        this.descriptionId = properties.effectiveDescriptionId();
++        this.components = properties.buildAndValidateComponents(Component.translatable(this.descriptionId), properties.effectiveModel());
++    }
++    // Fiddle end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key
+     public static final Codec<Holder<Item>> CODEC = BuiltInRegistries.ITEM
+         .holderByNameCodec()
          .validate(
              holder -> holder.is(Items.AIR.builtInRegistryHolder()) ? DataResult.error(() -> "Item must not be minecraft:air") : DataResult.success(holder)
          );
@@ -26,7 +42,24 @@
      private static final Logger LOGGER = LogUtils.getLogger();
      public static final Map<Block, Item> BY_BLOCK = Maps.newHashMap();
      public static final Identifier BASE_ATTACK_DAMAGE_ID = Identifier.withDefaultNamespace("base_attack_damage");
-@@ -120,6 +_,71 @@
+@@ -111,15 +_,86 @@
+     public static final int MAX_BAR_WIDTH = 13;
+     protected static final int APPROXIMATELY_INFINITE_USE_DURATION = 72000;
+     private final Holder.Reference<Item> builtInRegistryHolder = BuiltInRegistries.ITEM.createIntrusiveHolder(this);
+-    private final DataComponentMap components;
++    private DataComponentMap components; // Fiddle - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key - Make dependent fields non-final
+     private final @Nullable Item craftingRemainingItem;
+-    protected final String descriptionId;
++    protected String descriptionId; // Fiddle - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key - Make dependent fields non-final
+     private final FeatureFlagSet requiredFeatures;
+ 
++    // Fiddle start - More data-driven - Minecraft registries - Types - Add codec for items
++    public com.mojang.serialization.MapCodec<? extends net.minecraft.world.item.Item> codec() {
++        return org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.ItemCodecs.ITEM_CODEC;
++    }
++    // Fiddle end - More data-driven - Minecraft registries - Types - Add codec for items
++
+     public static int getId(Item item) {
          return item == null ? 0 : BuiltInRegistries.ITEM.getId(item);
      }
  
@@ -98,6 +131,19 @@
      public static Item byId(int id) {
          return BuiltInRegistries.ITEM.byId(id);
      }
+@@ -130,8 +_,12 @@
+     }
+ 
+     public Item(Item.Properties properties) {
++        // Fiddle start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key - Don't set dependent fields without a key
++        if (properties.id != null) {
+         this.descriptionId = properties.effectiveDescriptionId();
+         this.components = properties.buildAndValidateComponents(Component.translatable(this.descriptionId), properties.effectiveModel());
++        }
++        // Fiddle end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key - Don't set dependent fields without a key
+         this.craftingRemainingItem = properties.craftingRemainingItem;
+         this.requiredFeatures = properties.requiredFeatures;
+         if (SharedConstants.IS_RUNNING_IN_IDE) {
 @@ -367,11 +_,13 @@
      public static class Properties {
          private static final DependantName<Item, String> BLOCK_DESCRIPTION_ID = key -> Util.makeDescriptionId("block", key.identifier());

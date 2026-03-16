@@ -1,13 +1,19 @@
 --- a/src/main/java/io/papermc/paper/registry/PaperRegistries.java
 +++ b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
-@@ -110,8 +_,8 @@
+@@ -110,8 +_,14 @@
              start(Registries.GAME_EVENT, RegistryKey.GAME_EVENT).craft(GameEvent.class, CraftGameEvent::new).writable(PaperGameEventRegistryEntry.PaperBuilder::new),
              start(Registries.STRUCTURE_TYPE, RegistryKey.STRUCTURE_TYPE).craft(StructureType.class, CraftStructureType::new).build(),
              start(Registries.MOB_EFFECT, RegistryKey.MOB_EFFECT).craft(PotionEffectType.class, CraftPotionEffectType::new).build(),
 -            start(Registries.BLOCK, RegistryKey.BLOCK).craft(BlockType.class, CraftBlockType::new).build(),
 -            start(Registries.ITEM, RegistryKey.ITEM).craft(ItemType.class, CraftItemType::new).build(),
-+            start(Registries.BLOCK, RegistryKey.BLOCK).craft(BlockType.class, CraftBlockType::new).writable(org.fiddlemc.fiddle.impl.moredatadriven.paper.registry.BlockRegistryEntryImpl.BuilderImpl::new).delayed(), // Fiddle - More data-driven - Paper registry API - Implementation part - Make writable and delayed
-+            start(Registries.ITEM, RegistryKey.ITEM).craft(ItemType.class, CraftItemType::new).writable(org.fiddlemc.fiddle.impl.moredatadriven.paper.registry.ItemRegistryEntryImpl.BuilderImpl::new).delayed(), // Fiddle - More data-driven - Paper registry API - Implementation part - Make writable and delayed
++            // Fiddle start - More data-driven - Paper registry API - Types - Implementation part - Create Paper registries
++            start(Registries.FIDDLE_BLOCK_TYPE, RegistryKey.FIDDLE_BLOCK_TYPE).craft(org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec.class, org.fiddlemc.fiddle.impl.moredatadriven.paper.registry.type.FiddleBlockTypeImpl::of).writable(org.fiddlemc.fiddle.impl.moredatadriven.paper.registry.type.FiddleBlockTypeRegistryEntryImpl.BuilderImpl::new).delayed(),
++            start(Registries.FIDDLE_ITEM_TYPE, RegistryKey.FIDDLE_ITEM_TYPE).craft(org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.nms.WrappedItemCodec.class, org.fiddlemc.fiddle.impl.moredatadriven.paper.registry.type.FiddleItemTypeImpl::of).writable(org.fiddlemc.fiddle.impl.moredatadriven.paper.registry.type.FiddleItemTypeRegistryEntryImpl.BuilderImpl::new).delayed(),
++            // Fiddle end - More data-driven - Paper registry API - Types - Implementation part - Create Paper registries
++            // Fiddle start - More data-driven - Paper registry API - Implementation part - Make writable and delayed
++            start(Registries.BLOCK, RegistryKey.BLOCK).craft(BlockType.class, CraftBlockType::new).writable(org.fiddlemc.fiddle.impl.moredatadriven.paper.registry.BlockRegistryEntryImpl.BuilderImpl::new).delayed(),
++            start(Registries.ITEM, RegistryKey.ITEM).craft(ItemType.class, CraftItemType::new).writable(org.fiddlemc.fiddle.impl.moredatadriven.paper.registry.ItemRegistryEntryImpl.BuilderImpl::new).delayed(),
++            // Fiddle end - More data-driven - Paper registry API - Implementation part - Make writable and delayed
              start(Registries.VILLAGER_PROFESSION, RegistryKey.VILLAGER_PROFESSION).craft(Villager.Profession.class, CraftVillager.CraftProfession::new).build(),
              start(Registries.VILLAGER_TYPE, RegistryKey.VILLAGER_TYPE).craft(Villager.Type.class, CraftVillager.CraftType::new).build(),
              start(Registries.MAP_DECORATION_TYPE, RegistryKey.MAP_DECORATION_TYPE).craft(MapCursor.Type.class, CraftMapCursor.CraftType::new).build(),

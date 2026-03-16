@@ -53,17 +53,12 @@ public abstract class BlockRegistryEntryImpl implements BlockRegistryEntry, Sett
     protected @Nullable Identifier key;
 
     public BlockRegistryEntryImpl(
-        final Conversions conversions,
-        final @Nullable Block internal
+        Conversions conversions,
+        @Nullable Block internal
     ) {
-        if (internal == null) {
-            return;
+        if (internal != null) {
+            this.key = internal.keyInBlockRegistry;
         }
-    }
-
-    @Override
-    public NamespacedKey getKey() {
-        return new NamespacedKey(this.key.getNamespace(), this.key.getPath());
     }
 
     @Override
@@ -76,7 +71,7 @@ public abstract class BlockRegistryEntryImpl implements BlockRegistryEntry, Sett
         private @Nullable Function<Block.Properties, Block> nmsFactory;
         private BlockBehaviour.@Nullable Properties nmsProperties;
 
-        public BuilderImpl(final Conversions conversions, final @Nullable Block internal) {
+        public BuilderImpl(Conversions conversions, @Nullable Block internal) {
             super(conversions, internal);
         }
 

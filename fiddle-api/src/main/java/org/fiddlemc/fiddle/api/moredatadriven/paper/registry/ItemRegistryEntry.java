@@ -19,10 +19,11 @@ import org.jetbrains.annotations.ApiStatus;
 public interface ItemRegistryEntry {
 
     /**
-     * A mutable builder for the {@link ItemRegistryEntry} plugins may change in applicable registry events.
+     * A mutable builder for the {@link ItemRegistryEntry},
+     * that plugins may change in applicable registry events.
      *
      * <p>
-     * Currently, this must be cast to {@code ItemRegistryEntryBuilderNMS} to be used.
+     * Additional functionality is available by casting this instance to {@code ItemRegistryEntryBuilderNMS}.
      * </p>
      */
     @ApiStatus.Experimental

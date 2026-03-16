@@ -1,0 +1,11 @@
+--- a/src/main/java/io/papermc/paper/registry/RegistryKeyImpl.java
++++ b/src/main/java/io/papermc/paper/registry/RegistryKeyImpl.java
+@@ -31,7 +_,7 @@
+ 
+     // creates the key without adding to the internal set of keys
+     static <T> RegistryKey<T> createInternal(@Subst("some_key") final String key) {
+-        return new RegistryKeyImpl<>(Key.key(Key.MINECRAFT_NAMESPACE, key));
++        return new RegistryKeyImpl<>(Key.key(key)); // Fiddle - More data-driven - Paper registry API - API part - Allow other namespaces
+     }
+ 
+ }
