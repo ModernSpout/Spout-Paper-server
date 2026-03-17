@@ -1,5 +1,54 @@
 --- a/net/minecraft/world/level/block/Blocks.java
 +++ b/net/minecraft/world/level/block/Blocks.java
+@@ -1404,7 +_,7 @@
+         "wheat",
+         CropBlock::new,
+         BlockBehaviour.Properties.of()
+-            .mapColor(blockState1 -> blockState1.getValue(CropBlock.AGE) >= 6 ? MapColor.COLOR_YELLOW : MapColor.PLANT)
++            .mapColor(java.util.List.of(CropBlock.AGE), blockState1 -> blockState1.getValue(CropBlock.AGE) >= 6 ? MapColor.COLOR_YELLOW : MapColor.PLANT) // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
+             .noCollision()
+             .randomTicks()
+             .instabreak()
+@@ -7128,8 +_,10 @@
+         return state -> state.getValue(BlockStateProperties.LIT) ? lightValue : 0;
+     }
+ 
+-    private static Function<BlockState, MapColor> waterloggedMapColor(MapColor unwaterloggedMapColor) {
+-        return state -> state.getValue(BlockStateProperties.WATERLOGGED) ? MapColor.WATER : unwaterloggedMapColor;
++    // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
++    private static org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.MapColorFunction waterloggedMapColor(MapColor unwaterloggedMapColor) {
++        return new org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.MapColorFunction.ByProperties(java.util.List.of(BlockStateProperties.WATERLOGGED), state -> state.getValue(BlockStateProperties.WATERLOGGED) ? MapColor.WATER : unwaterloggedMapColor);
++        // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
+     }
+ 
+     private static Boolean never(BlockState state, BlockGetter level, BlockPos pos, EntityType<?> entity) {
+@@ -7149,7 +_,7 @@
+             name,
+             properties -> new BedBlock(color, properties),
+             BlockBehaviour.Properties.of()
+-                .mapColor(blockState -> blockState.getValue(BedBlock.PART) == BedPart.FOOT ? color.getMapColor() : MapColor.WOOL)
++                .mapColor(java.util.List.of(BedBlock.PART), blockState -> blockState.getValue(BedBlock.PART) == BedPart.FOOT ? color.getMapColor() : MapColor.WOOL) // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
+                 .sound(SoundType.WOOD)
+                 .strength(0.2F)
+                 .noOcclusion()
+@@ -7160,7 +_,7 @@
+ 
+     private static BlockBehaviour.Properties logProperties(MapColor sideColor, MapColor topColor, SoundType sound) {
+         return BlockBehaviour.Properties.of()
+-            .mapColor(state -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? sideColor : topColor)
++            .mapColor(java.util.List.of(RotatedPillarBlock.AXIS), state -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? sideColor : topColor) // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
+             .instrument(NoteBlockInstrument.BASS)
+             .strength(2.0F)
+             .sound(sound)
+@@ -7168,7 +_,7 @@
+     }
+ 
+     private static BlockBehaviour.Properties netherStemProperties(MapColor color) {
+-        return BlockBehaviour.Properties.of().mapColor(blockState -> color).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.STEM);
++        return BlockBehaviour.Properties.of().mapColor(color).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.STEM); // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
+     }
+ 
+     private static boolean always(BlockState state, BlockGetter level, BlockPos pos) {
 @@ -7271,6 +_,13 @@
  
      private static Block register(ResourceKey<Block> resourceKey, Function<BlockBehaviour.Properties, Block> factory, BlockBehaviour.Properties properties) {

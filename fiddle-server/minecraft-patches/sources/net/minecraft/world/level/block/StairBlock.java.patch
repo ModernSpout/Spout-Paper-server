@@ -27,7 +27,7 @@
 +    private @org.jspecify.annotations.Nullable BlockState baseStateCached;
 +    protected final BlockState baseState() {
 +        if (this.baseStateCached == null) {
-+            this.baseStateCached = org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateStringConversion.fromString(this.baseStateString);
++            this.baseStateCached = org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateStringConversion.blockStateFromString(this.baseStateString);
 +        }
 +        return this.baseStateCached;
 +    };
@@ -40,7 +40,7 @@
  
      protected StairBlock(BlockState baseState, BlockBehaviour.Properties properties) {
 +        // Fiddle start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references
-+        this(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateStringConversion.toString(baseState), properties);
++        this(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateStringConversion.blockStateToString(baseState), properties);
 +    }
 +
 +    protected StairBlock(String baseStateString, BlockBehaviour.Properties properties) {

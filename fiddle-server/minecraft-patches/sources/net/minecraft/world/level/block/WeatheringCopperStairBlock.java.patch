@@ -14,7 +14,7 @@
  
      public WeatheringCopperStairBlock(WeatheringCopper.WeatherState weatherState, BlockState baseState, BlockBehaviour.Properties properties) {
 +        // Fiddle start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references - Replace stairs explosion resistance implementation
-+        this(weatherState, org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateStringConversion.toString(baseState), properties);
++        this(weatherState, org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateStringConversion.blockStateToString(baseState), properties);
 +    }
 +
 +    public WeatheringCopperStairBlock(WeatheringCopper.WeatherState weatherState, String baseState, BlockBehaviour.Properties properties) {
