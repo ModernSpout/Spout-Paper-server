@@ -17,7 +17,9 @@ public final class BlockCodecs {
         @Override
         public <T> DataResult<T> encode(BlockBehaviour.Properties input, DynamicOps<T> ops, T prefix) {RecordBuilder<T> builder = ops.mapBuilder();
             builder.add("has_collision", ops.createBoolean(input.hasCollision));
-            builder.add("explosion_resistance", ops.createFloat(input.explosionResistance));
+            if (input.wasExplosionResistanceSet) {
+                builder.add("explosion_resistance", ops.createFloat(input.explosionResistance));
+            }
             builder.add("destroy_time", ops.createFloat(input.destroyTime));
             builder.add("requires_correct_tool_for_drops", ops.createBoolean(input.requiresCorrectToolForDrops));
             builder.add("is_randomly_ticking", ops.createBoolean(input.isRandomlyTicking));
@@ -55,6 +57,7 @@ public final class BlockCodecs {
                         return explosionResistance.map($ -> null);
                     }
                     properties.explosionResistance = explosionResistance.getOrThrow().floatValue();
+                    properties.wasExplosionResistanceSet = true;
                 }
                 T destroyTimeInput = mapLike.get("destroy_time");
                 if (destroyTimeInput != null) {

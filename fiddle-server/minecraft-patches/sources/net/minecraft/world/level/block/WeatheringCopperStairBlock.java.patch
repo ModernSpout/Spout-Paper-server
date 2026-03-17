@@ -1,0 +1,24 @@
+--- a/net/minecraft/world/level/block/WeatheringCopperStairBlock.java
++++ b/net/minecraft/world/level/block/WeatheringCopperStairBlock.java
+@@ -12,7 +_,7 @@
+     public static final MapCodec<WeatheringCopperStairBlock> CODEC = RecordCodecBuilder.mapCodec(
+         instance -> instance.group(
+                 WeatheringCopper.WeatherState.CODEC.fieldOf("weathering_state").forGetter(ChangeOverTimeBlock::getAge),
+-                BlockState.CODEC.fieldOf("base_state").forGetter(weatheringCopperStairBlock -> weatheringCopperStairBlock.baseState),
++                com.mojang.serialization.Codec.STRING.fieldOf("base_state").forGetter(weatheringCopperStairBlock -> weatheringCopperStairBlock.baseStateString), // Fiddle - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references
+                 propertiesCodec()
+             )
+             .apply(instance, WeatheringCopperStairBlock::new)
+@@ -25,6 +_,12 @@
+     }
+ 
+     public WeatheringCopperStairBlock(WeatheringCopper.WeatherState weatherState, BlockState baseState, BlockBehaviour.Properties properties) {
++        // Fiddle start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references - Replace stairs explosion resistance implementation
++        this(weatherState, org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateStringConversion.toString(baseState), properties);
++    }
++
++    public WeatheringCopperStairBlock(WeatheringCopper.WeatherState weatherState, String baseState, BlockBehaviour.Properties properties) {
++        // Fiddle end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references - Replace stairs explosion resistance implementation
+         super(baseState, properties);
+         this.weatherState = weatherState;
+     }

@@ -8,7 +8,7 @@
          this.server.spark.enableEarlyIfRequested(); // Paper - spark
          // Paper start - fix converting txt to json file; convert old users earlier after PlayerList creation but before file load/save
          if (this.convertOldUsers()) {
-@@ -275,6 +_,26 @@
+@@ -275,6 +_,33 @@
          com.destroystokyo.paper.Metrics.PaperMetrics.startMetrics(); // Paper - start metrics
          com.destroystokyo.paper.VersionHistoryManager.INSTANCE.getClass(); // Paper - load version history now
  
@@ -23,6 +23,12 @@
 +        }
 +        // Fiddle end - Resource pack - Construction - Fire compose event
 +        // TODO Fiddle remove temp debug below
++        org.fiddlemc.fiddle.impl.clientview.lookup.packethandling.ClientViewLookupThreadLocal.THREAD_LOCAL.set(new java.lang.ref.WeakReference<>(new org.fiddlemc.fiddle.impl.clientview.lookup.ClientViewLookup() {
++            @Override
++            public org.fiddlemc.fiddle.api.clientview.ClientView getClientView() {
++                return new org.fiddlemc.fiddle.impl.clientview.JavaWithClientModClientViewImpl(null);
++            }
++        }));
 +        org.fiddlemc.fiddle.impl.moredatadriven.minecraft.BlockRegistry.get().stream().forEach(block -> {
 +            if (block.isVanilla()) return;
 +            System.out.println("Custom block: " + net.minecraft.world.level.block.BlockTypes.CODEC.codec().encodeStart(com.mojang.serialization.JsonOps.INSTANCE, block).getOrThrow().toString());
@@ -31,6 +37,7 @@
 +            if (item.isVanilla()) return;
 +            System.out.println("Custom item: " + org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.ItemTypes.CODEC.codec().encodeStart(com.mojang.serialization.JsonOps.INSTANCE, item).getOrThrow().toString());
 +        });
++        org.fiddlemc.fiddle.impl.clientview.lookup.packethandling.ClientViewLookupThreadLocal.THREAD_LOCAL.remove();
 +
          // this.worldData.setGameType(properties.gameMode.get()); // CraftBukkit - moved to world loading
          LOGGER.info("Default game type: {}", properties.gameMode.get());

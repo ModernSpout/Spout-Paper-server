@@ -1,0 +1,76 @@
+--- a/net/minecraft/world/level/block/StairBlock.java
++++ b/net/minecraft/world/level/block/StairBlock.java
+@@ -28,7 +_,7 @@
+ 
+ public class StairBlock extends Block implements SimpleWaterloggedBlock {
+     public static final MapCodec<StairBlock> CODEC = RecordCodecBuilder.mapCodec(
+-        instance -> instance.group(BlockState.CODEC.fieldOf("base_state").forGetter(stairBlock -> stairBlock.baseState), propertiesCodec())
++        instance -> instance.group(com.mojang.serialization.Codec.STRING.fieldOf("base_state").forGetter(stairBlock -> stairBlock.baseStateString), propertiesCodec()) // Fiddle - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references
+             .apply(instance, StairBlock::new)
+     );
+     public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
+@@ -44,8 +_,23 @@
+     private static final Map<Direction, VoxelShape> SHAPE_TOP_OUTER = Shapes.rotateHorizontal(SHAPE_OUTER, OctahedralGroup.INVERT_Y);
+     private static final Map<Direction, VoxelShape> SHAPE_TOP_STRAIGHT = Shapes.rotateHorizontal(SHAPE_STRAIGHT, OctahedralGroup.INVERT_Y);
+     private static final Map<Direction, VoxelShape> SHAPE_TOP_INNER = Shapes.rotateHorizontal(SHAPE_INNER, OctahedralGroup.INVERT_Y);
+-    private final Block base;
+-    protected final BlockState baseState;
++    // Fiddle start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references
++    protected final String baseStateString;
++    private @org.jspecify.annotations.Nullable Block baseCached;
++    private Block base() {
++        if (this.baseCached == null) {
++            this.baseCached = this.baseState().getBlock();
++        }
++        return this.baseCached;
++    };
++    private @org.jspecify.annotations.Nullable BlockState baseStateCached;
++    protected final BlockState baseState() {
++        if (this.baseStateCached == null) {
++            this.baseStateCached = org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateStringConversion.fromString(this.baseStateString);
++        }
++        return this.baseStateCached;
++    };
++    // Fiddle end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references
+ 
+     @Override
+     public MapCodec<? extends StairBlock> codec() {
+@@ -53,6 +_,12 @@
+     }
+ 
+     protected StairBlock(BlockState baseState, BlockBehaviour.Properties properties) {
++        // Fiddle start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references
++        this(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateStringConversion.toString(baseState), properties);
++    }
++
++    protected StairBlock(String baseStateString, BlockBehaviour.Properties properties) {
++        // Fiddle end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references
+         super(properties);
+         this.registerDefaultState(
+             this.stateDefinition
+@@ -62,8 +_,9 @@
+                 .setValue(SHAPE, StairsShape.STRAIGHT)
+                 .setValue(WATERLOGGED, false)
+         );
+-        this.base = baseState.getBlock();
+-        this.baseState = baseState;
++        // Fiddle start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references
++        this.baseStateString = baseStateString;
++        // Fiddle end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references
+     }
+ 
+     @Override
+@@ -91,7 +_,12 @@
+ 
+     @Override
+     public float getExplosionResistance() {
+-        return this.base.getExplosionResistance();
++        // Fiddle start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references - Replace stairs explosion resistance implementation
++        if (this.properties.wasExplosionResistanceSet) {
++            return this.properties.explosionResistance;
++        }
++        return this.base().getExplosionResistance();
++        // Fiddle end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references - Replace stairs explosion resistance implementation
+     }
+ 
+     @Override

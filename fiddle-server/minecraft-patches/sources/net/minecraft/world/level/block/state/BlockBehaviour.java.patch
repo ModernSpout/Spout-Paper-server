@@ -77,7 +77,7 @@
          }
  
          public int getDirectSignal(BlockGetter level, BlockPos pos, Direction direction) {
-@@ -1102,35 +_,36 @@
+@@ -1102,35 +_,37 @@
      }
  
      public static class Properties {
@@ -96,6 +96,7 @@
 -        float friction = 0.6F;
 -        float speedFactor = 1.0F;
 -        float jumpFactor = 1.0F;
++        public boolean wasExplosionResistanceSet = false; // Fiddle - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references - Replace stairs explosion resistance implementation
 +        public float explosionResistance;
 +        public float destroyTime;
 +        public boolean requiresCorrectToolForDrops;
@@ -148,3 +149,24 @@
          }
  
          public static BlockBehaviour.Properties of() {
+@@ -1168,7 +_,12 @@
+             BlockBehaviour.Properties properties = new BlockBehaviour.Properties();
+             BlockBehaviour.Properties properties1 = blockBehaviour.properties;
+             properties.destroyTime = properties1.destroyTime;
++            // Fiddle start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references - Replace stairs explosion resistance implementation
++            if (properties1.wasExplosionResistanceSet) {
+             properties.explosionResistance = properties1.explosionResistance;
++            properties.wasExplosionResistanceSet = true;
++            }
++            // Fiddle end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references - Replace stairs explosion resistance implementation
+             properties.hasCollision = properties1.hasCollision;
+             properties.isRandomlyTicking = properties1.isRandomlyTicking;
+             properties.lightEmission = properties1.lightEmission;
+@@ -1355,6 +_,7 @@
+ 
+         public BlockBehaviour.Properties explosionResistance(float explosionResistance) {
+             this.explosionResistance = Math.max(0.0F, explosionResistance);
++            this.wasExplosionResistanceSet = true; // Fiddle - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references - Replace stairs explosion resistance implementation
+             return this;
+         }
+ 
