@@ -31,7 +31,6 @@ public class TestPluginBootstrap implements PluginBootstrap {
     @Override
     public void bootstrap(@NotNull BootstrapContext context) {
         loadIncludedDataPack(context);
-        addCustomBlocks(context);
         addCustomItems(context);
         setBlockMappings(context);
         setItemMappings(context);
@@ -50,54 +49,6 @@ public class TestPluginBootstrap implements PluginBootstrap {
             } catch (URISyntaxException | IOException e) {
                 throw new RuntimeException(e);
             }
-        });
-    }
-
-    /**
-     * Adds our custom blocks.
-     */
-    private void addCustomBlocks(@NotNull BootstrapContext context) {
-        context.getLifecycleManager().registerEventHandler(FiddleEvents.BLOCK, event -> {
-
-            event.registry().register(TypedKey.create(RegistryKey.BLOCK, Key.key("quark:birch_bookshelf")), builder -> {
-                builder
-                    .mapColor(BlockType.BIRCH_PLANKS)
-                    .instrument(Instrument.BASS_GUITAR)
-                    .destroyTime(1.5f)
-                    .explosionResistance(1.5f)
-                    .sound(BlockType.BIRCH_PLANKS)
-                    .ignitedByLava();
-            });
-
-            event.registry().register(TypedKey.create(RegistryKey.BLOCK, Key.key("quark:diorite_bricks")), builder -> {
-                builder
-                    .mapColor(BlockType.DIORITE)
-                    .instrument(Instrument.BASS_DRUM)
-                    .requiresCorrectToolForDrops()
-                    .destroyTime(1.5f)
-                    .explosionResistance(6.0f);
-            });
-
-            event.registry().register(TypedKey.create(RegistryKey.BLOCK, Key.key("quark:diorite_brick_slab")), builder -> {
-                builder
-                    .inheritsFromSlab()
-                    .mapColor(BlockType.DIORITE)
-                    .instrument(Instrument.BASS_DRUM)
-                    .requiresCorrectToolForDrops()
-                    .destroyTime(1.5f)
-                    .explosionResistance(6.0f);
-            });
-
-            event.registry().register(TypedKey.create(RegistryKey.BLOCK, Key.key("quark:diorite_brick_stairs")), builder -> {
-                builder
-                    .inheritsFromStairs(PluginBlockTypes.DIORITE_BRICKS.get()) // It's a stair block
-                    .mapColor(BlockType.DIORITE)
-                    .instrument(Instrument.BASS_DRUM)
-                    .requiresCorrectToolForDrops()
-                    .destroyTime(1.5f)
-                    .explosionResistance(6.0f);
-            });
-
         });
     }
 

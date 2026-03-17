@@ -2,8 +2,8 @@ package org.fiddlemc.fiddle.impl.util.java.serviceloader;
 
 import org.fiddlemc.fiddle.impl.java.serviceloader.GenericServiceProvider;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * A {@link GenericServiceProvider}, where the singleton instance is defined by {@link #create}.
@@ -13,7 +13,7 @@ public abstract class GenericServiceProviderImpl<S, I extends S> implements Gene
     /**
      * The backing cache for {@link #get()}.
      */
-    private static final Map<Class<?>, Object> INSTANCES = new HashMap<>();
+    private static final Map<Class<?>, Object> INSTANCES = new ConcurrentHashMap<>();
 
     /**
      * The service implementation class.

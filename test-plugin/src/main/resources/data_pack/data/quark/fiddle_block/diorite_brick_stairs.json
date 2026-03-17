@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:stairs",
+  "base_state": "quark:diorite_bricks",
+  "properties": {
+    "map_color": "minecraft:quartz",
+    "explosion_resistance": 6.0,
+    "destroy_time": 1.5,
+    "requires_correct_tool_for_drops": true,
+    "instrument": "minecraft:basedrum"
+  }
+}

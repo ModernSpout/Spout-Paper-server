@@ -29,7 +29,7 @@ public class EnumViaIdentifierCodec<A extends Enum<A>> implements Codec<A> {
         return Identifier.CODEC.decode(ops, input).flatMap(key -> {
             if (key.getFirst().getNamespace().equals(Identifier.DEFAULT_NAMESPACE)) {
                 try {
-                    return DataResult.success(Pair.of(Enum.valueOf(this.typeClass, key.getFirst().getPath()), input));
+                    return DataResult.success(Pair.of(Enum.valueOf(this.typeClass, key.getFirst().getPath().toUpperCase(Locale.ROOT)), input));
                 } catch (IllegalArgumentException ignored) {
                 }
             }
