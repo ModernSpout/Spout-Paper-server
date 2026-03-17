@@ -62,6 +62,25 @@
          }
      }
  
+@@ -434,11 +_,13 @@
+         public final float destroySpeed;
+         private final boolean requiresCorrectToolForDrops;
+         private final boolean canOcclude;
+-        private final BlockBehaviour.StatePredicate isRedstoneConductor;
+-        private final BlockBehaviour.StatePredicate isSuffocating;
+-        private final BlockBehaviour.StatePredicate isViewBlocking;
+-        private final BlockBehaviour.StatePredicate hasPostProcess;
+-        private final BlockBehaviour.StatePredicate emissiveRendering;
++        // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
++        private final org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate isRedstoneConductor;
++        private final org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate isSuffocating;
++        private final org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate isViewBlocking;
++        private final org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate hasPostProcess;
++        private final org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate emissiveRendering;
++        // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
+         private final BlockBehaviour.@Nullable OffsetFunction offsetFunction;
+         private final boolean spawnTerrainParticles;
+         private final NoteBlockInstrument instrument;
 @@ -754,7 +_,13 @@
          }
  
@@ -77,7 +96,7 @@
          }
  
          public int getDirectSignal(BlockGetter level, BlockPos pos, Direction direction) {
-@@ -1102,35 +_,37 @@
+@@ -1102,47 +_,50 @@
      }
  
      public static class Properties {
@@ -134,12 +153,17 @@
 +        public boolean replaceable;
          BlockBehaviour.StateArgumentPredicate<EntityType<?>> isValidSpawn = (state, level, pos, random) -> state.isFaceSturdy(level, pos, Direction.UP)
              && state.getLightEmission() < 14;
-         BlockBehaviour.StatePredicate isRedstoneConductor = (state, level, pos) -> state.isCollisionShapeFullBlock(level, pos);
-@@ -1138,11 +_,12 @@
-         BlockBehaviour.StatePredicate isViewBlocking = this.isSuffocating;
-         BlockBehaviour.StatePredicate hasPostProcess = (state, level, pos) -> false;
-         BlockBehaviour.StatePredicate emissiveRendering = (state, level, pos) -> false;
+-        BlockBehaviour.StatePredicate isRedstoneConductor = (state, level, pos) -> state.isCollisionShapeFullBlock(level, pos);
+-        BlockBehaviour.StatePredicate isSuffocating = (state, level, pos) -> state.blocksMotion() && state.isCollisionShapeFullBlock(level, pos);
+-        BlockBehaviour.StatePredicate isViewBlocking = this.isSuffocating;
+-        BlockBehaviour.StatePredicate hasPostProcess = (state, level, pos) -> false;
+-        BlockBehaviour.StatePredicate emissiveRendering = (state, level, pos) -> false;
 -        boolean dynamicShape;
++        public org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate isRedstoneConductor = org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate.IS_COLLISION_SHAPE_FULL_BLOCK;
++        public org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate isSuffocating = org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate.BLOCKS_MOTION_AND_IS_COLLISION_SHAPE_FULL_BLOCK;
++        public org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate isViewBlocking = this.isSuffocating;
++        public org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate hasPostProcess = org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate.NEVER;
++        public org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate emissiveRendering = org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate.NEVER;
 +        public boolean dynamicShape;
          FeatureFlagSet requiredFeatures = FeatureFlags.VANILLA_SET;
          BlockBehaviour.@Nullable OffsetFunction offsetFunction;
@@ -196,6 +220,63 @@
          }
  
          public BlockBehaviour.Properties noCollision() {
+@@ -1319,26 +_,56 @@
+         }
+ 
+         public BlockBehaviour.Properties isRedstoneConductor(BlockBehaviour.StatePredicate isRedstoneConductor) {
++            // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
++            return this.isRedstoneConductor(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate.wrap(isRedstoneConductor));
++        }
++
++        public BlockBehaviour.Properties isRedstoneConductor(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate isRedstoneConductor) {
++            // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
+             this.isRedstoneConductor = isRedstoneConductor;
+             return this;
+         }
+ 
+         public BlockBehaviour.Properties isSuffocating(BlockBehaviour.StatePredicate isSuffocating) {
++            // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
++            return this.isSuffocating(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate.wrap(isSuffocating));
++        }
++
++        public BlockBehaviour.Properties isSuffocating(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate isSuffocating) {
++            // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
+             this.isSuffocating = isSuffocating;
+             return this;
+         }
+ 
+         public BlockBehaviour.Properties isViewBlocking(BlockBehaviour.StatePredicate isViewBlocking) {
++            // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
++            return this.isViewBlocking(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate.wrap(isViewBlocking));
++        }
++
++        public BlockBehaviour.Properties isViewBlocking(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate isViewBlocking) {
++            // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
+             this.isViewBlocking = isViewBlocking;
+             return this;
+         }
+ 
+         public BlockBehaviour.Properties hasPostProcess(BlockBehaviour.StatePredicate hasPostProcess) {
++            // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
++            return this.hasPostProcess(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate.wrap(hasPostProcess));
++        }
++
++        public BlockBehaviour.Properties hasPostProcess(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate hasPostProcess) {
++            // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
+             this.hasPostProcess = hasPostProcess;
+             return this;
+         }
+ 
+         public BlockBehaviour.Properties emissiveRendering(BlockBehaviour.StatePredicate emissiveRendering) {
++            // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
++            return this.emissiveRendering(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate.wrap(emissiveRendering));
++        }
++
++        public BlockBehaviour.Properties emissiveRendering(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate emissiveRendering) {
++            // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
+             this.emissiveRendering = emissiveRendering;
+             return this;
+         }
 @@ -1355,6 +_,7 @@
  
          public BlockBehaviour.Properties explosionResistance(float explosionResistance) {
@@ -204,3 +285,12 @@
              return this;
          }
  
+@@ -1423,7 +_,7 @@
+     }
+ 
+     @FunctionalInterface
+-    public interface StatePredicate {
++    public interface StatePredicate extends java.io.Serializable { // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable - Make predicate extend serializable so that we can inspect it in KnownStatePrediate#wrap
+         boolean test(BlockState state, BlockGetter level, BlockPos pos);
+     }
+ }

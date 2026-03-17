@@ -140,6 +140,11 @@ public final class BlockCodecs {
             builder.add("force_solid_on", ops.createBoolean(input.forceSolidOn));
             builder.add("spawn_terrain_particles", ops.createBoolean(input.spawnTerrainParticles));
             builder.add("replaceable", ops.createBoolean(input.replaceable));
+            builder.add("is_redstone_conductor", input.isRedstoneConductor, KnownStatePredicate.CODEC);
+            builder.add("is_suffocating", input.isSuffocating, KnownStatePredicate.CODEC);
+            builder.add("is_view_blocking", input.isViewBlocking, KnownStatePredicate.CODEC);
+            builder.add("has_post_process", input.hasPostProcess, KnownStatePredicate.CODEC);
+            builder.add("emissive_rendering", input.emissiveRendering, KnownStatePredicate.CODEC);
             builder.add("dynamic_shape", ops.createBoolean(input.dynamicShape));
             return builder.build(prefix);
         }
@@ -150,11 +155,11 @@ public final class BlockCodecs {
                 BlockBehaviour.Properties properties = new BlockBehaviour.Properties();
                 T mapColorInput = mapLike.get("map_color");
                 if (mapColorInput != null) {
-                    DataResult<Pair<MapColorFunction, T>> mapColor = MAP_COLOR_FUNCTION_CODEC.decode(ops, mapColorInput);
+                    DataResult<MapColorFunction> mapColor = MAP_COLOR_FUNCTION_CODEC.decode(ops, mapColorInput).map(Pair::getFirst);
                     if (mapColor.isError()) {
                         return mapColor.map($ -> null);
                     }
-                    properties.mapColor = mapColor.getOrThrow().getFirst();
+                    properties.mapColor = mapColor.getOrThrow();
                 }
                 T hasCollisionInput = mapLike.get("has_collision");
                 if (hasCollisionInput != null) {
@@ -284,6 +289,46 @@ public final class BlockCodecs {
                         return replaceable.map($ -> null);
                     }
                     properties.replaceable = replaceable.getOrThrow();
+                }
+                T isRedstoneConductorInput = mapLike.get("is_redstone_conductor");
+                if (isRedstoneConductorInput != null) {
+                    DataResult<KnownStatePredicate> isRedstoneConductor = KnownStatePredicate.CODEC.decode(ops, isRedstoneConductorInput).map(Pair::getFirst);
+                    if (isRedstoneConductor.isError()) {
+                        return isRedstoneConductor.map($ -> null);
+                    }
+                    properties.isRedstoneConductor = isRedstoneConductor.getOrThrow();
+                }
+                T isSuffocatingInput = mapLike.get("is_suffocating");
+                if (isSuffocatingInput != null) {
+                    DataResult<KnownStatePredicate> isSuffocating = KnownStatePredicate.CODEC.decode(ops, isSuffocatingInput).map(Pair::getFirst);
+                    if (isSuffocating.isError()) {
+                        return isSuffocating.map($ -> null);
+                    }
+                    properties.isSuffocating = isSuffocating.getOrThrow();
+                }
+                T isViewBlockingInput = mapLike.get("is_view_blocking");
+                if (isViewBlockingInput != null) {
+                    DataResult<KnownStatePredicate> isViewBlocking = KnownStatePredicate.CODEC.decode(ops, isViewBlockingInput).map(Pair::getFirst);
+                    if (isViewBlocking.isError()) {
+                        return isViewBlocking.map($ -> null);
+                    }
+                    properties.isViewBlocking = isViewBlocking.getOrThrow();
+                }
+                T hasPostProcessInput = mapLike.get("has_post_process");
+                if (hasPostProcessInput != null) {
+                    DataResult<KnownStatePredicate> hasPostProcess = KnownStatePredicate.CODEC.decode(ops, hasPostProcessInput).map(Pair::getFirst);
+                    if (hasPostProcess.isError()) {
+                        return hasPostProcess.map($ -> null);
+                    }
+                    properties.hasPostProcess = hasPostProcess.getOrThrow();
+                }
+                T emissiveRenderingInput = mapLike.get("emissive_rendering");
+                if (emissiveRenderingInput != null) {
+                    DataResult<KnownStatePredicate> emissiveRendering = KnownStatePredicate.CODEC.decode(ops, emissiveRenderingInput).map(Pair::getFirst);
+                    if (emissiveRendering.isError()) {
+                        return emissiveRendering.map($ -> null);
+                    }
+                    properties.emissiveRendering = emissiveRendering.getOrThrow();
                 }
                 T dynamicShapeInput = mapLike.get("dynamic_shape");
                 if (dynamicShapeInput != null) {

@@ -1,5 +1,19 @@
 --- a/net/minecraft/world/level/block/Blocks.java
 +++ b/net/minecraft/world/level/block/Blocks.java
+@@ -44,11 +_,11 @@
+ import net.minecraft.world.level.material.PushReaction;
+ 
+ public class Blocks {
+-    private static final BlockBehaviour.StatePredicate NOT_CLOSED_SHULKER = (state, level, pos) -> !(
++    public static final BlockBehaviour.StatePredicate NOT_CLOSED_SHULKER = (state, level, pos) -> !( // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable - Make public
+             level.getBlockEntity(pos) instanceof ShulkerBoxBlockEntity shulkerBoxBlockEntity
+         )
+         || shulkerBoxBlockEntity.isClosed();
+-    private static final BlockBehaviour.StatePredicate NOT_EXTENDED_PISTON = (state, level, pos) -> !state.getValue(PistonBaseBlock.EXTENDED);
++    public static final BlockBehaviour.StatePredicate NOT_EXTENDED_PISTON = (state, level, pos) -> !state.getValue(PistonBaseBlock.EXTENDED); // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable - Make public
+     public static final Block AIR = register("air", AirBlock::new, BlockBehaviour.Properties.of().replaceable().noCollision().noLootTable().air());
+     public static final Block STONE = register(
+         "stone",
 @@ -1404,7 +_,7 @@
          "wheat",
          CropBlock::new,
@@ -9,6 +23,24 @@
              .noCollision()
              .randomTicks()
              .instabreak()
+@@ -2062,7 +_,7 @@
+             .strength(0.1F)
+             .requiresCorrectToolForDrops()
+             .sound(SoundType.SNOW)
+-            .isViewBlocking((state, level, pos) -> state.getValue(SnowLayerBlock.LAYERS) >= 8)
++            .isViewBlocking(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate.MAX_SNOW_LAYERS) // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
+             .pushReaction(PushReaction.DESTROY)
+     );
+     public static final Block ICE = register(
+@@ -6288,7 +_,7 @@
+             .strength(1.5F)
+             .sound(SoundType.SCULK_SENSOR)
+             .lightLevel(blockState1 -> 1)
+-            .emissiveRendering((state, level, pos) -> SculkSensorBlock.getPhase(state) == SculkSensorPhase.ACTIVE)
++            .emissiveRendering(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate.SCULK_PHASE_ACTIVE)
+     );
+     public static final Block CALIBRATED_SCULK_SENSOR = register(
+         "calibrated_sculk_sensor", CalibratedSculkSensorBlock::new, BlockBehaviour.Properties.ofLegacyCopy(SCULK_SENSOR)
 @@ -7128,8 +_,10 @@
          return state -> state.getValue(BlockStateProperties.LIT) ? lightValue : 0;
      }
@@ -40,7 +72,7 @@
              .instrument(NoteBlockInstrument.BASS)
              .strength(2.0F)
              .sound(sound)
-@@ -7168,7 +_,7 @@
+@@ -7168,14 +_,14 @@
      }
  
      private static BlockBehaviour.Properties netherStemProperties(MapColor color) {
@@ -48,7 +80,16 @@
 +        return BlockBehaviour.Properties.of().mapColor(color).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.STEM); // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
      }
  
-     private static boolean always(BlockState state, BlockGetter level, BlockPos pos) {
+-    private static boolean always(BlockState state, BlockGetter level, BlockPos pos) {
++    public static boolean always(BlockState state, BlockGetter level, BlockPos pos) { // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable - Make public
+         return true;
+     }
+ 
+-    private static boolean never(BlockState state, BlockGetter level, BlockPos pos) {
++    public static boolean never(BlockState state, BlockGetter level, BlockPos pos) { // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable - Make public
+         return false;
+     }
+ 
 @@ -7271,6 +_,13 @@
  
      private static Block register(ResourceKey<Block> resourceKey, Function<BlockBehaviour.Properties, Block> factory, BlockBehaviour.Properties properties) {
