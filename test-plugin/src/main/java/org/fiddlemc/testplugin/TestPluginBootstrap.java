@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Objects;
 
 @SuppressWarnings("unused")
 public class TestPluginBootstrap implements PluginBootstrap {
@@ -40,7 +41,7 @@ public class TestPluginBootstrap implements PluginBootstrap {
     private void loadIncludedDataPack(@NotNull BootstrapContext context) {
         context.getLifecycleManager().registerEventHandler(LifecycleEvents.DATAPACK_DISCOVERY, event -> {
             try {
-                event.registrar().discoverPack(this.getClass().getResource("/data_pack").toURI(), "provided");
+                event.registrar().discoverPack(Objects.requireNonNull(this.getClass().getResource("/data_pack")).toURI(), "provided");
             } catch (URISyntaxException | IOException e) {
                 throw new RuntimeException(e);
             }
@@ -67,6 +68,7 @@ public class TestPluginBootstrap implements PluginBootstrap {
     private void setBlockMappings(@NotNull BootstrapContext context) {
         context.getLifecycleManager().registerEventHandler(FiddleEvents.BLOCK_MAPPING, event -> {
 
+            // Birch bookshelf
             event.registerStateToState(
                 ClientView.AwarenessLevel.VANILLA,
                 PluginBlockTypes.BIRCH_BOOKSHELF.get(),
@@ -82,6 +84,8 @@ public class TestPluginBootstrap implements PluginBootstrap {
                 builder.from(getBirchBookshelfNoteBlockState());
                 builder.to(BlockType.NOTE_BLOCK.createBlockData());
             });
+
+            // Diorite bricks
             event.registerStateToState(
                 ClientView.AwarenessLevel.VANILLA,
                 PluginBlockTypes.DIORITE_BRICKS.get(),
@@ -97,6 +101,8 @@ public class TestPluginBootstrap implements PluginBootstrap {
                 builder.from(getDioriteBricksNoteBlockState());
                 builder.to(BlockType.NOTE_BLOCK.createBlockData());
             });
+
+            // Diorite brick slab
             event.registerStateToState(
                 ClientView.AwarenessLevel.VANILLA,
                 PluginBlockTypes.DIORITE_BRICK_SLAB.get(),
@@ -112,6 +118,8 @@ public class TestPluginBootstrap implements PluginBootstrap {
                 BlockType.WAXED_CUT_COPPER_SLAB,
                 BlockType.CUT_COPPER_SLAB
             );
+
+            // Diorite brick stairs
             event.registerStateToState(
                 ClientView.AwarenessLevel.VANILLA,
                 PluginBlockTypes.DIORITE_BRICK_STAIRS.get(),
@@ -137,6 +145,7 @@ public class TestPluginBootstrap implements PluginBootstrap {
     private void setItemMappings(@NotNull BootstrapContext context) {
         context.getLifecycleManager().registerEventHandler(FiddleEvents.ITEM_MAPPING, event -> {
 
+            // Glass shard
             event.register(builder -> {
                 builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
                 builder.from(PluginItemTypes.GLASS_SHARD.get());
@@ -150,6 +159,8 @@ public class TestPluginBootstrap implements PluginBootstrap {
                     handle.getMutable().editMeta(meta -> meta.setItemModel(NamespacedKey.fromString("quark:glass_shard")));
                 });
             });
+
+            // Birch bookshelf
             event.register(builder -> {
                 builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
                 builder.from(PluginItemTypes.BIRCH_BOOKSHELF.get());
@@ -166,6 +177,8 @@ public class TestPluginBootstrap implements PluginBootstrap {
                     });
                 });
             });
+
+            // Diorite bricks
             event.register(builder -> {
                 builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
                 builder.from(PluginItemTypes.DIORITE_BRICKS.get());
@@ -182,6 +195,8 @@ public class TestPluginBootstrap implements PluginBootstrap {
                     });
                 });
             });
+
+            // Diorite brick slab
             event.register(builder -> {
                 builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
                 builder.from(PluginItemTypes.DIORITE_BRICK_SLAB.get());
@@ -200,6 +215,8 @@ public class TestPluginBootstrap implements PluginBootstrap {
                 builder.from(ItemType.WAXED_CUT_COPPER_SLAB);
                 builder.to(ItemType.CUT_COPPER_SLAB);
             });
+
+            // Diorite brick stairs
             event.register(builder -> {
                 builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
                 builder.from(PluginItemTypes.DIORITE_BRICK_STAIRS.get());

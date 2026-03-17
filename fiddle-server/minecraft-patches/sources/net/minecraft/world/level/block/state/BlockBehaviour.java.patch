@@ -171,13 +171,14 @@
 -        BlockBehaviour.StatePredicate hasPostProcess = (state, level, pos) -> false;
 -        BlockBehaviour.StatePredicate emissiveRendering = (state, level, pos) -> false;
 -        boolean dynamicShape;
+-        FeatureFlagSet requiredFeatures = FeatureFlags.VANILLA_SET;
 +        public org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate isRedstoneConductor = org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate.IS_COLLISION_SHAPE_FULL_BLOCK;
 +        public org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate isSuffocating = org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate.BLOCKS_MOTION_AND_IS_COLLISION_SHAPE_FULL_BLOCK;
 +        public org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate isViewBlocking = this.isSuffocating;
 +        public org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate hasPostProcess = org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate.NEVER;
 +        public org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate emissiveRendering = org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate.NEVER;
 +        public boolean dynamicShape;
-         FeatureFlagSet requiredFeatures = FeatureFlags.VANILLA_SET;
++        public FeatureFlagSet requiredFeatures = FeatureFlags.VANILLA_SET;
          BlockBehaviour.@Nullable OffsetFunction offsetFunction;
 +        // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make properties fields public
  

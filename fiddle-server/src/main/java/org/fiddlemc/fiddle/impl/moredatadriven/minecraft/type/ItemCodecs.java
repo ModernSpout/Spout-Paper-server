@@ -6,6 +6,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.EggItem;
 import net.minecraft.world.item.Item;
@@ -24,18 +25,20 @@ public final class ItemCodecs {
         throw new UnsupportedOperationException();
     }
 
-    private static Item.Properties constructItemProperties(DataComponentMap components) {
+    private static Item.Properties constructItemProperties(DataComponentMap components, FeatureFlagSet requiredFeatures) {
         Item.Properties properties = new Item.Properties();
         properties.components.addAll(components);
+        properties.requiredFeatures = requiredFeatures;
         return properties;
     }
 
     private static Item.Properties reconstructItemProperties(Item item) {
-        return constructItemProperties(item.components());
+        return constructItemProperties(item.components(), item.requiredFeatures());
     }
 
     private static final Codec<Item.Properties> ITEM_PROPERTIES_CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        DataComponentMap.CODEC.fieldOf("components").forGetter(properties -> properties.components.build())
+        DataComponentMap.CODEC.optionalFieldOf("components", DataComponentMap.EMPTY).forGetter(properties -> properties.components.build()),
+        CodecUtil.optionalFieldOf(FeatureFlagCodecs.FEATURE_FLAG_SET_CODEC, "required_features", FeatureFlagSet::of).forGetter(properties -> properties.requiredFeatures)
     ).apply(instance, ItemCodecs::constructItemProperties));
 
     private static <I extends Item> RecordCodecBuilder<I, Item.Properties> propertiesCodec() {

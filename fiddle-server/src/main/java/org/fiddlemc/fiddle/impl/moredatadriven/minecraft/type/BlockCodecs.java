@@ -5,6 +5,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.RecordBuilder;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
@@ -111,6 +112,7 @@ public final class BlockCodecs {
             builder.add("has_post_process", input.hasPostProcess, KnownStatePredicate.CODEC);
             builder.add("emissive_rendering", input.emissiveRendering, KnownStatePredicate.CODEC);
             builder.add("dynamic_shape", ops.createBoolean(input.dynamicShape));
+            builder.add("required_features", input.requiredFeatures, FeatureFlagCodecs.FEATURE_FLAG_SET_CODEC);
             return builder.build(prefix);
         }
 
@@ -326,6 +328,14 @@ public final class BlockCodecs {
                         return dynamicShape.map($ -> null);
                     }
                     properties.dynamicShape = dynamicShape.getOrThrow();
+                }
+                T requiredFeaturesInput = mapLike.get("required_features");
+                if (requiredFeaturesInput != null) {
+                    DataResult<FeatureFlagSet> requiredFeatures = FeatureFlagCodecs.FEATURE_FLAG_SET_CODEC.decode(ops, requiredFeaturesInput).map(Pair::getFirst);
+                    if (requiredFeatures.isError()) {
+                        return requiredFeatures.map($ -> null);
+                    }
+                    properties.requiredFeatures = requiredFeatures.getOrThrow();
                 }
                 return DataResult.success(Pair.of(properties, input));
             });
