@@ -1,23 +1,16 @@
 --- a/net/minecraft/server/WorldLoader.java
 +++ b/net/minecraft/server/WorldLoader.java
-@@ -37,6 +_,20 @@
+@@ -37,6 +_,13 @@
              Pair<WorldDataConfiguration, CloseableResourceManager> pair = initConfig.packConfig.createResourceManager();
              CloseableResourceManager closeableResourceManager = pair.getSecond();
              LayeredRegistryAccess<RegistryLayer> layeredRegistryAccess = RegistryLayer.createRegistryAccess();
-+            RegistryAccess.Frozen beforeDelayedFreezingRegistryAccess = RegistryDataLoader.load(closeableResourceManager, java.util.Collections.emptyList(), org.fiddlemc.fiddle.impl.moredatadriven.datapack.delayedfrozenregistries.DataPackRegistriesToLoadBeforeDelayedRegistryFreeze.REGISTRIES); // Fiddle - More data-driven - Data pack - Delayed frozen registries - Load some registries before
-+            // Fiddle start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries
-+            org.fiddlemc.fiddle.impl.moredatadriven.datapack.CopyResourcesFromDataPackRegistryToInternalRegistry.copy(
-+                beforeDelayedFreezingRegistryAccess.lookupOrThrow(org.fiddlemc.fiddle.impl.moredatadriven.datapack.FiddleDataPackRegistries.BLOCK_FROM_DATA_PACK),
-+                net.minecraft.core.registries.BuiltInRegistries.BLOCK
-+            );
-+            org.fiddlemc.fiddle.impl.moredatadriven.datapack.CopyResourcesFromDataPackRegistryToInternalRegistry.copy(
-+                beforeDelayedFreezingRegistryAccess.lookupOrThrow(org.fiddlemc.fiddle.impl.moredatadriven.datapack.FiddleDataPackRegistries.ITEM_FROM_DATA_PACK),
-+                net.minecraft.core.registries.BuiltInRegistries.ITEM
-+            );
-+            // Fiddle end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries
-+            // Fiddle start - More data-driven - Data pack - Delayed frozen registries - Freeze delayed registries
-+            org.fiddlemc.fiddle.impl.moredatadriven.datapack.delayedfrozenregistries.DelayedRegistryFreezing.freezeDelayedRegistries();
-+            // Fiddle end - More data-driven - Data pack - Delayed frozen registries - Freeze delayed registries
++            // Fiddle start - More data-driven - Data pack - Delayed frozen registries - Load some registries before
++            for (org.fiddlemc.fiddle.impl.moredatadriven.datapack.delayedfrozenregistries.DataPackRegistriesToLoadBeforeDelayedRegistryFreeze.Instance<?> instance : org.fiddlemc.fiddle.impl.moredatadriven.datapack.delayedfrozenregistries.DataPackRegistriesToLoadBeforeDelayedRegistryFreeze.REGISTRIES) {
++                RegistryAccess.Frozen registryAccess = RegistryDataLoader.load(closeableResourceManager, java.util.Collections.emptyList(), List.of(instance.registryData()));
++                instance.postLoadAction().accept((Registry) registryAccess.lookupOrThrow(instance.registryData().key()));
++            }
++            // Fiddle end - More data-driven - Data pack - Delayed frozen registries - Load some registries before
++            org.fiddlemc.fiddle.impl.moredatadriven.datapack.delayedfrozenregistries.DelayedRegistryFreezing.freezeDelayedRegistries(); // Fiddle - More data-driven - Data pack - Delayed frozen registries - Freeze delayed registries
              List<Registry.PendingTags<?>> list = TagLoader.loadTagsForExistingRegistries(
                  closeableResourceManager, layeredRegistryAccess.getLayer(RegistryLayer.STATIC), io.papermc.paper.plugin.lifecycle.event.registrar.ReloadableRegistrarEvent.Cause.INITIAL // Paper - tag lifecycle - add cause
              );

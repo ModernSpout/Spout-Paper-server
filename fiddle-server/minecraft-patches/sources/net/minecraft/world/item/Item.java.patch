@@ -1,15 +1,17 @@
 --- a/net/minecraft/world/item/Item.java
 +++ b/net/minecraft/world/item/Item.java
-@@ -95,13 +_,39 @@
+@@ -95,13 +_,41 @@
  import org.jspecify.annotations.Nullable;
  import org.slf4j.Logger;
  
 -public class Item implements FeatureElement, ItemLike {
 +// Fiddle start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key
 +public class Item implements FeatureElement, ItemLike, org.fiddlemc.fiddle.impl.moredatadriven.datapack.CopyResourcesFromDataPackRegistryToInternalRegistry.DelayedResourceKeyAttachable<Item> {
++    private Item.@Nullable Properties originalProperties;
 +    @Override
 +    public void attachResourceKey(ResourceKey<Item> resourceKey) {
-+        Item.Properties properties = new Item.Properties();
++        Item.Properties properties = this.originalProperties;
++        this.originalProperties = null;
 +        properties.setId(resourceKey);
 +        this.descriptionId = properties.effectiveDescriptionId();
 +        this.components = properties.buildAndValidateComponents(Component.translatable(this.descriptionId), properties.effectiveModel());
@@ -131,7 +133,7 @@
      public static Item byId(int id) {
          return BuiltInRegistries.ITEM.byId(id);
      }
-@@ -130,8 +_,12 @@
+@@ -130,8 +_,14 @@
      }
  
      public Item(Item.Properties properties) {
@@ -139,6 +141,8 @@
 +        if (properties.id != null) {
          this.descriptionId = properties.effectiveDescriptionId();
          this.components = properties.buildAndValidateComponents(Component.translatable(this.descriptionId), properties.effectiveModel());
++        } else {
++            this.originalProperties = properties;
 +        }
 +        // Fiddle end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key - Don't set dependent fields without a key
          this.craftingRemainingItem = properties.craftingRemainingItem;

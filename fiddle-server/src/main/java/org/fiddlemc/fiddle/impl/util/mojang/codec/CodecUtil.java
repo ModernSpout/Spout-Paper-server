@@ -4,9 +4,12 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.MapLike;
 import com.mojang.serialization.RecordBuilder;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * Provides convenience methods for dealing with {@link Codec}s.
@@ -55,6 +58,19 @@ public final class CodecUtil {
 
     public static <T> Optional<Float> getOptionalFloat(DynamicOps<T> ops, MapLike<T> input, String key) {
         return getOptionalNumber(ops, input, key).map(Number::floatValue);
+    }
+
+    /**
+     * Analogous to {@link Codec#optionalFieldOf(String, Object)},
+     * but with a {@link Supplier}.
+     *
+     * @see Codec#optionalFieldOf(String, Object)
+     */
+    public static <A> MapCodec<A> optionalFieldOf(Codec<A> codec, String name, Supplier<? extends A> defaultValueSupplier) {
+        return Codec.optionalField(name, codec, false).xmap(
+            o -> o.orElseGet(defaultValueSupplier),
+            a -> Objects.equals(a, defaultValueSupplier.get()) ? Optional.empty() : Optional.of(a)
+        );
     }
 
 }

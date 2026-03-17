@@ -39,6 +39,15 @@
          this.explosionResistance = properties.explosionResistance;
          this.isRandomlyTicking = properties.isRandomlyTicking;
          this.soundType = properties.soundType;
+@@ -123,7 +_,7 @@
+     protected abstract MapCodec<? extends Block> codec();
+ 
+     protected static <B extends Block> RecordCodecBuilder<B, BlockBehaviour.Properties> propertiesCodec() {
+-        return BlockBehaviour.Properties.CODEC.fieldOf("properties").forGetter(BlockBehaviour::properties);
++        return org.fiddlemc.fiddle.impl.util.mojang.codec.CodecUtil.optionalFieldOf(BlockBehaviour.Properties.CODEC,"properties", BlockBehaviour.Properties::new).forGetter(BlockBehaviour::properties); // Fiddle - More data-driven - Minecraft registries - Types - Adapt existing block type registry - Make properties optional in block codec
+     }
+ 
+     public static <B extends Block> MapCodec<B> simpleCodec(Function<BlockBehaviour.Properties, B> factory) {
 @@ -350,12 +_,20 @@
      }
  

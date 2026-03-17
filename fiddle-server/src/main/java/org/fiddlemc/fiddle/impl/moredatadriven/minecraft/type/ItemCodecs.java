@@ -11,6 +11,7 @@ import net.minecraft.world.item.EggItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import org.fiddlemc.fiddle.impl.util.mojang.codec.CodecUtil;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -38,7 +39,7 @@ public final class ItemCodecs {
     ).apply(instance, ItemCodecs::constructItemProperties));
 
     private static <I extends Item> RecordCodecBuilder<I, Item.Properties> propertiesCodec() {
-        return ITEM_PROPERTIES_CODEC.fieldOf("properties").forGetter(ItemCodecs::reconstructItemProperties);
+        return CodecUtil.optionalFieldOf(ITEM_PROPERTIES_CODEC, "properties", Item.Properties::new).forGetter(ItemCodecs::reconstructItemProperties);
     }
 
     /**
@@ -72,7 +73,7 @@ public final class ItemCodecs {
      */
     public static final MapCodec<BlockItem> BLOCK_ITEM_CODEC = simpleCodec(
         BuiltInRegistries.BLOCK.byNameCodec().fieldOf("block").forGetter(BlockItem::getBlock),
-        BlockItem::new
+        (block, properties) -> new BlockItem(block, properties.useBlockDescriptionPrefix())
     );
 
     /**

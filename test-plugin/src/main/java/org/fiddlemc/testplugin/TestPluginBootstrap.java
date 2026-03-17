@@ -3,9 +3,6 @@ package org.fiddlemc.testplugin;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
-import io.papermc.paper.registry.RegistryKey;
-import io.papermc.paper.registry.TypedKey;
-import net.kyori.adventure.key.Key;
 import org.bukkit.Instrument;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Note;
@@ -15,7 +12,6 @@ import org.bukkit.inventory.ItemType;
 import org.bukkit.inventory.meta.BlockDataMeta;
 import org.fiddlemc.fiddle.api.FiddleEvents;
 import org.fiddlemc.fiddle.api.clientview.ClientView;
-import org.fiddlemc.fiddle.api.moredatadriven.paper.registry.ItemRegistryEntry;
 import org.fiddlemc.fiddle.api.packetmapping.component.translatable.ServerSideTranslations;
 import org.fiddlemc.fiddle.api.packetmapping.item.ItemMappingUtilities;
 import org.fiddlemc.testplugin.data.PluginBlockTypes;
@@ -31,7 +27,6 @@ public class TestPluginBootstrap implements PluginBootstrap {
     @Override
     public void bootstrap(@NotNull BootstrapContext context) {
         loadIncludedDataPack(context);
-        addCustomItems(context);
         setBlockMappings(context);
         setItemMappings(context);
         setTranslations(context);
@@ -49,22 +44,6 @@ public class TestPluginBootstrap implements PluginBootstrap {
             } catch (URISyntaxException | IOException e) {
                 throw new RuntimeException(e);
             }
-        });
-    }
-
-    /**
-     * Adds our custom items.
-     */
-    private void addCustomItems(@NotNull BootstrapContext context) {
-        context.getLifecycleManager().registerEventHandler(FiddleEvents.ITEM, event -> {
-
-            event.registry().register(TypedKey.create(RegistryKey.ITEM, Key.key("quark:glass_shard")), builder -> {
-            });
-            event.registry().register(TypedKey.create(RegistryKey.ITEM, Key.key("quark:birch_bookshelf")), ItemRegistryEntry.Builder::inheritsFromBlock);
-            event.registry().register(TypedKey.create(RegistryKey.ITEM, Key.key("quark:diorite_bricks")), ItemRegistryEntry.Builder::inheritsFromBlock);
-            event.registry().register(TypedKey.create(RegistryKey.ITEM, Key.key("quark:diorite_brick_slab")), ItemRegistryEntry.Builder::inheritsFromBlock);
-            event.registry().register(TypedKey.create(RegistryKey.ITEM, Key.key("quark:diorite_brick_stairs")), ItemRegistryEntry.Builder::inheritsFromBlock);
-
         });
     }
 
