@@ -27,7 +27,6 @@ import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.PushReaction;
 import org.bukkit.FeatureFlag;
 import org.bukkit.Instrument;
-import org.bukkit.NamespacedKey;
 import org.bukkit.SoundGroup;
 import org.bukkit.block.BlockType;
 import org.bukkit.block.PistonMoveReaction;
@@ -42,8 +41,6 @@ import org.jspecify.annotations.Nullable;
 import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.function.ToIntFunction;
 
 /**
  * The implementation of {@link BlockRegistryEntry}.
@@ -196,8 +193,8 @@ public abstract class BlockRegistryEntryImpl implements BlockRegistryEntry, Sett
         }
 
         @Override
-        public Builder lightLevel(ToIntFunction<BlockData> lightEmission) {
-            return this.propertiesNMS(properties -> properties.lightLevel(state -> lightEmission.applyAsInt(CraftBlockData.fromData(state))));
+        public Builder lightLevel(int lightEmission) {
+            return this.propertiesNMS(properties -> properties.lightLevel(lightEmission));
         }
 
         @Override

@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/level/block/LightBlock.java
++++ b/net/minecraft/world/level/block/LightBlock.java
+@@ -33,7 +_,7 @@
+     public static final int MAX_LEVEL = 15;
+     public static final IntegerProperty LEVEL = BlockStateProperties.LEVEL;
+     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+-    public static final ToIntFunction<BlockState> LIGHT_EMISSION = state -> state.getValue(LEVEL);
++    public static final org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction<Integer> LIGHT_EMISSION = new org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties<>(java.util.List.of(LEVEL), state -> state.getValue(LEVEL)); // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
+ 
+     @Override
+     public MapCodec<LightBlock> codec() {

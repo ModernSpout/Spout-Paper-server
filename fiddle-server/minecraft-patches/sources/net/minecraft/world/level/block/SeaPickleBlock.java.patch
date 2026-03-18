@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/level/block/SeaPickleBlock.java
++++ b/net/minecraft/world/level/block/SeaPickleBlock.java
+@@ -56,7 +_,7 @@
+         }
+     }
+ 
+-    public static boolean isDead(BlockState state) {
++    public static boolean isDead(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties.PropertyValueMap state) { // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
+         return !state.getValue(WATERLOGGED);
+     }
+ 

@@ -1,0 +1,15 @@
+--- a/net/minecraft/world/level/block/GlowLichenBlock.java
++++ b/net/minecraft/world/level/block/GlowLichenBlock.java
+@@ -24,8 +_,10 @@
+         super(properties);
+     }
+ 
+-    public static ToIntFunction<BlockState> emission(int light) {
+-        return state -> MultifaceBlock.hasAnyFace(state) ? light : 0;
++    // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
++    public static org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction<Integer> emission(int light) {
++        return new org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties<>(java.util.List.of(PipeBlock.NORTH, PipeBlock.EAST, PipeBlock.SOUTH, PipeBlock.WEST, PipeBlock.UP, PipeBlock.DOWN), state -> MultifaceBlock.hasAnyFace(state) ? light : 0);
++        // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
+     }
+ 
+     @Override

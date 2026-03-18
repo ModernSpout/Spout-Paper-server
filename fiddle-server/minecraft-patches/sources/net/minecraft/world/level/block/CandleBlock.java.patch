@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/level/block/CandleBlock.java
++++ b/net/minecraft/world/level/block/CandleBlock.java
+@@ -40,7 +_,7 @@
+     public static final IntegerProperty CANDLES = BlockStateProperties.CANDLES;
+     public static final BooleanProperty LIT = AbstractCandleBlock.LIT;
+     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+-    public static final ToIntFunction<BlockState> LIGHT_EMISSION = state -> state.getValue(LIT) ? 3 * state.getValue(CANDLES) : 0;
++    public static final org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction<Integer> LIGHT_EMISSION = new org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties<>(List.of(LIT, CANDLES), state -> state.getValue(LIT) ? 3 * state.getValue(CANDLES) : 0); // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
+     private static final Int2ObjectMap<List<Vec3>> PARTICLE_OFFSETS = Util.make(
+         new Int2ObjectOpenHashMap<>(4),
+         map -> {

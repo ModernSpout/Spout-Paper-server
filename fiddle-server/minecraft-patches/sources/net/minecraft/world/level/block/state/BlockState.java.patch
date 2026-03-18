@@ -1,9 +1,19 @@
 --- a/net/minecraft/world/level/block/state/BlockState.java
 +++ b/net/minecraft/world/level/block/state/BlockState.java
-@@ -25,6 +_,60 @@
+@@ -7,7 +_,7 @@
+ import net.minecraft.world.level.block.Block;
+ import net.minecraft.world.level.block.state.properties.Property;
+ 
+-public class BlockState extends BlockBehaviour.BlockStateBase {
++public class BlockState extends BlockBehaviour.BlockStateBase implements org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties.PropertyValueMap { // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make block state function properties serializable
+     public static final Codec<BlockState> CODEC = codec(BuiltInRegistries.BLOCK.byNameCodec(), Block::defaultBlockState).stable();
+ 
+     // Paper start - optimise getType calls
+@@ -24,6 +_,60 @@
+     public BlockState(Block owner, Reference2ObjectArrayMap<Property<?>, Comparable<?>> values, MapCodec<BlockState> propertiesCodec) {
          super(owner, values, propertiesCodec);
      }
- 
++
 +    // Fiddle start - More data-driven - Minecraft registries - Cache block and item values
 +    /**
 +     * The {@linkplain net.minecraft.core.Registry#getId index} at which this block state is registered in
@@ -57,7 +67,6 @@
 +        this.isVanilla = true;
 +    }
 +    // Fiddle end - More data-driven - Vanilla flag - Implementation part
-+
+ 
      @Override
      protected BlockState asState() {
-         return this;

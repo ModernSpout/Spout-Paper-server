@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/level/block/RespawnAnchorBlock.java
++++ b/net/minecraft/world/level/block/RespawnAnchorBlock.java
+@@ -206,7 +_,7 @@
+         return true;
+     }
+ 
+-    public static int getScaledChargeLevel(BlockState state, int scale) {
++    public static int getScaledChargeLevel(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties.PropertyValueMap state, int scale) { // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make block state function properties serializable
+         return Mth.floor((state.getValue(CHARGE) - 0) / 4.0F * scale);
+     }
+ 

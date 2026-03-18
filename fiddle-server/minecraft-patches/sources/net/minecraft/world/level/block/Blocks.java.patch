@@ -32,6 +32,24 @@
              .pushReaction(PushReaction.DESTROY)
      );
      public static final Block ICE = register(
+@@ -5351,7 +_,7 @@
+         SeaPickleBlock::new,
+         BlockBehaviour.Properties.of()
+             .mapColor(MapColor.COLOR_GREEN)
+-            .lightLevel(blockState1 -> SeaPickleBlock.isDead(blockState1) ? 0 : 3 + 3 * blockState1.getValue(SeaPickleBlock.PICKLES))
++            .lightLevel(new org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties<>(java.util.List.of(SeaPickleBlock.WATERLOGGED, SeaPickleBlock.PICKLES), blockState1 -> SeaPickleBlock.isDead(blockState1) ? 0 : 3 + 3 * blockState1.getValue(SeaPickleBlock.PICKLES))) // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
+             .sound(SoundType.SLIME_BLOCK)
+             .noOcclusion()
+             .pushReaction(PushReaction.DESTROY)
+@@ -6010,7 +_,7 @@
+             .instrument(NoteBlockInstrument.BASEDRUM)
+             .requiresCorrectToolForDrops()
+             .strength(50.0F, 1200.0F)
+-            .lightLevel(blockState1 -> RespawnAnchorBlock.getScaledChargeLevel(blockState1, 15))
++            .lightLevel(new org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties<>(java.util.List.of(RespawnAnchorBlock.CHARGE), blockState1 -> RespawnAnchorBlock.getScaledChargeLevel(blockState1, 15))) // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
+     );
+     public static final Block POTTED_CRIMSON_FUNGUS = register(
+         "potted_crimson_fungus", properties -> new FlowerPotBlock(CRIMSON_FUNGUS, properties), flowerPotProperties()
 @@ -6288,7 +_,7 @@
              .strength(1.5F)
              .sound(SoundType.SCULK_SENSOR)
@@ -41,15 +59,41 @@
      );
      public static final Block CALIBRATED_SCULK_SENSOR = register(
          "calibrated_sculk_sensor", CalibratedSculkSensorBlock::new, BlockBehaviour.Properties.ofLegacyCopy(SCULK_SENSOR)
-@@ -7128,8 +_,10 @@
-         return state -> state.getValue(BlockStateProperties.LIT) ? lightValue : 0;
+@@ -7021,7 +_,7 @@
+         BlockBehaviour.Properties.of()
+             .mapColor(MapColor.STONE)
+             .instrument(NoteBlockInstrument.BASEDRUM)
+-            .lightLevel(blockState1 -> blockState1.getValue(TrialSpawnerBlock.STATE).lightLevel())
++            .lightLevel(new org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties<>(java.util.List.of(TrialSpawnerBlock.STATE), blockState1 -> blockState1.getValue(TrialSpawnerBlock.STATE).lightLevel())) // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
+             .strength(50.0F)
+             .sound(SoundType.TRIAL_SPAWNER)
+             .isViewBlocking(Blocks::never)
+@@ -7035,7 +_,7 @@
+             .instrument(NoteBlockInstrument.BASEDRUM)
+             .noOcclusion()
+             .sound(SoundType.VAULT)
+-            .lightLevel(blockState1 -> blockState1.getValue(VaultBlock.STATE).lightLevel())
++            .lightLevel(new org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties<>(java.util.List.of(VaultBlock.STATE), blockState1 -> blockState1.getValue(VaultBlock.STATE).lightLevel())) // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
+             .strength(50.0F)
+             .isViewBlocking(Blocks::never)
+     );
+@@ -7124,12 +_,16 @@
+             .pushReaction(PushReaction.DESTROY)
+     );
+ 
+-    private static ToIntFunction<BlockState> litBlockEmission(int lightValue) {
+-        return state -> state.getValue(BlockStateProperties.LIT) ? lightValue : 0;
++    // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
++    private static org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction<Integer> litBlockEmission(int lightValue) {
++        return new org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties<>(java.util.List.of(BlockStateProperties.LIT), state -> state.getValue(BlockStateProperties.LIT) ? lightValue : 0);
++        // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
      }
  
 -    private static Function<BlockState, MapColor> waterloggedMapColor(MapColor unwaterloggedMapColor) {
 -        return state -> state.getValue(BlockStateProperties.WATERLOGGED) ? MapColor.WATER : unwaterloggedMapColor;
 +    // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
-+    private static org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.MapColorFunction waterloggedMapColor(MapColor unwaterloggedMapColor) {
-+        return new org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.MapColorFunction.ByProperties(java.util.List.of(BlockStateProperties.WATERLOGGED), state -> state.getValue(BlockStateProperties.WATERLOGGED) ? MapColor.WATER : unwaterloggedMapColor);
++    private static org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction<net.minecraft.world.level.material.MapColor> waterloggedMapColor(MapColor unwaterloggedMapColor) {
++        return new org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties<>(java.util.List.of(BlockStateProperties.WATERLOGGED), state -> state.getValue(BlockStateProperties.WATERLOGGED) ? MapColor.WATER : unwaterloggedMapColor);
 +        // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
      }
  

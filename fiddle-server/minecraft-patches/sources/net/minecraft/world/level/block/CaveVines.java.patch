@@ -1,0 +1,14 @@
+--- a/net/minecraft/world/level/block/CaveVines.java
++++ b/net/minecraft/world/level/block/CaveVines.java
+@@ -72,7 +_,9 @@
+         return state.hasProperty(BERRIES) && state.getValue(BERRIES);
+     }
+ 
+-    static ToIntFunction<BlockState> emission(int berries) {
+-        return state -> state.getValue(BlockStateProperties.BERRIES) ? berries : 0;
++    // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
++    static org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction<Integer> emission(int berries) {
++        return new org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties<>(java.util.List.of(BlockStateProperties.BERRIES), state -> state.getValue(BlockStateProperties.BERRIES) ? berries : 0);
++        // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
+     }
+ }

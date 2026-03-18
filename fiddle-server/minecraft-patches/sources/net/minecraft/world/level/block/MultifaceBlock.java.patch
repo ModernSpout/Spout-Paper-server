@@ -1,0 +1,20 @@
+--- a/net/minecraft/world/level/block/MultifaceBlock.java
++++ b/net/minecraft/world/level/block/MultifaceBlock.java
+@@ -240,7 +_,7 @@
+         return blockState;
+     }
+ 
+-    public static boolean hasFace(BlockState state, Direction direction) {
++    public static boolean hasFace(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties.PropertyValueMap state, Direction direction) { // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make block state function properties serializable
+         BooleanProperty faceProperty = getFaceProperty(direction);
+         return state.getValueOrElse(faceProperty, false);
+     }
+@@ -275,7 +_,7 @@
+         return blockState;
+     }
+ 
+-    protected static boolean hasAnyFace(BlockState state) {
++    protected static boolean hasAnyFace(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties.PropertyValueMap state) { // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make block state function properties serializable
+         for (Direction direction : DIRECTIONS) {
+             if (hasFace(state, direction)) {
+                 return true;

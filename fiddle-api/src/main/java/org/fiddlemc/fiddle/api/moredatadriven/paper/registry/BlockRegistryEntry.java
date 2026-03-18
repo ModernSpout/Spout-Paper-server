@@ -8,7 +8,6 @@ import org.bukkit.block.BlockType;
 import org.bukkit.block.PistonMoveReaction;
 import org.bukkit.block.data.BlockData;
 import org.jetbrains.annotations.ApiStatus;
-import java.util.function.ToIntFunction;
 
 /**
  * A data-centric version-specific registry entry for the {@link BlockType} type.
@@ -192,10 +191,20 @@ public interface BlockRegistryEntry {
         }
 
         /**
-         * Sets the light level function for this block.
-         * This function is used to determine the light level emitted by each state of this block.
+         * Sets the light level for this block.
          */
-        BlockRegistryEntry.Builder lightLevel(ToIntFunction<BlockData> lightEmission);
+        BlockRegistryEntry.Builder lightLevel(int lightEmission);
+
+        // Temporarily removed due to stricter format of light emission for serialization
+        // /**
+        //  * Sets the light level function for this block.
+        //  * This function is used to determine the light level emitted by each state of this block.
+        //  *
+        //  * @param propertyDependencies The block state properties that the given {@code lightEmission}
+        //  *                             function may depend on. For example, the list must contain {@code "berries"}
+        //  *                             if you want to check whether a cave vines block has any berries.
+        //  */
+        // BlockRegistryEntry.Builder lightLevel(List<String> propertyDependencies, ToIntFunction<Map<String, String>> lightEmission);
 
         /**
          * Convenience function that calls {@link #destroyTime(float)} and {@link #explosionResistance(float)}.

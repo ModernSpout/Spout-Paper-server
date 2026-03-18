@@ -13,71 +13,18 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import org.fiddlemc.fiddle.impl.util.mojang.codec.EnumViaIdentifierCodec;
 import org.fiddlemc.fiddle.impl.util.mojang.codec.StaticFieldViaIdentifierCodec;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Holder for codecs related to blocks.
  */
 public final class BlockCodecs {
 
-    public static final Codec<MapColor> MAP_COLOR_CODEC = new StaticFieldViaIdentifierCodec<>(MapColor.class);
+    private static final Codec<MapColor> MAP_COLOR_CODEC = new StaticFieldViaIdentifierCodec<>(MapColor.class);
+    public static final Codec<BlockStateFunction<MapColor>> MAP_COLOR_FUNCTION_CODEC = BlockStateFunction.codec(MAP_COLOR_CODEC);
     public static final Codec<SoundType> SOUND_TYPE_CODEC = new StaticFieldViaIdentifierCodec<>(SoundType.class);
+    public static final Codec<BlockStateFunction<Integer>> LIGHT_EMISSION_CODEC = BlockStateFunction.codec(Codec.INT);
     public static final Codec<PushReaction> PUSH_REACTION_CODEC = new EnumViaIdentifierCodec<>(PushReaction.class);
     public static final Codec<NoteBlockInstrument> NOTE_BLOCK_INSTRUMENT_CODEC = new EnumViaIdentifierCodec<>(NoteBlockInstrument.class);
-
-    public static final Codec<MapColorFunction.Single> SINGLE_MAP_COLOR_FUNCTION_CODEC = MAP_COLOR_CODEC.xmap(MapColorFunction.Single::new, MapColorFunction.Single::mapColor);
-    public static final Codec<MapColorFunction.ByProperties> BY_PROPERTIES_MAP_COLOR_FUNCTION_CODEC = new Codec<>() {
-
-        @Override
-        public <T> DataResult<T> encode(MapColorFunction.ByProperties input, DynamicOps<T> ops, T prefix) {
-            RecordBuilder<T> builder = ops.mapBuilder();
-            input.listAllCombinations().stream().forEach(combination -> {
-                builder.add(BlockStateStringConversion.propertyKeyValuesToString(combination.left()), combination.right(), MAP_COLOR_CODEC);
-            });
-            return builder.build(prefix);
-        }
-
-        @Override
-        public <T> DataResult<Pair<MapColorFunction.ByProperties, T>> decode(DynamicOps<T> ops, T input) {
-            return ops.getMap(input).flatMap(mapLike -> {
-                List<String> propertyNames;
-                {
-                    Pair<T, T> entry = mapLike.entries().findAny().get();
-                    propertyNames = BlockStateStringConversion.propertyKeyValuesFromString(ops.getStringValue(entry.getFirst()).getOrThrow()).stream().map(it.unimi.dsi.fastutil.Pair::left).toList();
-                }
-                Map<List<String>, MapColor> precomputedMapColors = mapLike.entries().collect(Collectors.toMap(
-                    entry -> BlockStateStringConversion.propertyKeyValuesFromString(ops.getStringValue(entry.getFirst()).getOrThrow()).stream().map(it.unimi.dsi.fastutil.Pair::right).toList(),
-                    entry -> MAP_COLOR_CODEC.decode(ops, input).getOrThrow().getFirst())
-                );
-                return DataResult.success(Pair.of(new MapColorFunction.ByProperties(propertyNames, precomputedMapColors), input));
-            });
-        }
-
-    };
-
-    public static final Codec<MapColorFunction> MAP_COLOR_FUNCTION_CODEC = new Codec<>() {
-
-        @Override
-        public <T> DataResult<T> encode(MapColorFunction input, DynamicOps<T> ops, T prefix) {
-            return switch (input) {
-                case MapColorFunction.Single single -> SINGLE_MAP_COLOR_FUNCTION_CODEC.encode(single, ops, prefix);
-                case MapColorFunction.ByProperties byProperties ->
-                    BY_PROPERTIES_MAP_COLOR_FUNCTION_CODEC.encode(byProperties, ops, prefix);
-            };
-        }
-
-        @Override
-        public <T> DataResult<Pair<MapColorFunction, T>> decode(DynamicOps<T> ops, T input) {
-            DataResult<String> stringInput = ops.getStringValue(input);
-            if (stringInput.isSuccess()) {
-                return (DataResult) SINGLE_MAP_COLOR_FUNCTION_CODEC.decode(ops, input);
-            }
-            return (DataResult) BY_PROPERTIES_MAP_COLOR_FUNCTION_CODEC.decode(ops, input);
-        }
-
-    };
 
     public static final Codec<BlockBehaviour.Properties> PROPERTIES_CODEC = new Codec<>() {
 
@@ -87,6 +34,7 @@ public final class BlockCodecs {
             builder.add("map_color", input.mapColor, MAP_COLOR_FUNCTION_CODEC);
             builder.add("has_collision", ops.createBoolean(input.hasCollision));
             builder.add("sound_type", input.soundType, SOUND_TYPE_CODEC);
+            builder.add("light_emission", input.lightEmission, LIGHT_EMISSION_CODEC);
             if (input.wasExplosionResistanceSet) {
                 builder.add("explosion_resistance", ops.createFloat(input.explosionResistance));
             }
@@ -122,7 +70,7 @@ public final class BlockCodecs {
                 BlockBehaviour.Properties properties = new BlockBehaviour.Properties();
                 T mapColorInput = mapLike.get("map_color");
                 if (mapColorInput != null) {
-                    DataResult<MapColorFunction> mapColor = MAP_COLOR_FUNCTION_CODEC.decode(ops, mapColorInput).map(Pair::getFirst);
+                    DataResult<BlockStateFunction> mapColor = MAP_COLOR_FUNCTION_CODEC.decode(ops, mapColorInput).map(Pair::getFirst);
                     if (mapColor.isError()) {
                         return mapColor.map($ -> null);
                     }

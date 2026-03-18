@@ -90,6 +90,15 @@
          private final BlockBehaviour.@Nullable OffsetFunction offsetFunction;
          private final boolean spawnTerrainParticles;
          private final NoteBlockInstrument instrument;
+@@ -525,7 +_,7 @@
+         protected BlockStateBase(Block owner, Reference2ObjectArrayMap<Property<?>, Comparable<?>> values, MapCodec<BlockState> propertiesCodec) {
+             super(owner, values, propertiesCodec);
+             BlockBehaviour.Properties properties = owner.properties;
+-            this.lightEmission = properties.lightEmission.applyAsInt(this.asState());
++            this.lightEmission = properties.lightEmission.apply(this.asState()); // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
+             this.useShapeForLightOcclusion = owner.useShapeForLightOcclusion(this.asState());
+             this.isAir = properties.isAir;
+             this.ignitedByLava = properties.ignitedByLava;
 @@ -754,7 +_,13 @@
          }
  
@@ -113,12 +122,7 @@
 -        Function<BlockState, MapColor> mapColor = state -> MapColor.NONE;
 -        boolean hasCollision = true;
 -        SoundType soundType = SoundType.STONE;
-+        public static final Codec<BlockBehaviour.Properties> CODEC = org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockCodecs.PROPERTIES_CODEC; // Fiddle - More data-driven - Minecraft registries - Types - Adapt existing block type registry - Add missing properties codec implementation
-+        // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make properties fields public
-+        public org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.MapColorFunction mapColor = new org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.MapColorFunction.Single(MapColor.NONE);
-+        public boolean hasCollision = true;
-+        public SoundType soundType = SoundType.STONE;
-         ToIntFunction<BlockState> lightEmission = state -> 0;
+-        ToIntFunction<BlockState> lightEmission = state -> 0;
 -        float explosionResistance;
 -        float destroyTime;
 -        boolean requiresCorrectToolForDrops;
@@ -126,6 +130,12 @@
 -        float friction = 0.6F;
 -        float speedFactor = 1.0F;
 -        float jumpFactor = 1.0F;
++        public static final Codec<BlockBehaviour.Properties> CODEC = org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockCodecs.PROPERTIES_CODEC; // Fiddle - More data-driven - Minecraft registries - Types - Adapt existing block type registry - Add missing properties codec implementation
++        // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make properties fields public
++        public org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction<MapColor> mapColor = new org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.Single<>(MapColor.NONE);
++        public boolean hasCollision = true;
++        public SoundType soundType = SoundType.STONE;
++        public org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction<Integer> lightEmission = new org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.Single<>(0);
 +        public boolean wasExplosionResistanceSet = false; // Fiddle - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references - Replace stairs explosion resistance implementation
 +        public float explosionResistance;
 +        public float destroyTime;
@@ -205,7 +215,7 @@
          }
  
 +        // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
-+        public BlockBehaviour.Properties mapColor(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.MapColorFunction mapColor) {
++        public BlockBehaviour.Properties mapColor(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction<MapColor> mapColor) {
 +            this.mapColor = mapColor;
 +            return this;
 +        }
@@ -220,19 +230,44 @@
          public BlockBehaviour.Properties mapColor(MapColor mapColor) {
 -            this.mapColor = state -> mapColor;
 -            return this;
-+            return this.mapColor(new org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.MapColorFunction.Single(mapColor)); // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
++            return this.mapColor(new org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.Single<>(mapColor)); // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
          }
  
 -        public BlockBehaviour.Properties mapColor(Function<BlockState, MapColor> mapColor) {
 -            this.mapColor = mapColor;
 -            return this;
 +        // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
-+        public BlockBehaviour.Properties mapColor(List<Property<?>> properties, Function<org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.MapColorFunction.ByProperties.PropertyValueMap, MapColor> byPropertyValues) {
-+            return this.mapColor(new org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.MapColorFunction.ByProperties(properties, byPropertyValues));
++        public BlockBehaviour.Properties mapColor(List<Property<?>> properties, Function<org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties.PropertyValueMap, MapColor> byPropertyValues) {
++            return this.mapColor(new org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties<>(properties, byPropertyValues));
 +            // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
          }
  
          public BlockBehaviour.Properties noCollision() {
+@@ -1240,10 +_,20 @@
+             return this;
+         }
+ 
+-        public BlockBehaviour.Properties lightLevel(ToIntFunction<BlockState> lightEmission) {
+-            this.lightEmission = lightEmission;
+-            return this;
+-        }
++        // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
++        public BlockBehaviour.Properties lightLevel(int lightEmission) {
++            return this.lightLevel(new org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.Single<>(lightEmission));
++        }
++
++        public BlockBehaviour.Properties lightLevel(Function<BlockState, Integer> lightEmission) {
++            if (lightEmission instanceof org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction<Integer> blockStateFunction) {
++                this.lightEmission = blockStateFunction;
++                return this;
++            }
++            // Assume that every piece of code that calls this method with an argument that is not a BlockStateFunction is calling it with a single value; for every other place we call the method with a BlockStateFunction instead
++            return this.lightLevel(lightEmission.apply(null));
++        }
++        // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
+ 
+         public BlockBehaviour.Properties strength(float destroyTime, float explosionResistance) {
+             return this.destroyTime(destroyTime).explosionResistance(explosionResistance);
 @@ -1319,26 +_,56 @@
          }
  
