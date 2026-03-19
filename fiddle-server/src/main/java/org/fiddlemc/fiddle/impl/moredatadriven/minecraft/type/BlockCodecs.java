@@ -25,6 +25,7 @@ public final class BlockCodecs {
     public static final Codec<BlockStateFunction<Integer>> LIGHT_EMISSION_CODEC = BlockStateFunction.codec(Codec.INT);
     public static final Codec<PushReaction> PUSH_REACTION_CODEC = new EnumViaIdentifierCodec<>(PushReaction.class);
     public static final Codec<NoteBlockInstrument> NOTE_BLOCK_INSTRUMENT_CODEC = new EnumViaIdentifierCodec<>(NoteBlockInstrument.class);
+    public static final Codec<BlockBehaviour.OffsetType> OFFSET_TYPE_CODEC = new EnumViaIdentifierCodec<>(BlockBehaviour.OffsetType.class);
 
     public static final Codec<BlockBehaviour.Properties> PROPERTIES_CODEC = new Codec<>() {
 
@@ -61,6 +62,9 @@ public final class BlockCodecs {
             builder.add("emissive_rendering", input.emissiveRendering, KnownStatePredicate.CODEC);
             builder.add("dynamic_shape", ops.createBoolean(input.dynamicShape));
             builder.add("required_features", input.requiredFeatures, FeatureFlagCodecs.FEATURE_FLAG_SET_CODEC);
+            if (input.offsetFunction != null) {
+                builder.add("offset_function", input.offsetFunction, OFFSET_TYPE_CODEC);
+            }
             return builder.build(prefix);
         }
 
@@ -284,6 +288,14 @@ public final class BlockCodecs {
                         return requiredFeatures.map($ -> null);
                     }
                     properties.requiredFeatures = requiredFeatures.getOrThrow();
+                }
+                T offsetFunctionInput = mapLike.get("offset_function");
+                if (offsetFunctionInput != null) {
+                    DataResult<BlockBehaviour.OffsetType> offsetFunction = OFFSET_TYPE_CODEC.decode(ops, offsetFunctionInput).map(Pair::getFirst);
+                    if (offsetFunction.isError()) {
+                        return offsetFunction.map($ -> null);
+                    }
+                    properties.offsetFunction = offsetFunction.getOrThrow();
                 }
                 return DataResult.success(Pair.of(properties, input));
             });

@@ -71,7 +71,7 @@
          }
      }
  
-@@ -434,11 +_,13 @@
+@@ -434,12 +_,14 @@
          public final float destroySpeed;
          private final boolean requiresCorrectToolForDrops;
          private final boolean canOcclude;
@@ -80,6 +80,7 @@
 -        private final BlockBehaviour.StatePredicate isViewBlocking;
 -        private final BlockBehaviour.StatePredicate hasPostProcess;
 -        private final BlockBehaviour.StatePredicate emissiveRendering;
+-        private final BlockBehaviour.@Nullable OffsetFunction offsetFunction;
 +        // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
 +        private final org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate isRedstoneConductor;
 +        private final org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate isSuffocating;
@@ -87,9 +88,10 @@
 +        private final org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate hasPostProcess;
 +        private final org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate emissiveRendering;
 +        // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
-         private final BlockBehaviour.@Nullable OffsetFunction offsetFunction;
++        private final BlockBehaviour.@Nullable OffsetType offsetFunction; // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make offset function property serializable
          private final boolean spawnTerrainParticles;
          private final NoteBlockInstrument instrument;
+         private final boolean replaceable;
 @@ -525,7 +_,7 @@
          protected BlockStateBase(Block owner, Reference2ObjectArrayMap<Property<?>, Comparable<?>> values, MapCodec<BlockState> propertiesCodec) {
              super(owner, values, propertiesCodec);
@@ -114,8 +116,48 @@
          }
  
          public int getDirectSignal(BlockGetter level, BlockPos pos, Direction direction) {
-@@ -1102,47 +_,50 @@
+@@ -818,7 +_,7 @@
+         }
+ 
+         public Vec3 getOffset(BlockPos pos) {
+-            BlockBehaviour.OffsetFunction offsetFunction = this.offsetFunction;
++            BlockBehaviour.OffsetType offsetFunction = this.offsetFunction; // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make offset function property serializable
+             return offsetFunction != null ? offsetFunction.evaluate(this.asState(), pos) : Vec3.ZERO;
+         }
+ 
+@@ -1090,59 +_,77 @@
+         }
      }
+ 
+-    @FunctionalInterface
+-    public interface OffsetFunction {
+-        Vec3 evaluate(BlockState state, BlockPos pos);
+-    }
++    // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make offset function property serializable
++    // @FunctionalInterface
++    // public interface OffsetFunction {
++    //     Vec3 evaluate(BlockState state, BlockPos pos);
++    // }
++    // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make offset function property serializable
+ 
+     public static enum OffsetType {
+         NONE,
+         XZ,
+         XYZ;
++
++        // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make offset function property serializable
++        private final java.util.function.BiFunction<BlockState, BlockPos, Vec3> evaluate;
++
++        OffsetType() {
++            this.evaluate = BlockBehaviour.Properties.offsetFunction(this);
++        }
++
++        public Vec3 evaluate(BlockState state, BlockPos pos) {
++            return this.evaluate.apply(state, pos);
++        }
++
+     }
++    // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make offset function property serializable
  
      public static class Properties {
 -        public static final Codec<BlockBehaviour.Properties> CODEC = MapCodec.unitCodec(() -> of());
@@ -182,6 +224,7 @@
 -        BlockBehaviour.StatePredicate emissiveRendering = (state, level, pos) -> false;
 -        boolean dynamicShape;
 -        FeatureFlagSet requiredFeatures = FeatureFlags.VANILLA_SET;
+-        BlockBehaviour.@Nullable OffsetFunction offsetFunction;
 +        public org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate isRedstoneConductor = org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate.IS_COLLISION_SHAPE_FULL_BLOCK;
 +        public org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate isSuffocating = org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate.BLOCKS_MOTION_AND_IS_COLLISION_SHAPE_FULL_BLOCK;
 +        public org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate isViewBlocking = this.isSuffocating;
@@ -189,7 +232,7 @@
 +        public org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate emissiveRendering = org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate.NEVER;
 +        public boolean dynamicShape;
 +        public FeatureFlagSet requiredFeatures = FeatureFlags.VANILLA_SET;
-         BlockBehaviour.@Nullable OffsetFunction offsetFunction;
++        public BlockBehaviour.@Nullable OffsetType offsetFunction;
 +        // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make properties fields public
  
 -        private Properties() {
@@ -325,7 +368,7 @@
              this.emissiveRendering = emissiveRendering;
              return this;
          }
-@@ -1355,6 +_,7 @@
+@@ -1355,11 +_,19 @@
  
          public BlockBehaviour.Properties explosionResistance(float explosionResistance) {
              this.explosionResistance = Math.max(0.0F, explosionResistance);
@@ -333,6 +376,27 @@
              return this;
          }
  
+         public BlockBehaviour.Properties offsetType(BlockBehaviour.OffsetType offsetType) {
+-            this.offsetFunction = switch (offsetType) {
++            // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make offset function property serializable
++            this.offsetFunction = offsetType;
++            return this;
++        }
++
++        public static java.util.function.BiFunction<BlockState, BlockPos, Vec3> offsetFunction(BlockBehaviour.OffsetType offsetType) {
++            return switch (offsetType) {
++                // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make offset function property serializable
+                 case NONE -> null;
+                 case XZ -> (state, pos) -> {
+                     Block block = state.getBlock();
+@@ -1379,7 +_,6 @@
+                     return new Vec3(d1, d, d2);
+                 };
+             };
+-            return this;
+         }
+ 
+         public BlockBehaviour.Properties noTerrainParticles() {
 @@ -1423,7 +_,7 @@
      }
  

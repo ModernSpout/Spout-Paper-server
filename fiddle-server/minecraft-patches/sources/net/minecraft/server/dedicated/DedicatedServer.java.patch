@@ -30,7 +30,7 @@
 +            }
 +        }));
 +        org.fiddlemc.fiddle.impl.moredatadriven.minecraft.BlockRegistry.get().stream().forEach(block -> {
-+            if (block.isVanilla() && block != net.minecraft.world.level.block.Blocks.BARRIER && block != net.minecraft.world.level.block.Blocks.WHEAT) return;
++            if (block.isVanilla() && block != net.minecraft.world.level.block.Blocks.BARRIER && block != net.minecraft.world.level.block.Blocks.WHEAT && block != net.minecraft.world.level.block.Blocks.SHORT_GRASS) return;
 +            System.out.println("Custom block: " + net.minecraft.world.level.block.BlockTypes.CODEC.codec().encodeStart(com.mojang.serialization.JsonOps.INSTANCE, block).getOrThrow().toString());
 +        });
 +        org.fiddlemc.fiddle.impl.moredatadriven.minecraft.ItemRegistry.get().stream().forEach(item -> {
