@@ -1,5 +1,6 @@
 package org.fiddlemc.testplugin;
 
+import org.bukkit.Registry;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -27,18 +28,13 @@ public final class TestPlugin extends JavaPlugin implements Listener {
     }
 
     /**
-     * Give the player the custom items on join.
+     * Ops each player and gives them all custom items on join.
      */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onEntityPickupItem(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        Stream.of(
-            PluginItemTypes.GLASS_SHARD,
-            PluginItemTypes.BIRCH_BOOKSHELF,
-            PluginItemTypes.DIORITE_BRICKS,
-            PluginItemTypes.DIORITE_BRICK_SLAB,
-            PluginItemTypes.DIORITE_BRICK_STAIRS
-        ).map(Supplier::get).forEach(itemType -> {
+        player.setOp(true);
+        Registry.ITEM.stream().filter(item -> !item.isVanilla()).forEach(itemType -> {
             int hasAmount = Arrays.stream(player.getInventory().getContents())
                 .filter(itemStack -> itemStack != null && itemStack.getType().asItemType() == itemType)
                 .mapToInt(ItemStack::getAmount).sum();

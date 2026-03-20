@@ -125,7 +125,7 @@
              return offsetFunction != null ? offsetFunction.evaluate(this.asState(), pos) : Vec3.ZERO;
          }
  
-@@ -1090,59 +_,77 @@
+@@ -1090,57 +_,75 @@
          }
      }
  
@@ -172,6 +172,7 @@
 -        float friction = 0.6F;
 -        float speedFactor = 1.0F;
 -        float jumpFactor = 1.0F;
+-        private @Nullable ResourceKey<Block> id;
 +        public static final Codec<BlockBehaviour.Properties> CODEC = org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockCodecs.PROPERTIES_CODEC; // Fiddle - More data-driven - Minecraft registries - Types - Adapt existing block type registry - Add missing properties codec implementation
 +        // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make properties fields public
 +        public org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction<MapColor> mapColor = new org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.Single<>(MapColor.NONE);
@@ -186,7 +187,7 @@
 +        public float friction = 0.6F;
 +        public float speedFactor = 1.0F;
 +        public float jumpFactor = 1.0F;
-         private @Nullable ResourceKey<Block> id;
++        public @Nullable ResourceKey<Block> id;
          private DependantName<Block, Optional<ResourceKey<LootTable>>> drops = key -> Optional.of(
              ResourceKey.create(Registries.LOOT_TABLE, key.identifier().withPrefix("blocks/"))
          );
@@ -235,11 +236,8 @@
 +        public BlockBehaviour.@Nullable OffsetType offsetFunction;
 +        // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make properties fields public
  
--        private Properties() {
-+        public Properties() { // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make properties constructor public
+         private Properties() {
          }
- 
-         public static BlockBehaviour.Properties of() {
 @@ -1168,7 +_,12 @@
              BlockBehaviour.Properties properties = new BlockBehaviour.Properties();
              BlockBehaviour.Properties properties1 = blockBehaviour.properties;

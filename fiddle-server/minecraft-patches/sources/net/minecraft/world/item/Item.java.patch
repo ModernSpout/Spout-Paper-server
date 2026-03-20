@@ -157,8 +157,9 @@
 +        public final DataComponentMap.Builder components = DataComponentMap.builder().addAll(DataComponents.COMMON_ITEM_COMPONENTS);
          @Nullable Item craftingRemainingItem;
 -        FeatureFlagSet requiredFeatures = FeatureFlags.VANILLA_SET;
+-        private @Nullable ResourceKey<Item> id;
 +        public FeatureFlagSet requiredFeatures = FeatureFlags.VANILLA_SET;
-         private @Nullable ResourceKey<Item> id;
++        public @Nullable ResourceKey<Item> id;
          private DependantName<Item, String> descriptionId = ITEM_DESCRIPTION_ID;
 +        // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make properties fields public
          private final DependantName<Item, Identifier> model = ResourceKey::identifier;

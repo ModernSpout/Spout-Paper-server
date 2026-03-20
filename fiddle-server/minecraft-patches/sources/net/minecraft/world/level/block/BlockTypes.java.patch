@@ -19,21 +19,3 @@
          Registry.register(registry, "block", Block.CODEC);
          Registry.register(registry, "air", AirBlock.CODEC);
          Registry.register(registry, "amethyst", AmethystBlock.CODEC);
-@@ -213,7 +_,7 @@
-         Registry.register(registry, "spore_blossom", SporeBlossomBlock.CODEC);
-         Registry.register(registry, "stained_glass_pane", StainedGlassPaneBlock.CODEC);
-         Registry.register(registry, "stained_glass", StainedGlassBlock.CODEC);
--        Registry.register(registry, "stair", StairBlock.CODEC);
-+        Registry.register(registry, "stairs", StairBlock.CODEC); // Fiddle - More data-driven - Minecraft registries - Types - Adapt existing block type registry - Change "stair" to "stairs"
-         Registry.register(registry, "standing_sign", StandingSignBlock.CODEC);
-         Registry.register(registry, "stem", StemBlock.CODEC);
-         Registry.register(registry, "stonecutter", StonecutterBlock.CODEC);
-@@ -262,7 +_,7 @@
-         Registry.register(registry, "weathering_copper_golem_statue", WeatheringCopperGolemStatueBlock.CODEC);
-         Registry.register(registry, "weathering_copper_grate", WeatheringCopperGrateBlock.CODEC);
-         Registry.register(registry, "weathering_copper_slab", WeatheringCopperSlabBlock.CODEC);
--        Registry.register(registry, "weathering_copper_stair", WeatheringCopperStairBlock.CODEC);
-+        Registry.register(registry, "weathering_copper_stairs", WeatheringCopperStairBlock.CODEC); // Fiddle - More data-driven - Minecraft registries - Types - Adapt existing block type registry - Change "stair" to "stairs"
-         Registry.register(registry, "weathering_copper_trap_door", WeatheringCopperTrapDoorBlock.CODEC);
-         Registry.register(registry, "weathering_lantern", WeatheringLanternBlock.CODEC);
-         Registry.register(registry, "weathering_lightning_rod", WeatheringLightningRodBlock.CODEC);

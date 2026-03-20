@@ -5,6 +5,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.RecordBuilder;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -45,6 +48,9 @@ public final class BlockCodecs {
             builder.add("friction", ops.createFloat(input.friction));
             builder.add("speed_factor", ops.createFloat(input.speedFactor));
             builder.add("jump_factor", ops.createFloat(input.jumpFactor));
+            if (input.id != null) {
+                builder.add("id", input.id.identifier(), Identifier.CODEC);
+            }
             builder.add("can_occlude", ops.createBoolean(input.canOcclude));
             builder.add("is_air", ops.createBoolean(input.isAir));
             builder.add("ignited_by_lava", ops.createBoolean(input.ignitedByLava));
@@ -71,7 +77,7 @@ public final class BlockCodecs {
         @Override
         public <T> DataResult<Pair<BlockBehaviour.Properties, T>> decode(DynamicOps<T> ops, T input) {
             return ops.getMap(input).flatMap(mapLike -> {
-                BlockBehaviour.Properties properties = new BlockBehaviour.Properties();
+                BlockBehaviour.Properties properties = BlockBehaviour.Properties.of();
                 T mapColorInput = mapLike.get("map_color");
                 if (mapColorInput != null) {
                     DataResult<BlockStateFunction> mapColor = MAP_COLOR_FUNCTION_CODEC.decode(ops, mapColorInput).map(Pair::getFirst);
@@ -152,6 +158,14 @@ public final class BlockCodecs {
                         return jumpFactor.map($ -> null);
                     }
                     properties.jumpFactor = jumpFactor.getOrThrow().floatValue();
+                }
+                T idInput = mapLike.get("id");
+                if (idInput != null) {
+                    DataResult<Identifier> id = Identifier.CODEC.decode(ops, idInput).map(Pair::getFirst);
+                    if (id.isError()) {
+                        return id.map($ -> null);
+                    }
+                    properties.id = ResourceKey.create(BuiltInRegistries.BLOCK.key(), id.getOrThrow());
                 }
                 T canOccludeInput = mapLike.get("can_occlude");
                 if (canOccludeInput != null) {
