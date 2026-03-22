@@ -1,8 +1,8 @@
 {
   "values": [
-    "fiddle_more_shapes:dirt_slab",
-    "fiddle_more_shapes:glass_slab",
-    "fiddle_more_shapes:grass_slab",
+    "more_vanilla_shapes:dirt_slab",
+    "more_vanilla_shapes:glass_slab",
+    "more_vanilla_shapes:grass_slab",
     "quark:diorite_brick_slab"
   ]
 }

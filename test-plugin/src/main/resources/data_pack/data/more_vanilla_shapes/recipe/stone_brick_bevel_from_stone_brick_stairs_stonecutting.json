@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "minecraft:stone_brick_stairs",
+  "result": {
+    "count": 6,
+    "id": "more_vanilla_shapes:stone_brick_bevel"
+  }
+}

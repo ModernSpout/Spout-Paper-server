@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": "minecraft:stone_brick_slab",
-  "result": {
-    "count": 4,
-    "id": "fiddle_more_shapes:stone_brick_bevel"
-  }
-}

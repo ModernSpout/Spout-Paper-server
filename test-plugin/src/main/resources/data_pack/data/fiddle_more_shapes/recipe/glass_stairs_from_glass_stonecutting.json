@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": "minecraft:glass",
-  "result": {
-    "count": 1,
-    "id": "fiddle_more_shapes:glass_stairs"
-  }
-}

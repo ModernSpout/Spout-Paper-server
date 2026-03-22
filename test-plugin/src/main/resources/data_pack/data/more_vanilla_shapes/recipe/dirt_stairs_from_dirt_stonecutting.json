@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "minecraft:dirt",
+  "result": {
+    "count": 1,
+    "id": "more_vanilla_shapes:dirt_stairs"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "more_vanilla_shapes:stone_bricks_from_bevel"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_bevel": {
+      "conditions": {
+        "items": [
+          {
+            "items": "more_vanilla_shapes:stone_brick_bevel"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_bevel"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "more_vanilla_shapes:stone_bricks_from_bevel"
+    ]
+  }
+}

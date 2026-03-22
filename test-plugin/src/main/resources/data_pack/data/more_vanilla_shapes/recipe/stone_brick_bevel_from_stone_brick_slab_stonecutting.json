@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "minecraft:stone_brick_slab",
+  "result": {
+    "count": 4,
+    "id": "more_vanilla_shapes:stone_brick_bevel"
+  }
+}

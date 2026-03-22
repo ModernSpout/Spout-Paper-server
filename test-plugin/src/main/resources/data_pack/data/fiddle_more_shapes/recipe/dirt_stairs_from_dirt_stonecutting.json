@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": "minecraft:dirt",
-  "result": {
-    "count": 1,
-    "id": "fiddle_more_shapes:dirt_stairs"
-  }
-}

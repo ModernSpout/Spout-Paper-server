@@ -1,7 +1,7 @@
 {
   "values": [
-    "fiddle_more_shapes:dirt_stairs",
-    "fiddle_more_shapes:glass_stairs",
+    "more_vanilla_shapes:dirt_stairs",
+    "more_vanilla_shapes:glass_stairs",
     "quark:diorite_brick_stairs"
   ]
 }

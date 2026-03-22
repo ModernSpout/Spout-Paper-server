@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": "minecraft:grass_block",
-  "result": {
-    "count": 2,
-    "id": "fiddle_more_shapes:grass_slab"
-  }
-}

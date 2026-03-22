@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "minecraft:grass_block",
+  "result": {
+    "count": 2,
+    "id": "more_vanilla_shapes:grass_slab"
+  }
+}
