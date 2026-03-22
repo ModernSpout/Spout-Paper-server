@@ -63,6 +63,16 @@ public class FiddleGlobalConfiguration extends ConfigurationPart {
                  */
                 public IntOr.Default port = IntOr.Default.USE_DEFAULT;
 
+                /**
+                 * The external port at which the resource pack will be reachable.
+                 * This is useful when the resource pack is served through a port-changing proxy.
+                 *
+                 * <p>
+                 * By default, it is the same as {@link #port}.
+                 * </p>
+                 */
+                public IntOr.Default externalPort = IntOr.Default.USE_DEFAULT;
+
                 // public boolean keepPackInMemory = false; // TODO implement option (currently always true)
 
             }

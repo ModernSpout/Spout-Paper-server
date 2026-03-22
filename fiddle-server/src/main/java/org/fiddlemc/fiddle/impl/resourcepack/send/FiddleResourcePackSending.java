@@ -50,7 +50,7 @@ public final class FiddleResourcePackSending {
         String vanillaURL;
         String clientModURL;
         if (FiddleResourcePackServing.isEnabled()) {
-            String baseURL = "http://" + FiddleGlobalConfiguration.get().generatedResourcePack.output.serveOverHttp.ip + ":" + FiddleResourcePackServing.getPort()+ "/";
+            String baseURL = "http://" + FiddleGlobalConfiguration.get().generatedResourcePack.output.serveOverHttp.ip + ":" + FiddleGlobalConfiguration.get().generatedResourcePack.output.serveOverHttp.externalPort.or(FiddleResourcePackServing.getPort()) + "/";
             vanillaURL = baseURL + FiddleResourcePackServing.VANILLA_PACK_PATH;
             clientModURL = baseURL + FiddleResourcePackServing.CLIENT_MOD_PACK_PATH;
         } else {
