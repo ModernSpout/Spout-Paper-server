@@ -61,11 +61,11 @@ You are very welcome to help with implementation, testing, sharing knowledge or 
 Fiddle is a drop-in replacement for Paper.
 
 There are no builds available at the moment, but you can build Fiddle yourself by cloning the project and doing:
-* `./gradlew applyPatches`
+* `./gradlew applyAllPatches`
 * Create a runnable server jar with `./gradlew createMojmapPaperclipJar` (the jar file will be placed in `fiddle-server/build/libs`)
 
 You can easily run a test server (which [includes some example blocks and items](https://github.com/FiddleMC/Fiddle/blob/master/test-plugin/src/main/java/org/fiddlemc/testplugin/TestPluginBootstrap.java)):
-* `./gradlew applyPatches`
+* `./gradlew applyAllPatches`
 * `./gradlew runDevServer`
 <!--
 You can download the latest stable JAR from [releases](https://github.com/FiddleMC/Fiddle/releases) and the latest development JAR from [actions](https://github.com/FiddleMC/Fiddle/actions).

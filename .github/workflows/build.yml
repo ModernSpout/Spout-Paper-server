@@ -36,7 +36,7 @@ jobs:
         run: |
           git config --global user.email "no-reply@github.com"
           git config --global user.name "Github Actions"
-          ./gradlew applyPatches --stacktrace
+          ./gradlew applyAllPatches --stacktrace
 
       - name: Build
         run: ./gradlew build --stacktrace
