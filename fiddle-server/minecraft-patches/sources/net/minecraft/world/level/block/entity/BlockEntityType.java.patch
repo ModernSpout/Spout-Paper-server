@@ -1,0 +1,20 @@
+--- a/net/minecraft/world/level/block/entity/BlockEntityType.java
++++ b/net/minecraft/world/level/block/entity/BlockEntityType.java
+@@ -292,7 +_,7 @@
+         return Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, name, new BlockEntityType<>(factory, Set.of(validBlocks)));
+     }
+ 
+-    private BlockEntityType(BlockEntityType.BlockEntitySupplier<? extends T> factory, Set<Block> validBlocks) {
++    public BlockEntityType(BlockEntityType.BlockEntitySupplier<? extends T> factory, Set<Block> validBlocks) { // Fiddle - More data-driven - Block entities - public
+         this.factory = factory;
+         this.validBlocks = validBlocks;
+     }
+@@ -320,7 +_,7 @@
+     }
+ 
+     @FunctionalInterface
+-    interface BlockEntitySupplier<T extends BlockEntity> {
++    public interface BlockEntitySupplier<T extends BlockEntity> { // Fiddle - More data-driven - Block entities - public
+         T create(BlockPos pos, BlockState state);
+     }
+ }

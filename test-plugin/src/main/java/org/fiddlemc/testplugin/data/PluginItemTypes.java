@@ -26,6 +26,7 @@ public final class PluginItemTypes {
     public static Supplier<ItemType> DIORITE_BRICK_STAIRS = itemType("quark:diorite_brick_stairs");
     public static Supplier<ItemType> DIORITE_BRICKS = itemType("quark:diorite_bricks");
     public static Supplier<ItemType> GLASS_SHARD = itemType("quark:glass_shard");
+    public static Supplier<ItemType> EXAMPLE_BLOCK_ENTITY = itemType("example:block_entity");
 
     private static Supplier<ItemType> itemType(String key) {
         return Suppliers.memoize(() -> Registry.ITEM.get(Key.key(key)));
