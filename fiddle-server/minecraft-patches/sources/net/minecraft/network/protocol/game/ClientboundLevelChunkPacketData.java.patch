@@ -18,6 +18,14 @@
          // Paper start - Anti-Xray - Add chunk packet info
          if (chunkPacketInfo != null) {
              chunkPacketInfo.setBuffer(this.buffer);
+@@ -62,6 +_,7 @@
+         int totalTileEntities = 0; // Paper - Handle oversized block entities in chunks
+ 
+         for (Entry<BlockPos, BlockEntity> entry : levelChunk.getBlockEntities().entrySet()) {
++            if (!entry.getValue().getType().isVanilla()) return; // Fiddle - More data-driven - Block entities - Don't send non-vanilla block entities to the client
+             // Paper start - Handle oversized block entities in chunks
+             if (++totalTileEntities > BLOCK_ENTITY_LIMIT) {
+                 net.minecraft.network.protocol.Packet<ClientGamePacketListener> packet = entry.getValue().getUpdatePacket();
 @@ -82,6 +_,7 @@
              throw new RuntimeException("Chunk Packet trying to allocate too much memory on read.");
          } else {

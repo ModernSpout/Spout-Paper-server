@@ -1,0 +1,10 @@
+--- a/src/main/java/org/bukkit/craftbukkit/block/CraftBlockEntityState.java
++++ b/src/main/java/org/bukkit/craftbukkit/block/CraftBlockEntityState.java
+@@ -219,6 +_,7 @@
+ 
+     @Nullable
+     public Packet<ClientGamePacketListener> getUpdatePacket(@NotNull Location location) {
++        if (!this.snapshot.getType().isVanilla()) return null; // Fiddle - More data-driven - Block entities - Don't send non-vanilla block entities to the client
+         return new ClientboundBlockEntityDataPacket(CraftLocation.toBlockPosition(location), this.snapshot.getType(), this.getUpdateNBT());
+     }
+ 

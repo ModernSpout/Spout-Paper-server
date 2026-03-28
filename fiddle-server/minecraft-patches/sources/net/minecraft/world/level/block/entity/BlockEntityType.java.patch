@@ -1,7 +1,44 @@
 --- a/net/minecraft/world/level/block/entity/BlockEntityType.java
 +++ b/net/minecraft/world/level/block/entity/BlockEntityType.java
-@@ -292,7 +_,7 @@
-         return Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, name, new BlockEntityType<>(factory, Set.of(validBlocks)));
+@@ -277,6 +_,32 @@
+     public final Set<Block> validBlocks;
+     private final Holder.Reference<BlockEntityType<?>> builtInRegistryHolder = BuiltInRegistries.BLOCK_ENTITY_TYPE.createIntrusiveHolder(this);
+ 
++    // Fiddle start - More data-driven - Vanilla flag - Implementation part
++    private boolean isVanilla;
++
++    /**
++     * Returns whether this block entity type is present in vanilla.
++     * @return Whether this block is present in vanilla.
++     */
++    public boolean isVanilla() {
++        return this.isVanilla;
++    }
++
++    /**
++     * Sets {@link #isVanilla} to true.
++     *
++     * <p>
++     * This must only be called at most once,
++     * before the block is registered to {@link BuiltInRegistries#BLOCK_ENTITY_TYPE}.
++     * </p>
++     * @return this.
++     */
++    private BlockEntityType<T> markAsVanilla() {
++        this.isVanilla = true;
++        return this;
++    }
++    // Fiddle end - More data-driven - Vanilla flag - Implementation part
++
+     public static @Nullable Identifier getKey(BlockEntityType<?> type) {
+         return BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(type);
+     }
+@@ -289,10 +_,10 @@
+         }
+ 
+         Util.fetchChoiceType(References.BLOCK_ENTITY, name);
+-        return Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, name, new BlockEntityType<>(factory, Set.of(validBlocks)));
++        return Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, name, new BlockEntityType<T>(factory, Set.of(validBlocks)).markAsVanilla()); // Fiddle - More data-driven - Block entities - mark as vanilla
      }
  
 -    private BlockEntityType(BlockEntityType.BlockEntitySupplier<? extends T> factory, Set<Block> validBlocks) {
