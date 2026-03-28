@@ -4,8 +4,12 @@ import io.papermc.paper.registry.PaperRegistryBuilder;
 import io.papermc.paper.registry.data.util.Conversions;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import org.bukkit.block.BlockType;
+import org.bukkit.craftbukkit.block.CraftBlockType;
+import org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.BlockEntityTypeRegistryEntry;
 import org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.nms.BlockEntityTypeRegistryEntryBuilderNMS;
 import org.jspecify.annotations.Nullable;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,6 +38,12 @@ public class BlockEntityTypeRegistryEntryImpl {
         @Override
         public BlockEntityTypeRegistryEntryBuilderNMS validBlocksNMS(final Block... blocks) {
             this.validBlocks.addAll(Set.of(blocks));
+            return this;
+        }
+
+        @Override
+        public BlockEntityTypeRegistryEntry.Builder validBlocks(final BlockType... blocks) {
+            Arrays.stream(blocks).map(CraftBlockType::bukkitToMinecraftNew).forEach(this.validBlocks::add);
             return this;
         }
 

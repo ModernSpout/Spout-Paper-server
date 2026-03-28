@@ -154,7 +154,7 @@ public class TestPluginBootstrap implements PluginBootstrap {
                 builder -> {
                     var builderNMS = (BlockEntityTypeRegistryEntryBuilderNMS) builder;
                     builderNMS.factorNMS(TestBlockEntity::new);
-                    builderNMS.validBlocksNMS(BuiltInRegistries.BLOCK.get(Identifier.fromNamespaceAndPath("example", "block_entity")).get().value());
+                    builderNMS.validBlocks(PluginBlockTypes.EXAMPLE_BLOCK_ENTITY.get());
                 }
             );
         });
