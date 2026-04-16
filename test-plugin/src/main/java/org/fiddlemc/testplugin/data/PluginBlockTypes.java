@@ -18,7 +18,6 @@ public final class PluginBlockTypes {
     public static Supplier<BlockType> DIRT_STAIRS = blockType("more_vanilla_shapes:dirt_stairs");
     public static Supplier<BlockType> GLASS_SLAB = blockType("more_vanilla_shapes:glass_slab");
     public static Supplier<BlockType> GLASS_STAIRS = blockType("more_vanilla_shapes:glass_stairs");
-    public static Supplier<BlockType> GRASS_SLAB = blockType("more_vanilla_shapes:grass_slab");
     public static Supplier<BlockType> STONE_BRICK_BEVEL = blockType("more_vanilla_shapes:stone_brick_bevel");
     public static Supplier<BlockType> AZALEA_PLANKS = blockType("quark:azalea_planks");
     public static Supplier<BlockType> BIRCH_BOOKSHELF = blockType("quark:birch_bookshelf");

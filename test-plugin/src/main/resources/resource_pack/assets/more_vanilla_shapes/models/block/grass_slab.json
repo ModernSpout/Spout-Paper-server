@@ -1,9 +1,0 @@
-{
-  "parent": "fiddle:block/top_half_texture_bottom_slab",
-  "textures": {
-    "particle": "minecraft:block/dirt",
-    "bottom": "minecraft:block/dirt",
-    "top": "minecraft:block/grass_block_top",
-    "side": "minecraft:block/grass_block_side"
-  }
-}

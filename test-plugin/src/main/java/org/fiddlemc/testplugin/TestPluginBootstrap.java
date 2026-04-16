@@ -92,6 +92,7 @@ public class TestPluginBootstrap implements PluginBootstrap {
             automaticMappings.slab(builder -> {
                 builder.from(PluginBlockTypes.DIRT_SLAB.get());
                 builder.fallback(BlockType.MUD_BRICK_SLAB);
+                builder.fullBlockFallbackDefaultStateOf(BlockType.DIRT);
             });
 
             // Dirt stairs
@@ -101,34 +102,16 @@ public class TestPluginBootstrap implements PluginBootstrap {
             });
 
             // Glass slab
-            event.manualMappings().registerStateToState(
-                ClientView.AwarenessLevel.getThatDoNotAlwaysUnderstandsAllServerSideBlocks(),
-                PluginBlockTypes.GLASS_SLAB.get().createBlockDataStates().stream().filter(data -> ((Slab) data).getType() != Slab.Type.DOUBLE).toList(),
-                BlockType.QUARTZ_SLAB
-            );
-            event.manualMappings().register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.getThatDoNotAlwaysUnderstandsAllServerSideBlocks());
-                builder.from(PluginBlockTypes.GLASS_SLAB.get().createBlockDataStates().stream().filter(data -> ((Slab) data).getType() == Slab.Type.DOUBLE).toList());
-                builder.toDefaultStateOf(BlockType.GLASS);
+            automaticMappings.slab(builder -> {
+                builder.from(PluginBlockTypes.GLASS_SLAB.get());
+                builder.fallback(BlockType.QUARTZ_SLAB);
+                builder.fullBlockFallbackDefaultStateOf(BlockType.GLASS);
             });
 
             // Glass stairs
-            event.manualMappings().registerStateToState(
-                ClientView.AwarenessLevel.getThatDoNotAlwaysUnderstandsAllServerSideBlocks(),
-                PluginBlockTypes.GLASS_STAIRS.get(),
-                BlockType.QUARTZ_STAIRS
-            );
-
-            // Grass slab
-            event.manualMappings().registerStateToState(
-                ClientView.AwarenessLevel.getThatDoNotAlwaysUnderstandsAllServerSideBlocks(),
-                PluginBlockTypes.GRASS_SLAB.get(),
-                BlockType.MOSSY_COBBLESTONE_SLAB
-            );
-            event.manualMappings().register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.getThatDoNotAlwaysUnderstandsAllServerSideBlocks());
-                builder.from(PluginBlockTypes.GRASS_SLAB.get().createBlockDataStates().stream().filter(data -> ((Slab) data).getType() == Slab.Type.DOUBLE).toList());
-                builder.toDefaultStateOf(BlockType.GRASS_BLOCK);
+            automaticMappings.stairs(builder -> {
+                builder.from(PluginBlockTypes.GLASS_STAIRS.get());
+                builder.fallback(BlockType.QUARTZ_STAIRS);
             });
 
             // Stone brick bevel
@@ -177,56 +160,11 @@ public class TestPluginBootstrap implements PluginBootstrap {
     private void setItemMappings(@NotNull BootstrapContext context) {
         context.getLifecycleManager().registerEventHandler(FiddleEvents.ITEM_MAPPING, event -> {
 
-            // Glass slab
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
-                builder.from(PluginItemTypes.GLASS_SLAB.get());
-                builder.to(ItemType.QUARTZ_SLAB);
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(PluginItemTypes.GLASS_SLAB.get());
-                builder.to(handle -> {
-                    ItemMappingUtilities.get().setItemTypeWhilePreservingRest(handle, ItemType.QUARTZ_SLAB);
-                    handle.getMutable().editMeta(meta -> meta.setItemModel(NamespacedKey.fromString("more_vanilla_shapes:glass_slab")));
-                });
-            });
-
-            // Glass stairs
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
-                builder.from(PluginItemTypes.GLASS_STAIRS.get());
-                builder.to(ItemType.QUARTZ_STAIRS);
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(PluginItemTypes.GLASS_STAIRS.get());
-                builder.to(handle -> {
-                    ItemMappingUtilities.get().setItemTypeWhilePreservingRest(handle, ItemType.QUARTZ_STAIRS);
-                    handle.getMutable().editMeta(meta -> meta.setItemModel(NamespacedKey.fromString("more_vanilla_shapes:glass_stairs")));
-                });
-            });
-
-            // Grass slab
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
-                builder.from(PluginItemTypes.GRASS_SLAB.get());
-                builder.to(ItemType.MOSSY_COBBLESTONE_SLAB);
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(PluginItemTypes.GRASS_SLAB.get());
-                builder.to(handle -> {
-                    ItemMappingUtilities.get().setItemTypeWhilePreservingRest(handle, ItemType.MOSSY_COBBLESTONE_SLAB);
-                    // handle.getMutable().editMeta(meta -> meta.setItemModel(NamespacedKey.fromString("more_vanilla_shapes:grass_slab")));
-                });
-            });
-
             // Stone brick bevel
             event.register(builder -> {
                 builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
                 builder.from(PluginItemTypes.STONE_BRICK_BEVEL.get());
-                builder.to(ItemType.BARRIER);
+                builder.to(ItemType.STONE);
             });
             event.register(builder -> {
                 builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
@@ -278,8 +216,6 @@ public class TestPluginBootstrap implements PluginBootstrap {
             event.register(PluginBlockTypes.GLASS_SLAB.get().translationKey(), "ガラスのハーフブロック", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
             event.register(PluginBlockTypes.GLASS_STAIRS.get().translationKey(), "Glass Stairs");
             event.register(PluginBlockTypes.GLASS_STAIRS.get().translationKey(), "ガラスの階段", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
-            event.register(PluginBlockTypes.GRASS_SLAB.get().translationKey(), "Grass Slab");
-            event.register(PluginBlockTypes.GRASS_SLAB.get().translationKey(), "草のハーフブロック", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
             event.register(PluginBlockTypes.STONE_BRICK_BEVEL.get().translationKey(), "Stone Brick Piece");
             event.register(PluginBlockTypes.STONE_BRICK_BEVEL.get().translationKey(), "石レンガのミニ", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
             event.register(PluginBlockTypes.AZALEA_PLANKS.get().translationKey(), "Azalea Planks");
