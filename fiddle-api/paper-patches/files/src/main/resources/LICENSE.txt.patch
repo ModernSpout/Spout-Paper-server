@@ -1,6 +1,6 @@
 --- /dev/null
 +++ b/src/main/resources/LICENSE.txt
-@@ -1,0 +_,774 @@
+@@ -1,0 +_,778 @@
 +The entirety of this copyrightable work is licensed under a complemented
 +GNU General Public License, version 3,
 +which is included below under
@@ -27,6 +27,10 @@
 +------------------------------------------------------------------------------
 +
 +           COMPLEMENTED GNU GENERAL PUBLIC LICENSE FOR SPOUT
++
++"Martijn Muijsers" refers to the natural person that authored
++the original version of the Program,
++and at the time held the GitHub username MartijnMuijsers.
 +
 +This license is an extension of the
 +GNU General Public License, version 3 (GPL-3.0),

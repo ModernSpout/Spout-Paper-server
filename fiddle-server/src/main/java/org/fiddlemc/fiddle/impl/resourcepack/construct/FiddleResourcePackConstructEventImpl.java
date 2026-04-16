@@ -15,6 +15,7 @@ import org.jspecify.annotations.Nullable;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.zip.CRC32;
@@ -145,37 +147,55 @@ public final class FiddleResourcePackConstructEventImpl implements PaperLifecycl
     }
 
     @Override
-    public void copyPluginResources(BootstrapContext context, ClientView.AwarenessLevel awarenessLevel, String pathInPluginResources, String pathInResourcePack) throws IOException {
-        this.copyPluginResources(context, List.of(awarenessLevel), pathInPluginResources, pathInResourcePack);
+    public void copyPluginResources(BootstrapContext context, ClientView.AwarenessLevel awarenessLevel, String pathInPluginResources, String pathInResourcePack, @Nullable Predicate<String> filter) throws IOException {
+        this.copyPluginResources(context, List.of(awarenessLevel), pathInPluginResources, pathInResourcePack, filter);
 
     }
 
     @Override
-    public void copyPluginResources(BootstrapContext context, ClientView.AwarenessLevel[] awarenessLevels, String pathInPluginResources, String pathInResourcePack) throws IOException {
-        this.copyPluginResources(context, Arrays.asList(awarenessLevels), pathInPluginResources, pathInResourcePack);
+    public void copyPluginResources(BootstrapContext context, ClientView.AwarenessLevel[] awarenessLevels, String pathInPluginResources, String pathInResourcePack, @Nullable Predicate<String> filter) throws IOException {
+        this.copyPluginResources(context, Arrays.asList(awarenessLevels), pathInPluginResources, pathInResourcePack, filter);
     }
 
     @Override
-    public void copyPluginResources(BootstrapContext context, Iterable<ClientView.AwarenessLevel> awarenessLevels, String pathInPluginResources, String pathInResourcePack) throws IOException {
-        try (JarFile jar = new JarFile(context.getPluginSource().toFile())) {
+    public void copyPluginResources(BootstrapContext context, Iterable<ClientView.AwarenessLevel> awarenessLevels, String pathInPluginResources, String pathInResourcePack, @Nullable Predicate<String> filter) throws IOException {
+        this.copyPluginResources(context.getPluginSource(), awarenessLevels, pathInPluginResources, pathInResourcePack, filter);
+    }
+
+    @Override
+    public void copyPluginResources(Path pluginSource, ClientView.AwarenessLevel awarenessLevel, String pathInPluginResources, String pathInResourcePack, @Nullable Predicate<String> filter) throws IOException {
+        this.copyPluginResources(pluginSource, List.of(awarenessLevel), pathInPluginResources, pathInResourcePack, filter);
+
+    }
+
+    @Override
+    public void copyPluginResources(Path pluginSource, ClientView.AwarenessLevel[] awarenessLevels, String pathInPluginResources, String pathInResourcePack, @Nullable Predicate<String> filter) throws IOException {
+        this.copyPluginResources(pluginSource, Arrays.asList(awarenessLevels), pathInPluginResources, pathInResourcePack, filter);
+    }
+
+    @Override
+    public void copyPluginResources(Path pluginSource, Iterable<ClientView.AwarenessLevel> awarenessLevels, String pathInPluginResources, String pathInResourcePack, @Nullable Predicate<String> filter) throws IOException {
+        try (JarFile jar = new JarFile(pluginSource.toFile())) {
             Enumeration<JarEntry> entries = jar.entries();
             while (entries.hasMoreElements()) {
                 JarEntry entry = entries.nextElement();
                 String name = entry.getName();
                 if (name.startsWith(pathInPluginResources + "/") && !entry.isDirectory()) {
                     String relativePath = name.substring(pathInPluginResources.length()); // Starts with forward slash
-                    byte[] bytes;
-                    try (InputStream inputStream = jar.getInputStream(entry)) {
-                        bytes = inputStream.readAllBytes();
-                    }
-                    boolean first = true;
-                    for (ClientView.AwarenessLevel awarenessLevel : awarenessLevels) {
-                        if (first) {
-                            first = false;
-                        } else {
-                            bytes = Arrays.copyOf(bytes, bytes.length);
+                    if (filter == null || filter.test(relativePath.substring(1))) {
+                        byte[] bytes;
+                        try (InputStream inputStream = jar.getInputStream(entry)) {
+                            bytes = inputStream.readAllBytes();
                         }
-                        path(awarenessLevel, pathInResourcePack + (pathInResourcePack.isEmpty() ? relativePath.substring(1) : relativePath)).asBytes().setMutable(bytes);
+                        boolean first = true;
+                        for (ClientView.AwarenessLevel awarenessLevel : awarenessLevels) {
+                            if (first) {
+                                first = false;
+                            } else {
+                                bytes = Arrays.copyOf(bytes, bytes.length);
+                            }
+                            path(awarenessLevel, pathInResourcePack + (pathInResourcePack.isEmpty() ? relativePath.substring(1) : relativePath)).asBytes().setMutable(bytes);
+                        }
                     }
                 }
             }

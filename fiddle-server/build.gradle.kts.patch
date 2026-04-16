@@ -98,7 +98,7 @@
      testImplementation("org.ow2.asm:asm-tree:9.8")
      testImplementation("org.junit-pioneer:junit-pioneer:2.2.0") // CartesianTest
  
-@@ -191,21 +_,23 @@
+@@ -191,21 +_,24 @@
          val git = Git(rootProject.layout.projectDirectory.path)
          val mcVersion = rootProject.providers.gradleProperty("mcVersion").get()
          val build = System.getenv("BUILD_NUMBER") ?: null
@@ -112,6 +112,7 @@
              "Main-Class" to "org.bukkit.craftbukkit.Main",
 -            "Implementation-Title" to "Paper",
 +            "Add-Opens" to "java.base/java.lang", // Fiddle - Synchronize Bukkit enums - Add module opens to server JAR
++            "Enable-Final-Field-Mutation" to "ALL-UNNAMED", // Fiddle - Synchronize Bukkit enums - Add enable final field mutation to server JAR
 +            "Implementation-Title" to "Fiddle", // Fiddle - Branding changes - Rename server brand
              "Implementation-Version" to implementationVersion,
 -            "Implementation-Vendor" to date,
@@ -139,11 +140,12 @@
  idea {
      module {
          generatedSourceDirs.add(generatedDir.toFile())
-@@ -293,6 +_,7 @@
+@@ -293,6 +_,8 @@
          vendor.set(JvmVendorSpec.JETBRAINS)
      })
      jvmArgs("-XX:+AllowEnhancedClassRedefinition")
-+    jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED") // Fiddle - Synchronize Bukkit enums - Add module opens to server JAR
++    jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED") // Fiddle - Synchronize Bukkit enums - Add module opens to dev server runs
++    // jvmArgs("--enable-final-field-mutation", "ALL-UNNAMED") // Fiddle - Synchronize Bukkit enums - Add enable final field mutation to dev server runs
  
      if (rootProject.childProjects["test-plugin"] != null) {
          val testPluginJar = rootProject.project(":test-plugin").tasks.jar.flatMap { it.archiveFile }
@@ -169,16 +171,17 @@
  fill {
      project("paper")
      versionFamily(paperweight.minecraftVersion.map { it.split(".", "-").takeWhile { part -> part.toIntOrNull() != null }.take(2).joinToString(".") })
-@@ -372,3 +_,69 @@
+@@ -372,3 +_,70 @@
          }
      }
  }
 +*/
 +// Fiddle end - Project setup - Remove Fill
 +
-+// Fiddle start - Synchronize Bukkit enums - Add module opens to server JAR
++// Fiddle start - Synchronize Bukkit enums - Add module opens and enable final field mutation to server JAR
 +val extendedManifestLines: List<String> = listOf(
-+    "Add-Opens" to "java.base/java.lang"
++    "Add-Opens" to "java.base/java.lang",
++    "Enable-Final-Field-Mutation" to "ALL-UNNAMED"
 +).map { "${it.first}: ${it.second}" }
 +
 +if (extendedManifestLines.isNotEmpty()) {

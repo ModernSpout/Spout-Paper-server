@@ -34,16 +34,16 @@ public class TestPluginBootstrap implements PluginBootstrap {
     @Override
     public void bootstrap(@NotNull BootstrapContext context) {
         loadIncludedDataPack(context);
+        loadIncludedResourcePack(context);
         setBlockMappings(context);
         setItemMappings(context);
         setItemSourceTooltipMapping(context);
         setTranslations(context);
-        configureResourcePack(context);
     }
 
     /**
      * Makes sure the included data pack is loaded.
-     * It contains crafting recipes for the custom items we add.
+     * It contains drop tables, crafting recipes and more for the custom blocks and items we add.
      */
     private void loadIncludedDataPack(@NotNull BootstrapContext context) {
         context.getLifecycleManager().registerEventHandler(LifecycleEvents.DATAPACK_DISCOVERY, event -> {
@@ -52,6 +52,16 @@ public class TestPluginBootstrap implements PluginBootstrap {
             } catch (URISyntaxException | IOException e) {
                 throw new RuntimeException(e);
             }
+        });
+    }
+
+    /**
+     * Makes sure the included resource pack is loaded.
+     * It contains textures, models and more for the custom blocks and items we add.
+     */
+    private void loadIncludedResourcePack(@NotNull BootstrapContext context) {
+        context.getLifecycleManager().registerEventHandler(FiddleEvents.PLUGIN_RESOURCE_PACK_DISCOVERY, event -> {
+            event.register(this, context);
         });
     }
 
@@ -330,17 +340,6 @@ public class TestPluginBootstrap implements PluginBootstrap {
             event.register(BlockType.BOOKSHELF.translationKey(), "Oak Bookshelf");
             event.register(BlockType.BOOKSHELF.translationKey(), "オークの本棚", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
 
-        });
-    }
-
-    private void configureResourcePack(@NotNull BootstrapContext context) {
-        context.getLifecycleManager().registerEventHandler(FiddleEvents.RESOURCE_PACK_CONSTRUCT, event -> {
-            try {
-                event.copyPluginResources(context, List.of(ClientView.AwarenessLevel.RESOURCE_PACK, ClientView.AwarenessLevel.CLIENT_MOD), "resource_pack_direct", "");
-                event.copyPluginResources(context, ClientView.AwarenessLevel.CLIENT_MOD, "resource_pack", "");
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
         });
     }
 

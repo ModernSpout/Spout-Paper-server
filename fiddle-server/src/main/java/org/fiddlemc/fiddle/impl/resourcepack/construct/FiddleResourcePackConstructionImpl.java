@@ -1,27 +1,35 @@
 package org.fiddlemc.fiddle.impl.resourcepack.construct;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
+import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventRunner;
 import io.papermc.paper.plugin.lifecycle.event.handler.configuration.PrioritizedLifecycleEventHandlerConfiguration;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEventType;
 import io.papermc.paper.plugin.lifecycle.event.types.PrioritizableLifecycleEventType;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.block.Block;
 import org.fiddlemc.fiddle.api.clientview.ClientView;
 import org.fiddlemc.fiddle.api.resourcepack.construct.FiddleResourcePackConstructEvent;
 import org.fiddlemc.fiddle.api.resourcepack.construct.FiddleResourcePackConstructFinishEvent;
 import org.fiddlemc.fiddle.api.resourcepack.construct.FiddleResourcePackConstruction;
 import org.fiddlemc.fiddle.impl.configuration.FiddleGlobalConfiguration;
-import org.fiddlemc.fiddle.impl.packetmapping.component.translatable.ServerSideTranslationsImpl;
+import org.fiddlemc.fiddle.impl.moredatadriven.minecraft.BlockRegistry;
+import org.fiddlemc.fiddle.impl.moredatadriven.minecraft.VanillaOnlyBlockRegistry;
+import org.fiddlemc.fiddle.impl.resourcepack.plugin.discover.FiddlePluginResourcePackDiscoveryImpl;
 import org.fiddlemc.fiddle.impl.resourcepack.send.FiddleResourcePackSending;
 import org.fiddlemc.fiddle.impl.resourcepack.serve.FiddleResourcePackServing;
 import org.fiddlemc.fiddle.impl.util.composable.ComposableImpl;
 import org.fiddlemc.fiddle.impl.util.java.serviceloader.NoArgsConstructorServiceProviderImpl;
 import org.jspecify.annotations.Nullable;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * The implementation for {@link FiddleResourcePackConstruction}.
@@ -52,7 +60,6 @@ public final class FiddleResourcePackConstructionImpl extends ComposableImpl<Fid
     protected FiddleResourcePackConstructEventImpl createComposeEvent() {
         // Create the event
         FiddleResourcePackConstructEventImpl event = new FiddleResourcePackConstructEventImpl();
-        // Initialize built-in resources
         // Add default contents
         for (String path : DEFAULT_RESOURCE_PACK_CONTENTS_PATHS) {
             try {
@@ -61,6 +68,41 @@ public final class FiddleResourcePackConstructionImpl extends ComposableImpl<Fid
                 throw new RuntimeException(e);
             }
         }
+        // Add included plugin contents
+        FiddlePluginResourcePackDiscoveryImpl.get().getIncludedResourcePackPaths().forEach(pair -> {
+            Path pluginSource = pair.right().left();
+            String internalPath = pair.right().right();
+            try {
+                event.copyPluginResources(pluginSource, List.of(ClientView.AwarenessLevel.RESOURCE_PACK), internalPath, "", pathInResourcePack -> {
+                    // Filter out non-vanilla blockstates
+                    Matcher blockstatesMatcher = BLOCKSTATES_FILE_PATTERN.matcher(pathInResourcePack);
+                    if (!blockstatesMatcher.find()) {
+                        return true;
+                    }
+                    try {
+                        String namespace = blockstatesMatcher.group(1);
+                        String path = blockstatesMatcher.group(2);
+                        Identifier identifier = Identifier.fromNamespaceAndPath(namespace, path);
+                        Optional<Block> optionalBlock = BlockRegistry.get().getOptional(identifier);
+                        if (optionalBlock.isEmpty()) {
+                            // The block doesn't exist, don't include it
+                        }
+                        Block block = optionalBlock.get();
+                        return block.isVanilla();
+                    } catch (Exception ignored) {
+                        // Something is weird, let's not include it
+                        return false;
+                    }
+                });
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                event.copyPluginResources(pluginSource, ClientView.AwarenessLevel.CLIENT_MOD, internalPath, "", null);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
         // Return the event
         return event;
     }
@@ -201,5 +243,7 @@ public final class FiddleResourcePackConstructionImpl extends ComposableImpl<Fid
         "assets/fiddle/models/block/bevel_yyyyyyyy.json",
         "assets/fiddle/models/block/top_half_texture_bottom_slab.json",
     };
+
+    private static final Pattern BLOCKSTATES_FILE_PATTERN = Pattern.compile("assets/([^/]+)/blockstates/([^/]+)\\.json");
 
 }

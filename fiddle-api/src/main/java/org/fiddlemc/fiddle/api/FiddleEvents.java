@@ -26,6 +26,8 @@ import org.fiddlemc.fiddle.api.packetmapping.item.ItemMappingsComposeEvent;
 import org.fiddlemc.fiddle.api.resourcepack.construct.FiddleResourcePackConstructEvent;
 import org.fiddlemc.fiddle.api.resourcepack.construct.FiddleResourcePackConstructFinishEvent;
 import org.fiddlemc.fiddle.api.resourcepack.construct.FiddleResourcePackConstruction;
+import org.fiddlemc.fiddle.api.resourcepack.plugin.discover.FiddlePluginResourcePackDiscoverEvent;
+import org.fiddlemc.fiddle.api.resourcepack.plugin.discover.FiddlePluginResourcePackDiscovery;
 import org.fiddlemc.fiddle.api.util.composable.ComposableEventType;
 import org.jspecify.annotations.Nullable;
 
@@ -43,6 +45,7 @@ public final class FiddleEvents {
     public static final LifecycleEventType.Prioritizable<BootstrapContext, RegistryComposeEvent<?, FiddleItemTypeRegistryEntry.Builder>> ITEM_TYPE = (LifecycleEventType.Prioritizable) RegistryEvents.ITEM_TYPE.compose();
     public static final LifecycleEventType.Prioritizable<BootstrapContext, RegistryComposeEvent<BlockType, BlockRegistryEntry.Builder>> BLOCK = RegistryEvents.BLOCK.compose();
     public static final LifecycleEventType.Prioritizable<BootstrapContext, RegistryComposeEvent<ItemType, ItemRegistryEntry.Builder>> ITEM = RegistryEvents.ITEM.compose();
+    public static final ComposableEventType<FiddlePluginResourcePackDiscoverEvent> PLUGIN_RESOURCE_PACK_DISCOVERY = FiddlePluginResourcePackDiscovery.get().compose();
     public static final ComposableEventType<FiddleResourcePackConstructEvent> RESOURCE_PACK_CONSTRUCT = FiddleResourcePackConstruction.get().compose();
     public static final LifecycleEventType<BootstrapContext, FiddleResourcePackConstructFinishEvent, PrioritizedLifecycleEventHandlerConfiguration<BootstrapContext>> RESOURCE_PACK_CONSTRUCT_FINISH = FiddleResourcePackConstruction.get().finish();
     public static final ComposableEventType<BlockMappingsComposeEvent> BLOCK_MAPPING = ((BlockMappings) BlockMappings.get()).compose();

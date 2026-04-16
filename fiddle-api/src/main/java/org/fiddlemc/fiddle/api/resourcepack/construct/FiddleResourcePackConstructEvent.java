@@ -9,6 +9,8 @@ import org.bukkit.NamespacedKey;
 import org.fiddlemc.fiddle.api.clientview.ClientView;
 import org.jspecify.annotations.Nullable;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.util.function.Predicate;
 
 /**
  * Provides functionality to edit the constructed Fiddle server resource pack.
@@ -107,17 +109,36 @@ public interface FiddleResourcePackConstructEvent extends LifecycleEvent {
      * @param pathInResourcePack    A path to a folder in the resource pack,
      *                              for example {@code "assets/example/models"}.
      *                              To copy to the root of the resource pack, put a blank string ({@code ""}).
+     * @param filter                A filter on the file names (relative to the root of the {@code pathInResourcePack}),
+     *                              or null if not required. If present, only file names for which the predicate
+     *                              returns true will be copied.
      */
-    void copyPluginResources(BootstrapContext context, ClientView.AwarenessLevel awarenessLevel, String pathInPluginResources, String pathInResourcePack) throws IOException;
+    void copyPluginResources(BootstrapContext context, ClientView.AwarenessLevel awarenessLevel, String pathInPluginResources, String pathInResourcePack, @Nullable Predicate<String> filter) throws IOException;
 
     /**
-     * @see #copyPluginResources(BootstrapContext, ClientView.AwarenessLevel, String, String)
+     * @see #copyPluginResources(BootstrapContext, ClientView.AwarenessLevel, String, String, Predicate)
      */
-    void copyPluginResources(BootstrapContext context, ClientView.AwarenessLevel[] awarenessLevels, String pathInPluginResources, String pathInResourcePack) throws IOException;
+    void copyPluginResources(BootstrapContext context, ClientView.AwarenessLevel[] awarenessLevels, String pathInPluginResources, String pathInResourcePack, @Nullable Predicate<String> filter) throws IOException;
 
     /**
-     * @see #copyPluginResources(BootstrapContext, ClientView.AwarenessLevel, String, String)
+     * @see #copyPluginResources(BootstrapContext, ClientView.AwarenessLevel, String, String, Predicate)
      */
-    void copyPluginResources(BootstrapContext context, Iterable<ClientView.AwarenessLevel> awarenessLevels, String pathInPluginResources, String pathInResourcePack) throws IOException;
+    void copyPluginResources(BootstrapContext context, Iterable<ClientView.AwarenessLevel> awarenessLevels, String pathInPluginResources, String pathInResourcePack, @Nullable Predicate<String> filter) throws IOException;
+
+    /**
+     * The same as {@link #copyPluginResources(BootstrapContext, ClientView.AwarenessLevel, String, String, Predicate)},
+     * but for the given {@link BootstrapContext#getPluginSource()}.
+     */
+    void copyPluginResources(Path pluginSource, ClientView.AwarenessLevel awarenessLevel, String pathInPluginResources, String pathInResourcePack, @Nullable Predicate<String> filter) throws IOException;
+
+    /**
+     * @see #copyPluginResources(Path, ClientView.AwarenessLevel, String, String, Predicate)
+     */
+    void copyPluginResources(Path pluginSource, ClientView.AwarenessLevel[] awarenessLevels, String pathInPluginResources, String pathInResourcePack, @Nullable Predicate<String> filter) throws IOException;
+
+    /**
+     * @see #copyPluginResources(Path, ClientView.AwarenessLevel, String, String, Predicate)
+     */
+    void copyPluginResources(Path pluginSource, Iterable<ClientView.AwarenessLevel> awarenessLevels, String pathInPluginResources, String pathInResourcePack, @Nullable Predicate<String> filter) throws IOException;
 
 }

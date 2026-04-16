@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/Main.java
 +++ b/net/minecraft/server/Main.java
-@@ -105,6 +_,43 @@
+@@ -105,6 +_,40 @@
                  JvmProfiler.INSTANCE.start(Environment.SERVER);
              }
  
@@ -18,19 +18,16 @@
 +            if (!org.fiddlemc.fiddle.impl.configuration.FiddleGlobalConfiguration.get()._enabled) {
 +                LOGGER.warn("");
 +                LOGGER.warn("********************************************************************************");
-+                LOGGER.warn("You must confirm that you wish to run Fiddle in this folder.");
++                LOGGER.warn("You must confirm that you wish to run Spout in this folder.");
 +                LOGGER.warn("");
-+                LOGGER.warn("Fiddle allows you to add new blocks and items. These are saved into your world");
++                LOGGER.warn("Spout allows you to add new blocks and items. These are saved into your world");
 +                LOGGER.warn("and plugin data, meaning the world and plugin data is affected in the same way");
-+                LOGGER.warn("as on a modded server. Loading a world in Fiddle is therefore PERMANENT.");
++                LOGGER.warn("as on a modded server. Loading a world in Spout is therefore PERMANENT.");
 +                LOGGER.warn("");
-+                LOGGER.warn("DO NOT RUN FIDDLE ON A SERVER IF YOU DO NOT WANT THE WORLD AND PLUGIN DATA TO BE");
++                LOGGER.warn("DO NOT RUN SPOUT ON A SERVER IF YOU DO NOT WANT THE WORLD AND PLUGIN DATA TO BE");
 +                LOGGER.warn("PERMANENTLY AFFECTED.");
 +                LOGGER.warn("");
-+                LOGGER.warn("Make sure to back up any world and plugin data before enabling Fiddle.");
-+                LOGGER.warn("");
-+                LOGGER.warn("At the time this message is written, Fiddle is still in development,");
-+                LOGGER.warn("in which case DO NOT RUN FIDDLE ON A PRODUCTION SERVER.");
++                LOGGER.warn("Make sure to back up any world and plugin data before enabling Spout.");
 +                LOGGER.warn("");
 +                LOGGER.warn("To confirm, open config/fiddle-global.yml and change '_enabled' to true.");
 +                LOGGER.warn("By changing '_enabled' to true, you are indicating that you understand that");

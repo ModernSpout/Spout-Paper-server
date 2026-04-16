@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import net.minecraft.world.level.block.state.BlockState;
 import org.fiddlemc.fiddle.api.resourcepack.content.Blockstates;
-import org.fiddlemc.fiddle.impl.moredatadriven.paper.plugin.FiddlePlugins;
+import org.fiddlemc.fiddle.impl.resourcepack.plugin.discover.FiddlePluginResourcePackDiscoveryImpl;
 
 /**
  * Common interface for {@link FromToBlockStateRequestBuilderImpl}
@@ -18,7 +18,7 @@ public interface FromToBlockStatesRequestBuilder {
 
     default JsonObject getBlockstatesVariant(int fromStateI, PluginBootstrap bootstrap) {
         BlockState fromState = this.fromStates()[fromStateI];
-        Blockstates blockstates = FiddlePlugins.getResourcePackBlockstates(bootstrap, fromState.getBlock().keyInBlockRegistry);
+        Blockstates blockstates = FiddlePluginResourcePackDiscoveryImpl.get().getResourcePackBlockstates(bootstrap, fromState.getBlock().keyInBlockRegistry);
         return blockstates.getVariant(fromState.createCraftBlockData());
     }
 
