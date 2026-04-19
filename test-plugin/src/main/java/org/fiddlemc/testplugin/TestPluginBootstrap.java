@@ -23,13 +23,16 @@ public class TestPluginBootstrap implements PluginBootstrap {
      * It contains drop tables, crafting recipes and more for the custom blocks and items we add.
      */
     private void loadIncludedDataPack(@NotNull BootstrapContext context) {
-        context.getLifecycleManager().registerEventHandler(LifecycleEvents.DATAPACK_DISCOVERY, event -> {
-            try {
-                event.registrar().discoverPack(Objects.requireNonNull(this.getClass().getResource("/data_pack")).toURI(), "provided");
-            } catch (URISyntaxException | IOException e) {
-                throw new RuntimeException(e);
+        context.getLifecycleManager().registerEventHandler(
+            LifecycleEvents.DATAPACK_DISCOVERY,
+            event -> {
+                try {
+                    event.registrar().discoverPack(Objects.requireNonNull(this.getClass().getResource("/data_pack")).toURI(), "provided");
+                } catch (URISyntaxException | IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
-        });
+        );
     }
 
     /**
@@ -37,7 +40,10 @@ public class TestPluginBootstrap implements PluginBootstrap {
      * It contains textures, models and more for the custom blocks and items we add.
      */
     private void loadIncludedResourcePack(@NotNull BootstrapContext context) {
-        context.getLifecycleManager().registerEventHandler(FiddleEvents.PLUGIN_RESOURCE_PACK_DISCOVERY, event -> event.register(this, context));
+        context.getLifecycleManager().registerEventHandler(
+            FiddleEvents.PLUGIN_RESOURCE_PACK_DISCOVERY,
+            event -> event.register(this, context)
+        );
     }
 
 }
