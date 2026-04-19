@@ -58,7 +58,7 @@ Download the latest JAR from [GitHub Actions](https://github.com/FiddleMC/Fiddle
 
 You can easily run a test server (which [includes some example blocks and items](https://github.com/FiddleMC/Fiddle/blob/master/test-plugin/src/main/java/org/fiddlemc/testplugin/TestPluginBootstrap.java)):
 * `git clone https://github.com/FiddleMC/Fiddle.git`
-* `./gradlew applyPatches`
+* `./gradlew applyAllPatches`
 * `./gradlew runDevServer`
 <!--
 You can download the latest stable JAR from [releases](https://github.com/FiddleMC/Fiddle/releases) and the latest development JAR from [actions](https://github.com/FiddleMC/Fiddle/actions).
