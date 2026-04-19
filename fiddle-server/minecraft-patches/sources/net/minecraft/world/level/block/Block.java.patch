@@ -22,7 +22,7 @@
          return CODEC;
      }
 +
-+    public @Nullable List<org.fiddlemc.fiddle.impl.packetmapping.block.datadriven.UnappliedDataDrivenMapping> unappliedDataPackMappings = null; // Fiddle - Block mapping - Load mappings from data pack
++    public @Nullable List<org.fiddlemc.fiddle.impl.packetmapping.block.datadriven.UnappliedDataDrivenBlockMapping> unappliedDataPackMappings = null; // Fiddle - Block mapping - Data-driven - Load mappings from data pack
 +
 +    // Fiddle start - More data-driven - Minecraft registries - Cache block and item values
 +    /**

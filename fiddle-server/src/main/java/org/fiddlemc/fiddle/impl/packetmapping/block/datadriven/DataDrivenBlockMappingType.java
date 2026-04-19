@@ -7,9 +7,9 @@ import org.fiddlemc.fiddle.impl.packetmapping.block.BlockMappingsComposeEventImp
 import org.jspecify.annotations.Nullable;
 
 /**
- * A type of data-driven mapping.
+ * A type of data-driven block mapping.
  */
-public interface DataDrivenMappingType {
+public interface DataDrivenBlockMappingType {
 
     <T> void apply(BlockMappingsComposeEventImpl event, @Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike);
 

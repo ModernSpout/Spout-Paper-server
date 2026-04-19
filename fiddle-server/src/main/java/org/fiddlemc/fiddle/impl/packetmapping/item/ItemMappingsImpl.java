@@ -138,22 +138,37 @@ public final class ItemMappingsImpl extends ComposableImpl<ItemMappingsComposeEv
 
     @Override
     protected ItemMappingsComposeEventImpl createComposeEvent() {
+
         // Create the event
         ItemMappingsComposeEventImpl event = new ItemMappingsComposeEventImpl();
+
         // Register the built-in default item names mapping step
         event.register(
             Arrays.asList(ClientView.AwarenessLevel.getAll()),
             Registry.ITEM.stream().toList(),
             new MapDefaultItemNamesItemMappingsStep()
         );
+
         // Register the built-in non-vanilla debug stick state removal step
         event.register(
             Arrays.asList(ClientView.AwarenessLevel.getThatDoNotAlwaysUnderstandsAllServerSideBlocks()),
             List.of(ItemType.DEBUG_STICK),
             new RemoveNonVanillaDebugStickStateItemMappingsStep()
         );
+
+        // Register data-driven mappings
+        ItemRegistry.get().forEach(item -> {
+            if (item.unappliedDataPackMappings != null) {
+                // Apply the mappings
+                item.unappliedDataPackMappings.forEach(mapping -> mapping.apply(event, item));
+                // Dereference the mappings to reclaim memory
+                item.unappliedDataPackMappings = null;
+            }
+        });
+
         // Return the event
         return event;
+
     }
 
     @Override

@@ -8,7 +8,7 @@ import com.mojang.serialization.MapLike;
 import com.mojang.serialization.RecordBuilder;
 import net.minecraft.world.level.block.Block;
 import org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec;
-import org.fiddlemc.fiddle.impl.packetmapping.block.datadriven.UnappliedDataDrivenMapping;
+import org.fiddlemc.fiddle.impl.packetmapping.block.datadriven.UnappliedDataDrivenBlockMapping;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,11 +29,11 @@ public final class WrappedBlockCodecImpl<B extends Block> implements WrappedBloc
 
     private WrappedBlockCodecImpl(MapCodec<B> codec) {
         this.codec = codec;
-        this.extendedCodec = new MapCodec<B>() {
+        this.extendedCodec = new MapCodec<>() {
 
             @Override
-            public <T> RecordBuilder<T> encode(B b, DynamicOps<T> ops, RecordBuilder<T> recordBuilder) {
-                return codec.encode(b, ops, recordBuilder);
+            public <T> RecordBuilder<T> encode(B input, DynamicOps<T> ops, RecordBuilder<T> recordBuilder) {
+                return codec.encode(input, ops, recordBuilder);
             }
 
             @Override
@@ -41,7 +41,7 @@ public final class WrappedBlockCodecImpl<B extends Block> implements WrappedBloc
                 return codec.decode(ops, mapLike).flatMap(block -> {
                     T mappingsInput = mapLike.get("mappings");
                     if (mappingsInput != null) {
-                        DataResult<Pair<List<UnappliedDataDrivenMapping>, T>> mappings = UnappliedDataDrivenMapping.LIST_CODEC.decode(ops, mappingsInput);
+                        DataResult<Pair<List<UnappliedDataDrivenBlockMapping>, T>> mappings = UnappliedDataDrivenBlockMapping.LIST_CODEC.decode(ops, mappingsInput);
                         if (mappings.isError()) {
                             return mappings.map($ -> null);
                         }

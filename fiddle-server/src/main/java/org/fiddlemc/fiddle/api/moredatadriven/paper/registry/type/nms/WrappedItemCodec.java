@@ -10,4 +10,6 @@ public interface WrappedItemCodec<I extends Item> {
 
     MapCodec<I> getCodec();
 
+    MapCodec<I> getExtendedCodec();
+
 }

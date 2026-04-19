@@ -44,7 +44,7 @@
      private static final Logger LOGGER = LogUtils.getLogger();
      public static final Map<Block, Item> BY_BLOCK = Maps.newHashMap();
      public static final Identifier BASE_ATTACK_DAMAGE_ID = Identifier.withDefaultNamespace("base_attack_damage");
-@@ -111,15 +_,86 @@
+@@ -111,15 +_,88 @@
      public static final int MAX_BAR_WIDTH = 13;
      protected static final int APPROXIMATELY_INFINITE_USE_DURATION = 72000;
      private final Holder.Reference<Item> builtInRegistryHolder = BuiltInRegistries.ITEM.createIntrusiveHolder(this);
@@ -65,6 +65,8 @@
          return item == null ? 0 : BuiltInRegistries.ITEM.getId(item);
      }
  
++    public java.util.@Nullable List<org.fiddlemc.fiddle.impl.packetmapping.item.datadriven.UnappliedDataDrivenItemMapping> unappliedDataPackMappings = null; // Fiddle - Item mapping - Data-driven - Load mappings from data pack
++
 +    // Fiddle start - More data-driven - Minecraft registries - Cache block and item values
 +    /**
 +     * The {@link net.minecraft.resources.Identifier} with which this item is registered in

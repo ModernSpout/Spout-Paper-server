@@ -1,5 +1,7 @@
 package org.fiddlemc.fiddle.impl.packetmapping.block.datadriven;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.MapLike;
 import net.minecraft.resources.Identifier;
@@ -15,6 +17,7 @@ import org.fiddlemc.fiddle.api.packetmapping.block.automatic.FromBlockStateReque
 import org.fiddlemc.fiddle.api.packetmapping.block.automatic.FromBlockTypeRequestBuilder;
 import org.fiddlemc.fiddle.api.packetmapping.block.automatic.ToBlockStateRequestBuilder;
 import org.fiddlemc.fiddle.api.packetmapping.block.automatic.ToBlockTypeRequestBuilder;
+import org.fiddlemc.fiddle.impl.branding.FiddleNamespace;
 import org.fiddlemc.fiddle.impl.clientview.ClientViewImpl;
 import org.fiddlemc.fiddle.impl.moredatadriven.minecraft.BlockRegistry;
 import org.fiddlemc.fiddle.impl.packetmapping.block.BlockMappingsComposeEventImpl;
@@ -23,18 +26,33 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Some built-in {@link DataDrivenMappingType}s.
+ * Some built-in {@link DataDrivenBlockMappingType}s.
  */
-public final class BuiltInDataDrivenMappingTypes {
+public final class BuiltInDataDrivenBlockMappingTypes {
 
-    private BuiltInDataDrivenMappingTypes() {
+    private BuiltInDataDrivenBlockMappingTypes() {
         throw new UnsupportedOperationException();
+    }
+
+    public static abstract class BuiltInDataDrivenBlockMappingType implements DataDrivenBlockMappingType {
+
+        private BuiltInDataDrivenBlockMappingType(String key) {
+            DataDrivenBlockMappingTypeRegistry.register(Identifier.fromNamespaceAndPath(FiddleNamespace.FIDDLE, key), this);
+        }
+
     }
 
     public static <T> Collection<? extends BlockData> parseFromBlockStates(@Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike) {
         T fromInput = mapLike.get("from");
         if (fromInput != null) {
-            return List.of(Bukkit.createBlockData(ops.getStringValue(fromInput).getOrThrow()));
+            List<String> fromStrings;
+            DataResult<String> fromSingleString = ops.getStringValue(fromInput);
+            if (fromSingleString.isSuccess()) {
+                fromStrings = List.of(fromSingleString.getOrThrow());
+            } else {
+                fromStrings = Codec.list(Codec.STRING).decode(ops, fromInput).getOrThrow().getFirst();
+            }
+            return fromStrings.stream().map(Bukkit::createBlockData).toList();
         } else if (block != null) {
             return CraftBlockType.minecraftToBukkitNew(block).createBlockDataStates();
         } else {
@@ -120,7 +138,7 @@ public final class BuiltInDataDrivenMappingTypes {
         return cached;
     }
 
-    public static final DataDrivenMappingType MANUAL = new DataDrivenMappingType() {
+    public static final DataDrivenBlockMappingType MANUAL = new BuiltInDataDrivenBlockMappingType("manual") {
 
         @Override
         public <T> void apply(BlockMappingsComposeEventImpl event, @Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike) {
@@ -154,7 +172,7 @@ public final class BuiltInDataDrivenMappingTypes {
 
     };
 
-    public static final DataDrivenMappingType FULL_BLOCK = new DataDrivenMappingType() {
+    public static final DataDrivenBlockMappingType FULL_BLOCK = new BuiltInDataDrivenBlockMappingType("full_block") {
 
         @Override
         public <T> void apply(BlockMappingsComposeEventImpl event, @Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike) {
@@ -170,7 +188,7 @@ public final class BuiltInDataDrivenMappingTypes {
 
     };
 
-    public static final DataDrivenMappingType LEAVES = new DataDrivenMappingType() {
+    public static final DataDrivenBlockMappingType LEAVES = new BuiltInDataDrivenBlockMappingType("leaves") {
 
         @Override
         public <T> void apply(BlockMappingsComposeEventImpl event, @Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike) {
@@ -186,7 +204,7 @@ public final class BuiltInDataDrivenMappingTypes {
 
     };
 
-    public static final DataDrivenMappingType SLAB = new DataDrivenMappingType() {
+    public static final DataDrivenBlockMappingType SLAB = new BuiltInDataDrivenBlockMappingType("slab") {
 
         @Override
         public <T> void apply(BlockMappingsComposeEventImpl event, @Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike) {
@@ -202,7 +220,7 @@ public final class BuiltInDataDrivenMappingTypes {
 
     };
 
-    public static final DataDrivenMappingType STAIRS = new DataDrivenMappingType() {
+    public static final DataDrivenBlockMappingType STAIRS = new BuiltInDataDrivenBlockMappingType("stairs") {
 
         @Override
         public <T> void apply(BlockMappingsComposeEventImpl event, @Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike) {
@@ -213,5 +231,14 @@ public final class BuiltInDataDrivenMappingTypes {
         }
 
     };
+
+    private static boolean bootstrapped = false;
+
+    static void bootstrapIfNecessary() {
+        if (!bootstrapped) {
+            List.of(STAIRS);
+            bootstrapped = true;
+        }
+    }
 
 }

@@ -9,6 +9,8 @@ import org.fiddlemc.fiddle.api.util.composable.BuilderComposeEvent;
 import org.fiddlemc.fiddle.api.util.composable.ChangeRegisteredComposeEvent;
 import org.fiddlemc.fiddle.api.util.composable.GetRegisteredComposeEvent;
 import org.jspecify.annotations.Nullable;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -40,18 +42,50 @@ public interface ItemMappingsComposeEvent<M> extends BuilderComposeEvent<ItemMap
         this.changeRegistered(Pair.of(awarenessLevel, from), listConsumer);
     }
 
-    default void registerAutomatic(ItemType from, ItemType fallback) {
-        this.registerAutomatic(from, fallback, fallback);
+    default void register(ItemType from, ItemType to) {
+        this.register(ClientView.AwarenessLevel.getThatDoNotAlwaysUnderstandsAllServerSideItems(), from, to, null);
     }
 
-    default void registerAutomatic(ItemType from, ItemType proxy, ItemType fallback) {
-        this.registerAutomatic(from, proxy, fallback, from.getKey());
+    default void register(ItemType from, ItemType to, @Nullable Boolean overrideItemModel) {
+        this.register(ClientView.AwarenessLevel.getThatDoNotAlwaysUnderstandsAllServerSideItems(), from, to, overrideItemModel, null);
     }
 
-    default void registerAutomatic(ItemType from, ItemType fallback, @Nullable NamespacedKey itemModel) {
-        this.registerAutomatic(from, fallback, fallback, itemModel);
+    default void register(ItemType from, ItemType to, @Nullable Boolean overrideItemModel, @Nullable NamespacedKey itemModel) {
+        this.register(List.of(ClientView.AwarenessLevel.getThatDoNotAlwaysUnderstandsAllServerSideItems()), from, to, overrideItemModel, itemModel);
     }
 
-    void registerAutomatic(ItemType from, ItemType proxy, ItemType fallback, @Nullable NamespacedKey itemModel);
+    default void register(ClientView.AwarenessLevel awarenessLevel, ItemType from, ItemType to) {
+        this.register(awarenessLevel, from, to, null);
+    }
+
+    default void register(ClientView.AwarenessLevel awarenessLevel, ItemType from, ItemType to, @Nullable Boolean overrideItemModel) {
+        this.register(awarenessLevel, from, to, overrideItemModel, null);
+    }
+
+    default void register(ClientView.AwarenessLevel awarenessLevel, ItemType from, ItemType to, @Nullable Boolean overrideItemModel, @Nullable NamespacedKey itemModel) {
+        this.register(List.of(awarenessLevel), from, to, overrideItemModel, itemModel);
+    }
+
+    default void register(ClientView.AwarenessLevel[] awarenessLevels, ItemType from, ItemType to) {
+        this.register(awarenessLevels, from, to, null);
+    }
+
+    default void register(ClientView.AwarenessLevel[] awarenessLevels, ItemType from, ItemType to, @Nullable Boolean overrideItemModel) {
+        this.register(awarenessLevels, from, to, overrideItemModel, null);
+    }
+
+    default void register(ClientView.AwarenessLevel[] awarenessLevels, ItemType from, ItemType to, @Nullable Boolean overrideItemModel, @Nullable NamespacedKey itemModel) {
+        this.register(Arrays.asList(awarenessLevels), from, to, overrideItemModel, itemModel);
+    }
+
+    default void register(Collection<ClientView.AwarenessLevel> awarenessLevels, ItemType from, ItemType to) {
+        this.register(awarenessLevels, from, to, null);
+    }
+
+    default void register(Collection<ClientView.AwarenessLevel> awarenessLevels, ItemType from, ItemType to, @Nullable Boolean overrideItemModel) {
+        this.register(awarenessLevels, from, to, overrideItemModel, null);
+    }
+
+    void register(Collection<ClientView.AwarenessLevel> awarenessLevels, ItemType from, ItemType to, @Nullable Boolean overrideItemModel, @Nullable NamespacedKey itemModel);
 
 }

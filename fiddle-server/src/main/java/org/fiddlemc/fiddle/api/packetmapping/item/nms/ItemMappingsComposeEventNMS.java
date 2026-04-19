@@ -13,6 +13,8 @@ import org.fiddlemc.fiddle.api.clientview.ClientView;
 import org.fiddlemc.fiddle.api.packetmapping.item.ItemMappingsComposeEvent;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -55,22 +57,54 @@ public interface ItemMappingsComposeEventNMS<M> extends ItemMappingsComposeEvent
     }
 
     @Override
-    default void registerAutomatic(ItemType from, ItemType proxy, ItemType fallback, @Nullable NamespacedKey itemModel) {
-        this.registerAutomaticNMS(CraftItemType.bukkitToMinecraftNew(from), CraftItemType.bukkitToMinecraftNew(proxy), CraftItemType.bukkitToMinecraftNew(fallback), itemModel == null ? null : CraftNamespacedKey.toMinecraft(itemModel));
+    default void register(Collection<ClientView.AwarenessLevel> awarenessLevels, ItemType from, ItemType to, @Nullable Boolean overrideItemModel, @Nullable NamespacedKey itemModel) {
+        this.registerNMS(awarenessLevels, CraftItemType.bukkitToMinecraftNew(from), CraftItemType.bukkitToMinecraftNew(to), overrideItemModel, itemModel == null ? null : CraftNamespacedKey.toMinecraft(itemModel));
     }
 
-    default void registerAutomaticNMS(Item from, Item fallback) {
-        this.registerAutomaticNMS(from, fallback, fallback);
+    default void registerNMS(Item from, Item to) {
+        this.registerNMS(ClientView.AwarenessLevel.getThatDoNotAlwaysUnderstandsAllServerSideItems(), from, to, null);
     }
 
-    default void registerAutomaticNMS(Item from, Item proxy, Item fallback) {
-        this.registerAutomaticNMS(from, proxy, fallback, from.keyInItemRegistry);
+    default void registerNMS(Item from, Item to, @Nullable Boolean overrideItemModel) {
+        this.registerNMS(ClientView.AwarenessLevel.getThatDoNotAlwaysUnderstandsAllServerSideItems(), from, to, overrideItemModel, null);
     }
 
-    default void registerAutomaticNMS(Item from, Item fallback, @Nullable Identifier itemModel) {
-        this.registerAutomaticNMS(from, fallback, fallback, itemModel);
+    default void registerNMS(Item from, Item to, @Nullable Boolean overrideItemModel, @Nullable Identifier itemModel) {
+        this.registerNMS(List.of(ClientView.AwarenessLevel.getThatDoNotAlwaysUnderstandsAllServerSideItems()), from, to, overrideItemModel, itemModel);
     }
 
-    void registerAutomaticNMS(Item from, Item proxy, Item fallback, @Nullable Identifier itemModel);
+    default void registerNMS(ClientView.AwarenessLevel awarenessLevel, Item from, Item to) {
+        this.registerNMS(awarenessLevel, from, to, null);
+    }
+
+    default void registerNMS(ClientView.AwarenessLevel awarenessLevel, Item from, Item to, @Nullable Boolean overrideItemModel) {
+        this.registerNMS(awarenessLevel, from, to, overrideItemModel, null);
+    }
+
+    default void registerNMS(ClientView.AwarenessLevel awarenessLevel, Item from, Item to, @Nullable Boolean overrideItemModel, @Nullable Identifier itemModel) {
+        this.registerNMS(List.of(awarenessLevel), from, to, overrideItemModel, itemModel);
+    }
+
+    default void registerNMS(ClientView.AwarenessLevel[] awarenessLevels, Item from, Item to) {
+        this.registerNMS(awarenessLevels, from, to, null);
+    }
+
+    default void registerNMS(ClientView.AwarenessLevel[] awarenessLevels, Item from, Item to, @Nullable Boolean overrideItemModel) {
+        this.registerNMS(awarenessLevels, from, to, overrideItemModel, null);
+    }
+
+    default void registerNMS(ClientView.AwarenessLevel[] awarenessLevels, Item from, Item to, @Nullable Boolean overrideItemModel, @Nullable Identifier itemModel) {
+        this.registerNMS(Arrays.asList(awarenessLevels), from, to, overrideItemModel, itemModel);
+    }
+
+    default void registerNMS(Collection<ClientView.AwarenessLevel> awarenessLevels, Item from, Item to) {
+        this.registerNMS(awarenessLevels, from, to, null);
+    }
+
+    default void registerNMS(Collection<ClientView.AwarenessLevel> awarenessLevels, Item from, Item to, @Nullable Boolean overrideItemModel) {
+        this.registerNMS(awarenessLevels, from, to, overrideItemModel, null);
+    }
+
+    void registerNMS(Collection<ClientView.AwarenessLevel> awarenessLevels, Item from, Item to, @Nullable Boolean overrideItemModel, @Nullable Identifier itemModel);
 
 }

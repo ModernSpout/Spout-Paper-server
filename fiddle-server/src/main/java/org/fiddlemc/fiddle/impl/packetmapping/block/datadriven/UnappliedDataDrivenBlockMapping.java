@@ -12,30 +12,30 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 
 /**
- * The data-driven mappings for a {@link Block}.
+ * A data-driven mapping for a {@link Block} that has not been applied yet.
  */
-public final class UnappliedDataDrivenMapping {
+public final class UnappliedDataDrivenBlockMapping {
 
-    public static final Codec<UnappliedDataDrivenMapping> CODEC = new Codec<>() {
+    public static final Codec<UnappliedDataDrivenBlockMapping> CODEC = new Codec<>() {
 
         @Override
-        public <T> DataResult<T> encode(UnappliedDataDrivenMapping mapping, DynamicOps<T> ops, T t) {
+        public <T> DataResult<T> encode(UnappliedDataDrivenBlockMapping mapping, DynamicOps<T> ops, T t) {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public <T> DataResult<Pair<UnappliedDataDrivenMapping, T>> decode(DynamicOps<T> ops, T input) {
-            return ops.getMap(input).flatMap(mapLike -> DataResult.success(Pair.of(new UnappliedDataDrivenMapping(ops, mapLike), input)));
+        public <T> DataResult<Pair<UnappliedDataDrivenBlockMapping, T>> decode(DynamicOps<T> ops, T input) {
+            return ops.getMap(input).flatMap(mapLike -> DataResult.success(Pair.of(new UnappliedDataDrivenBlockMapping(ops, mapLike), input)));
         }
 
     };
 
-    public static final Decoder<List<UnappliedDataDrivenMapping>> LIST_CODEC = Codec.list(CODEC);
+    public static final Decoder<List<UnappliedDataDrivenBlockMapping>> LIST_CODEC = Codec.list(CODEC);
 
     private final DynamicOps<?> ops;
     private final MapLike<?> mapLike;
 
-    private UnappliedDataDrivenMapping(DynamicOps<?> ops, MapLike<?> mapLike) {
+    private UnappliedDataDrivenBlockMapping(DynamicOps<?> ops, MapLike<?> mapLike) {
         this.ops = ops;
         this.mapLike = mapLike;
     }
@@ -56,7 +56,7 @@ public final class UnappliedDataDrivenMapping {
             throw new IllegalArgumentException("Invalid mapping type for a mapping" + (block == null ? "" : " for block " + block) + typeResult.error().map(error -> ": " + error.message()).orElse(""));
         }
         String typeString = typeResult.getOrThrow();
-        @Nullable DataDrivenMappingType type = DataDrivenMappingTypeRegistry.get(typeString);
+        @Nullable DataDrivenBlockMappingType type = DataDrivenBlockMappingTypeRegistry.get(typeString);
         if (type == null) {
             throw new IllegalArgumentException("Unknown mapping type for a mapping" + (block == null ? "" : " for block " + block) + ": " + typeString);
         }

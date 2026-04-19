@@ -16,7 +16,7 @@ public final class ItemTypes {
         throw new UnsupportedOperationException();
     }
 
-    public static final MapCodec<Item> CODEC = BuiltInRegistries.FIDDLE_ITEM_TYPE.byNameCodec().dispatchMap(item -> WrappedItemCodecImpl.wrap(item.codec()), WrappedItemCodec::getCodec);
+    public static final MapCodec<Item> CODEC = BuiltInRegistries.FIDDLE_ITEM_TYPE.byNameCodec().dispatchMap(item -> WrappedItemCodecImpl.wrap(item.codec()), WrappedItemCodec::getExtendedCodec);
 
     public static WrappedItemCodec<? extends Item> bootstrap(Registry<WrappedItemCodec<? extends Item>> registry) {
         class Registry {

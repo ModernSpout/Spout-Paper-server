@@ -12,9 +12,4 @@ public interface FiddleItemTypeNMS<I extends Item> extends FiddleItemType {
     @Override
     WrappedItemCodec<I> getWrappedCodec();
 
-    @Override
-    default MapCodec<I> getCodec() {
-        return this.getWrappedCodec().getCodec();
-    }
-
 }
