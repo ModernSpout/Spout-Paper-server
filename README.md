@@ -45,11 +45,11 @@ Spout lets Spout plugins add new blocks and items server-side. When players join
 
 This is the Spout server extension of Paper.
 
-<ul style="list-style-type: '✓ ';">
-<li>Support for Bukkit / Spigot / Paper plugins</li>
-<li>Add Spout plugins just like Paper plugins</li>
-<li>Works with the <a href="https://github.com/FiddleMC/Fiddle-mod">Spout client mod</a> and vanilla clients</li>
-</ul>
+&nbsp;&nbsp;&nbsp;&nbsp;✓&nbsp;&nbsp;Support for Bukkit / Spigot / Paper plugins
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;✓&nbsp;&nbsp;Add Spout plugins just like Paper plugins
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;✓&nbsp;&nbsp;Works with the <a href="https://github.com/FiddleMC/Fiddle-mod">Spout client mod</a> and vanilla clients
 
 ## Installation
 
