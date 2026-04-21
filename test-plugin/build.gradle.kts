@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly(project(":fiddle-api"))
+    compileOnly(project(":spout-api"))
 }
 
 tasks.processResources {

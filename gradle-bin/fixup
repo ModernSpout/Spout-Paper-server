@@ -4,7 +4,7 @@
 
 cd ..
 ./gradlew fixupPaperApiFilePatches || true
-./gradlew :fiddle-server:fixupMinecraftResourcePatches || true
-./gradlew :fiddle-server:fixupMinecraftSourcePatches || true
-./gradlew :fiddle-server:fixupPaperServerFilePatches || true
+./gradlew :spout-server:fixupMinecraftResourcePatches || true
+./gradlew :spout-server:fixupMinecraftSourcePatches || true
+./gradlew :spout-server:fixupPaperServerFilePatches || true
 cd gradle-bin

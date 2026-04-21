@@ -5,5 +5,5 @@
 cd ../run
 rm -f ./*/session.lock
 cd ..
-./gradlew :fiddle-server:runDevServer
+./gradlew :spout-server:runDevServer
 cd gradle-bin

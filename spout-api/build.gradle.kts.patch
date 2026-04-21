@@ -52,12 +52,12 @@
  val services = objects.newInstance<Services>()
  
  tasks.withType<Javadoc>().configureEach {
-+    // Fiddle start - Project setup - Hide Javadoc lint warnings
++    // Spout start - Project setup - Hide Javadoc lint warnings
 +    (options as StandardJavadocDocletOptions).addStringOption(
 +        "Xdoclint:none",
 +        "-quiet"
 +    )
-+    // Fiddle end - Project setup - Hide Javadoc lint warnings
++    // Spout end - Project setup - Hide Javadoc lint warnings
      val options = options as StandardJavadocDocletOptions
 -    options.overview = "src/main/javadoc/overview.html"
 +    options.overview = "../paper-api/src/main/javadoc/overview.html"
@@ -76,12 +76,12 @@
  
      // workaround for https://github.com/gradle/gradle/issues/4046
 -    inputs.dir("src/main/javadoc").withPropertyName("javadoc-sourceset")
-+    inputs.dir("../fiddle-api/src/main/javadoc").withPropertyName("javadoc-sourceset") // Fiddle start - Project setup - Update fix to fork directory
++    inputs.dir("../spout-api/src/main/javadoc").withPropertyName("javadoc-sourceset") // Spout start - Project setup - Update fix to fork directory
      val fsOps = services.fileSystemOperations
      doLast {
          fsOps.copy {
 -            from("src/main/javadoc") {
-+            from("../fiddle-api/src/main/javadoc") { // Fiddle start - Project setup - Update fix to fork directory
++            from("../spout-api/src/main/javadoc") { // Spout start - Project setup - Update fix to fork directory
                  include("**/doc-files/**")
              }
              into("build/docs/javadoc")
@@ -90,7 +90,7 @@
      dependsOn(scanJarForBadCalls)
  }
 +
-+// Fiddle start - Project setup - Hide annoying compilation warnings
++// Spout start - Project setup - Hide annoying compilation warnings
 +tasks.withType<JavaCompile> {
 +    options.compilerArgs.addAll(
 +        listOf(
@@ -101,4 +101,4 @@
 +        )
 +    )
 +}
-+// Fiddle end - Project setup - Hide annoying compilation warnings
++// Spout end - Project setup - Hide annoying compilation warnings

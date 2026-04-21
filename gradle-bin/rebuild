@@ -5,6 +5,6 @@
 cd ..
 ./gradlew rebuildPaperApiFeaturePatches # includes rebuildPaperApiFilePatches
 ./gradlew rebuildPaperSingleFilePatches
-./gradlew :fiddle-server:rebuildMinecraftFeaturePatches # includes :fiddle-server:rebuildMinecraftFilePatches, which includes :fiddle-server:rebuildMinecraftResourcePatches and :fiddle-server:rebuildMinecraftSourcePatches
-./gradlew :fiddle-server:rebuildPaperServerFeaturePatches # includes :fiddle-server:rebuildPaperServerFilePatches
+./gradlew :spout-server:rebuildMinecraftFeaturePatches # includes :spout-server:rebuildMinecraftFilePatches, which includes :spout-server:rebuildMinecraftResourcePatches and :spout-server:rebuildMinecraftSourcePatches
+./gradlew :spout-server:rebuildPaperServerFeaturePatches # includes :spout-server:rebuildPaperServerFilePatches
 cd gradle-bin

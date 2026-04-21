@@ -2,7 +2,7 @@
 +++ b/paper-server/build.gradle.kts
 @@ -1,14 +_,17 @@
 -import io.papermc.fill.model.BuildChannel
-+// import io.papermc.fill.model.BuildChannel // Fiddle - Project setup - Remove Fill
++// import io.papermc.fill.model.BuildChannel // Spout - Project setup - Remove Fill
  import io.papermc.paperweight.attribute.DevBundleOutput
  import io.papermc.paperweight.util.*
  import java.time.Instant
@@ -16,7 +16,7 @@
      idea
      id("io.papermc.paperweight.core")
 -    id("io.papermc.fill.gradle") version "1.0.10"
-+    // id("io.papermc.fill.gradle") version "1.0.10" // Fiddle - Project setup - Remove Fill
++    // id("io.papermc.fill.gradle") version "1.0.10" // Spout - Project setup - Remove Fill
  }
  
  val paperMavenPublicUrl = "https://repo.papermc.io/repository/maven-public/"
@@ -24,17 +24,17 @@
      minecraftVersion = providers.gradleProperty("mcVersion")
      gitFilePatches = false
  
-+    // Fiddle start - Project setup - Set up Paperweight
-+    val fiddle = forks.register("fiddle") {
++    // Spout start - Project setup - Set up Paperweight
++    val spout = forks.register("spout") {
 +        upstream.patchDir("paperServer") {
 +            upstreamPath = "paper-server"
 +            excludes = setOf("src/minecraft", "patches", "build.gradle.kts")
-+            patchesDir = rootDirectory.dir("fiddle-server/paper-patches")
++            patchesDir = rootDirectory.dir("spout-server/paper-patches")
 +            outputDir = rootDirectory.dir("paper-server")
 +        }
 +    }
-+    activeFork = fiddle
-+    // Fiddle end - Project setup - Set up Paperweight
++    activeFork = spout
++    // Spout end - Project setup - Set up Paperweight
 +
      spigot {
          enabled = true
@@ -52,7 +52,7 @@
  }
  
 -val log4jPlugins = sourceSets.create("log4jPlugins")
-+// Fiddle start - Project setup - Set project directory references
++// Spout start - Project setup - Set project directory references
 +sourceSets {
 +    main {
 +        java { srcDir("../paper-server/src/main/java") }
@@ -66,7 +66,7 @@
 +val log4jPlugins = sourceSets.create("log4jPlugins") {
 +    java { srcDir("../paper-server/src/log4jPlugins/java") }
 +}
-+// Fiddle end - Project setup - Set project directory references
++// Spout end - Project setup - Set project directory references
  configurations.named(log4jPlugins.compileClasspathConfigurationName) {
      extendsFrom(configurations.compileClasspath.get())
  }
@@ -83,7 +83,7 @@
  
  dependencies {
 -    implementation(project(":paper-api"))
-+    implementation(project(":fiddle-api")) // Fiddle - Project setup - Set up Gradle project
++    implementation(project(":spout-api")) // Spout - Project setup - Set up Gradle project
      implementation("ca.spottedleaf:concurrentutil:0.0.8")
      implementation("org.jline:jline-terminal-ffm:3.27.1") // use ffm on java 22+
      implementation("org.jline:jline-terminal-jni:3.27.1") // fall back to jni on java 21
@@ -111,22 +111,22 @@
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
 -            "Implementation-Title" to "Paper",
-+            "Add-Opens" to "java.base/java.lang", // Fiddle - Synchronize Bukkit enums - Add module opens to server JAR
-+            "Enable-Final-Field-Mutation" to "ALL-UNNAMED", // Fiddle - Synchronize Bukkit enums - Add enable final field mutation to server JAR
-+            "Implementation-Title" to "Fiddle", // Fiddle - Branding changes - Rename server brand
++            "Add-Opens" to "java.base/java.lang", // Spout - Synchronize Bukkit enums - Add module opens to server JAR
++            "Enable-Final-Field-Mutation" to "ALL-UNNAMED", // Spout - Synchronize Bukkit enums - Add enable final field mutation to server JAR
++            "Implementation-Title" to "Spout", // Spout - Branding changes - Rename server brand
              "Implementation-Version" to implementationVersion,
 -            "Implementation-Vendor" to date,
 -            "Specification-Title" to "Paper",
-+            "Implementation-Build-Date" to date, // Fiddle - Project setup - Include Git date as "Implementation-Build-Date"
-+            "Implementation-Vendor" to "FiddleMC & contributors", // Fiddle - Branding changes - Rename server brand
-+            "Specification-Title" to "Fiddle", // Fiddle - Branding changes - Rename server brand
++            "Implementation-Build-Date" to date, // Spout - Project setup - Include Git date as "Implementation-Build-Date"
++            "Implementation-Vendor" to "Spout authors & contributors", // Spout - Branding changes - Rename server brand
++            "Specification-Title" to "Spout", // Spout - Branding changes - Rename server brand
              "Specification-Version" to project.version,
 -            "Specification-Vendor" to "Paper Team",
 -            "Brand-Id" to "papermc:paper",
 -            "Brand-Name" to "Paper",
-+            "Specification-Vendor" to "FiddleMC & contributors", // Fiddle - Branding changes - Rename server brand
-+            "Brand-Id" to "fiddlemc:fiddle", // Fiddle - Branding changes - Rename server brand
-+            "Brand-Name" to "Fiddle", // Fiddle - Branding changes - Rename server brand
++            "Specification-Vendor" to "Spout authors & contributors", // Spout - Branding changes - Rename server brand
++            "Brand-Id" to "spout:spout-server-paper", // Spout - Branding changes - Rename server brand
++            "Brand-Name" to "Spout", // Spout - Branding changes - Rename server brand
              "Build-Number" to (build ?: ""),
              "Build-Time" to buildTime.toString(),
              "Git-Branch" to gitBranch,
@@ -136,7 +136,7 @@
  
 -val generatedDir: java.nio.file.Path = layout.projectDirectory.dir("src/generated/java").asFile.toPath()
 +val generatedDir: java.nio.file.Path =
-+    layout.projectDirectory.dir("../paper-server/src/generated/java").asFile.toPath() // Fiddle - Project setup - Set project directory references
++    layout.projectDirectory.dir("../paper-server/src/generated/java").asFile.toPath() // Spout - Project setup - Set project directory references
  idea {
      module {
          generatedSourceDirs.add(generatedDir.toFile())
@@ -144,8 +144,8 @@
          vendor.set(JvmVendorSpec.JETBRAINS)
      })
      jvmArgs("-XX:+AllowEnhancedClassRedefinition")
-+    jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED") // Fiddle - Synchronize Bukkit enums - Add module opens to dev server runs
-+    // jvmArgs("--enable-final-field-mutation", "ALL-UNNAMED") // Fiddle - Synchronize Bukkit enums - Add enable final field mutation to dev server runs
++    jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED") // Spout - Synchronize Bukkit enums - Add module opens to dev server runs
++    // jvmArgs("--enable-final-field-mutation", "ALL-UNNAMED") // Spout - Synchronize Bukkit enums - Add enable final field mutation to dev server runs
  
      if (rootProject.childProjects["test-plugin"] != null) {
          val testPluginJar = rootProject.project(":test-plugin").tasks.jar.flatMap { it.archiveFile }
@@ -153,7 +153,7 @@
      mainClass.set(null as String?)
  }
  
-+// Fiddle start - Project setup - Hide annoying compilation warnings
++// Spout start - Project setup - Hide annoying compilation warnings
 +tasks.withType<JavaCompile> {
 +    options.compilerArgs.addAll(
 +        listOf(
@@ -164,9 +164,9 @@
 +        )
 +    )
 +}
-+// Fiddle end - Project setup - Hide annoying compilation warnings
++// Spout end - Project setup - Hide annoying compilation warnings
 +
-+// Fiddle start - Project setup - Remove Fill
++// Spout start - Project setup - Remove Fill
 +/*
  fill {
      project("paper")
@@ -176,9 +176,9 @@
      }
  }
 +*/
-+// Fiddle end - Project setup - Remove Fill
++// Spout end - Project setup - Remove Fill
 +
-+// Fiddle start - Synchronize Bukkit enums - Add module opens and enable final field mutation to server JAR
++// Spout start - Synchronize Bukkit enums - Add module opens and enable final field mutation to server JAR
 +val extendedManifestLines: List<String> = listOf(
 +    "Add-Opens" to "java.base/java.lang",
 +    "Enable-Final-Field-Mutation" to "ALL-UNNAMED"
@@ -241,4 +241,4 @@
 +        }
 +    }
 +}
-+// Fiddle end - Synchronize Bukkit enums - Add module opens to server JAR
++// Spout end - Synchronize Bukkit enums - Add module opens to server JAR

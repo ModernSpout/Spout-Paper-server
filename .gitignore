@@ -53,12 +53,12 @@ manifest.mf
 # other stuff
 /run
 
-/fiddle-server/build.gradle.kts
-/fiddle-server/src/minecraft
-/fiddle-server/map-color-cache.dat
-/fiddle-server/logs
+/spout-server/build.gradle.kts
+/spout-server/src/minecraft
+/spout-server/map-color-cache.dat
+/spout-server/logs
 /paper-server
-/fiddle-api/build.gradle.kts
+/spout-api/build.gradle.kts
 /paper-api
 *.jar
 test-plugin.settings.gradle.kts

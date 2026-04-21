@@ -1,4 +1,4 @@
-# Fiddle
+# Spout
 
 Paperweight files are licensed under [MIT](https://opensource.org/licenses/MIT) (included in `license/MIT.txt`).\
 Patches, code files, build files, workflow files and executable binaries are licensed under a complemented GPL-3.0

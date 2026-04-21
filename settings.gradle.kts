@@ -9,19 +9,19 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
-// Fiddle start - Project setup - Check for Git
+// Spout start - Project setup - Check for Git
 if (!file(".git").exists()) {
     val errorText = """
         
         =====================[ ERROR ]=====================
-         The Fiddle project directory is not a properly cloned Git repository.
+         The Spout project directory is not a properly cloned Git repository.
          
-         In order to build Fiddle from source you must clone
-         the Fiddle repository using Git, not download a code
+         In order to build Spout from source you must clone
+         the Spout repository using Git, not download a code
          zip from GitHub.
          
-         Built Fiddle jars are available for download at
-         https://github.com/FiddleMC/Fiddle/actions
+         Built Spout jars are available for download at
+         https://github.com/FiddleMC/Spout-Paper-server/actions
          
          See https://github.com/PaperMC/Paper/blob/master/CONTRIBUTING.md
          for further information on building and modifying Paper forks.
@@ -29,14 +29,14 @@ if (!file(".git").exists()) {
     """.trimIndent()
     error(errorText)
 }
-// Fiddle end - Project setup - Check for Git
+// Spout end - Project setup - Check for Git
 
-// Fiddle start - Set up Gradle project
-rootProject.name = "fiddle"
+// Spout start - Set up Gradle project
+rootProject.name = "spout-paper-server"
 
-include("fiddle-api")
-include("fiddle-server")
-// Fiddle end - Set up Gradle project
+include("spout-api")
+include("spout-server")
+// Spout end - Set up Gradle project
 
 optionalInclude("test-plugin")
 

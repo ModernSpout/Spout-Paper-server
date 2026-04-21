@@ -11,22 +11,22 @@ paperweight {
 
         patchFile {
             path = "paper-server/build.gradle.kts"
-            // Fiddle start - Project setup - Set up Paperweight
-            outputFile = file("fiddle-server/build.gradle.kts")
-            patchFile = file("fiddle-server/build.gradle.kts.patch")
-            // Fiddle end - Project setup - Set up Paperweight
+            // Spout start - Project setup - Set up Paperweight
+            outputFile = file("spout-server/build.gradle.kts")
+            patchFile = file("spout-server/build.gradle.kts.patch")
+            // Spout end - Project setup - Set up Paperweight
         }
         patchFile {
             path = "paper-api/build.gradle.kts"
-            // Fiddle start - Project setup - Set up Paperweight
-            outputFile = file("fiddle-api/build.gradle.kts")
-            patchFile = file("fiddle-api/build.gradle.kts.patch")
-            // Fiddle end - Project setup - Set up Paperweight
+            // Spout start - Project setup - Set up Paperweight
+            outputFile = file("spout-api/build.gradle.kts")
+            patchFile = file("spout-api/build.gradle.kts.patch")
+            // Spout end - Project setup - Set up Paperweight
         }
         patchDir("paperApi") {
             upstreamPath = "paper-api"
             excludes = setOf("build.gradle.kts")
-            patchesDir = file("fiddle-api/paper-patches") // Fiddle - Project setup - Set up Paperweight
+            patchesDir = file("spout-api/paper-patches") // Spout - Project setup - Set up Paperweight
             outputDir = file("paper-api")
         }
     }
@@ -57,7 +57,7 @@ subprojects {
         options.encoding = Charsets.UTF_8.name()
         options.release = 21
         options.isFork = true
-        // Fiddle start - Project setup - Hide annoying compilation warnings
+        // Spout start - Project setup - Hide annoying compilation warnings
         options.compilerArgs.addAll(
             listOf(
                 "-Xlint:-dep-ann",
@@ -66,7 +66,7 @@ subprojects {
                 "-Xlint:-removal",
             )
         )
-        // Fiddle end - Project setup - Hide annoying compilation warnings
+        // Spout end - Project setup - Hide annoying compilation warnings
     }
     tasks.withType<Javadoc> {
         options.encoding = Charsets.UTF_8.name()
