@@ -206,7 +206,7 @@
 +                project.logger.lifecycle("Adding extended manifest elements to ${jar.second?.let { "$it " } ?: ""}${jar.first} JAR...")
 +
 +                val jarName = listOfNotNull(
-+                    rootProject.name,
++                    "spout",
 +                    jar.first,
 +                    project.version,
 +                    jar.second,
