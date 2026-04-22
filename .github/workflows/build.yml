@@ -3,7 +3,7 @@ on: [ push ]
 jobs:
   build:
     # Only runs on master, and if the last commit does not start with [ci-skip]
-    if: github.ref == 'refs/heads/master' && ${{ !contains(github.event.commits[0].message, '[ci-skip]') }}
+    if: ${{ github.ref == 'refs/heads/master' && !contains(github.event.commits[0].message, '[ci-skip]') }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -18,9 +18,7 @@ jobs:
           java-version: ${{ matrix.java }}
           distribution: 'temurin'
       - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@v3
-        env:
-          NODE_OPTIONS: --dns-result-order=ipv4first
+        uses: gradle/wrapper-validation-action@v2
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v3
       - name: Grant execute permission for gradlew
