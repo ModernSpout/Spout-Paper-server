@@ -63,9 +63,9 @@
 +        resources { srcDir("../paper-server/src/test/resources") }
 +    }
 +}
-+val log4jPlugins = sourceSets.create("log4jPlugins") {
++val log4jPlugins = sourceSets.create("log4jPlugins", Action {
 +    java { srcDir("../paper-server/src/log4jPlugins/java") }
-+}
++})
 +// Spout end - Project setup - Set project directory references
  configurations.named(log4jPlugins.compileClasspathConfigurationName) {
      extendsFrom(configurations.compileClasspath.get())

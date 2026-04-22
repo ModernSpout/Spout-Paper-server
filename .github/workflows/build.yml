@@ -33,5 +33,6 @@ jobs:
       - name: Upload JAR
         uses: actions/upload-artifact@v7
         with:
-          name: Spout
-          path: spout-server/build/libs/spout-server-*.jar
+          name: Spout server JAR
+          path: spout-server/build/libs/spout-paperclip-*-mojmap.jar
+          archive: false
