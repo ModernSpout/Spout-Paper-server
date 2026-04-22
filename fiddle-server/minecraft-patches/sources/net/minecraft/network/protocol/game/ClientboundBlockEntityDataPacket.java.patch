@@ -1,0 +1,10 @@
+--- a/net/minecraft/network/protocol/game/ClientboundBlockEntityDataPacket.java
++++ b/net/minecraft/network/protocol/game/ClientboundBlockEntityDataPacket.java
+@@ -28,6 +_,7 @@
+     private final CompoundTag tag;
+ 
+     public static ClientboundBlockEntityDataPacket create(BlockEntity blockEntity, BiFunction<BlockEntity, RegistryAccess, CompoundTag> dataGetter) {
++        if (!blockEntity.getType().isVanilla()) return null; // Fiddle - More data-driven - Block entities - Don't send non-vanilla block entities to the client
+         RegistryAccess registryAccess = blockEntity.getLevel().registryAccess();
+         return new ClientboundBlockEntityDataPacket(blockEntity.getBlockPos(), blockEntity.getType(), blockEntity.sanitizeSentNbt(dataGetter.apply(blockEntity, registryAccess))); // Paper - Sanitize sent data
+     }

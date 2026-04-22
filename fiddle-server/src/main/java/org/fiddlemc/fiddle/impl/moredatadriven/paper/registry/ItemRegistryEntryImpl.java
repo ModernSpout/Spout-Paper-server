@@ -185,7 +185,7 @@ public abstract class ItemRegistryEntryImpl implements ItemRegistryEntry, Settab
 
         @Override
         public ItemRegistryEntryImpl.BuilderImpl factoryForBlockNMS(Identifier blockIdentifier) {
-            return this.factoryForBlockNMS(blockIdentifier);
+            return this.factoryNMS(properties -> new BlockItem(BlockRegistry.get().getValue(blockIdentifier), properties));
         }
 
         @Override

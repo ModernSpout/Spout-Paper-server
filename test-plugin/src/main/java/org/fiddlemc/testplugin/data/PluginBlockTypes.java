@@ -25,6 +25,7 @@ public final class PluginBlockTypes {
     public static Supplier<BlockType> DIORITE_BRICK_SLAB = blockType("quark:diorite_brick_slab");
     public static Supplier<BlockType> DIORITE_BRICK_STAIRS = blockType("quark:diorite_brick_stairs");
     public static Supplier<BlockType> DIORITE_BRICKS = blockType("quark:diorite_bricks");
+    public static Supplier<BlockType> EXAMPLE_BLOCK_ENTITY = blockType("example:block_entity");
 
     private static Supplier<BlockType> blockType(String key) {
         return Suppliers.memoize(() -> Registry.BLOCK.get(Key.key(key)));

@@ -3,9 +3,14 @@ package org.fiddlemc.testplugin;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import io.papermc.paper.registry.RegistryKey;
+import io.papermc.paper.registry.TypedKey;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import org.bukkit.Instrument;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Note;
@@ -20,6 +25,8 @@ import org.bukkit.inventory.ItemType;
 import org.bukkit.inventory.meta.BlockDataMeta;
 import org.fiddlemc.fiddle.api.FiddleEvents;
 import org.fiddlemc.fiddle.api.clientview.ClientView;
+import org.fiddlemc.fiddle.api.moredatadriven.paper.registry.nms.BlockRegistryEntryBuilderNMS;
+import org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.nms.BlockEntityTypeRegistryEntryBuilderNMS;
 import org.fiddlemc.fiddle.api.packetmapping.component.translatable.ServerSideTranslations;
 import org.fiddlemc.fiddle.api.packetmapping.item.ItemMappingUtilities;
 import org.fiddlemc.testplugin.data.PluginBlockTypes;
@@ -38,6 +45,7 @@ public class TestPluginBootstrap implements PluginBootstrap {
     @Override
     public void bootstrap(@NotNull BootstrapContext context) {
         loadIncludedDataPack(context);
+        registerBlockEntities(context);
         setBlockMappings(context);
         setItemMappings(context);
         setItemSourceTooltipMapping(context);
@@ -111,6 +119,63 @@ public class TestPluginBootstrap implements PluginBootstrap {
         state.setInstrument(Instrument.BELL);
         state.setNote(Note.natural(0, Note.Tone.G));
         return state;
+    }
+
+    /**
+     * Register custom block entities.
+     */
+    private void registerBlockEntities(@NotNull BootstrapContext context) {
+
+        context.getLifecycleManager().registerEventHandler(FiddleEvents.BLOCK, event -> {
+            System.out.println("FiddleEvents.BLOCK");
+            event.registry().register(
+                TypedKey.create(RegistryKey.BLOCK, Key.key("example:block_entity")),
+                builder -> {
+                    var builderNMS = (BlockRegistryEntryBuilderNMS) builder;
+                    builderNMS.factoryNMS(TestBlock::new);
+                }
+            );
+        });
+
+        context.getLifecycleManager().registerEventHandler(FiddleEvents.ITEM, event -> {
+            System.out.println("FiddleEvents.ITEM");
+            event.registry().register(
+                TypedKey.create(RegistryKey.ITEM, Key.key("example:block_entity")),
+                builder -> {
+                    builder.inheritsFromBlock(new NamespacedKey("example", "block_entity"));
+                }
+            );
+        });
+
+        context.getLifecycleManager().registerEventHandler(FiddleEvents.BLOCK_ENTITY_TYPE, event -> {
+            System.out.println("FiddleEvents.BLOCK_ENTITY_TYPE");
+            event.registry().register(
+                TypedKey.create(RegistryKey.BLOCK_ENTITY_TYPE, Key.key("example:block_entity")),
+                builder -> {
+                    var builderNMS = (BlockEntityTypeRegistryEntryBuilderNMS) builder;
+                    builderNMS.factorNMS(TestBlockEntity::new);
+                    builderNMS.validBlocks(PluginBlockTypes.EXAMPLE_BLOCK_ENTITY.get());
+                }
+            );
+        });
+
+        context.getLifecycleManager().registerEventHandler(FiddleEvents.ITEM_MAPPING, event -> {
+            event.register(builder -> {
+                builder.everyAwarenessLevel();
+                builder.from(PluginItemTypes.EXAMPLE_BLOCK_ENTITY.get());
+                builder.to(handle -> {
+                    ItemMappingUtilities.get().setItemTypeWhilePreservingRest(handle, ItemType.DIAMOND_BLOCK);
+                });
+            });
+        });
+
+        context.getLifecycleManager().registerEventHandler(FiddleEvents.BLOCK_MAPPING, event -> {
+            event.register(builder -> {
+                builder.everyAwarenessLevel();
+                builder.fromEveryStateOf(PluginBlockTypes.EXAMPLE_BLOCK_ENTITY.get());
+                builder.to(BlockType.DIAMOND_BLOCK.createBlockData());
+            });
+        });
     }
 
     /**
@@ -676,6 +741,7 @@ public class TestPluginBootstrap implements PluginBootstrap {
                         case "more_vanilla_shapes" -> "More Vanilla Shapes";
                         case "quark" -> "Quark";
                         case "minecraft", "fiddle" -> null;
+                        case "example" -> "Example";
                         default ->
                             throw new IllegalStateException("Unexpected value: " + handle.getOriginal().getType().key().namespace());
                     };

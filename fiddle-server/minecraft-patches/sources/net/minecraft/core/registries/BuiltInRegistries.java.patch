@@ -1,6 +1,6 @@
 --- a/net/minecraft/core/registries/BuiltInRegistries.java
 +++ b/net/minecraft/core/registries/BuiltInRegistries.java
-@@ -172,12 +_,12 @@
+@@ -172,16 +_,25 @@
      public static final Registry<SoundEvent> SOUND_EVENT = registerSimple(Registries.SOUND_EVENT, registry -> SoundEvents.ITEM_PICKUP);
      public static final DefaultedRegistry<Fluid> FLUID = registerDefaultedWithIntrusiveHolders(Registries.FLUID, "empty", registry -> Fluids.EMPTY);
      public static final Registry<MobEffect> MOB_EFFECT = registerSimple(Registries.MOB_EFFECT, MobEffects::bootstrap);
@@ -14,14 +14,29 @@
 +    public static final org.fiddlemc.fiddle.impl.moredatadriven.minecraft.ItemRegistry ITEM = internalRegister(Registries.ITEM, org.fiddlemc.fiddle.impl.moredatadriven.minecraft.ItemRegistry.get(), registry -> Items.AIR); // Fiddle - More data-driven - Minecraft registries - Use custom class
      public static final Registry<Potion> POTION = registerSimple(Registries.POTION, Potions::bootstrap);
      public static final Registry<ParticleType<?>> PARTICLE_TYPE = registerSimple(Registries.PARTICLE_TYPE, registry -> ParticleTypes.BLOCK);
-     public static final Registry<BlockEntityType<?>> BLOCK_ENTITY_TYPE = registerSimpleWithIntrusiveHolders(
+-    public static final Registry<BlockEntityType<?>> BLOCK_ENTITY_TYPE = registerSimpleWithIntrusiveHolders(
+-        Registries.BLOCK_ENTITY_TYPE, registry -> BlockEntityType.FURNACE
++    // Fiddle start - More data-driven - Block entities - Use delayed freezing
++    public static final Registry<BlockEntityType<?>> BLOCK_ENTITY_TYPE = internalRegister(
++        Registries.BLOCK_ENTITY_TYPE,
++        new MappedRegistry<>(Registries.BLOCK_ENTITY_TYPE, Lifecycle.stable(), true) {
++            @Override
++            public boolean isFreezingDelayed() {
++                return true;
++            }
++        },
++        registry -> BlockEntityType.FURNACE
++    // Fiddle end - More data-driven - Block entities - Use delayed freezing
+     );
+     public static final Registry<Identifier> CUSTOM_STAT = registerSimple(Registries.CUSTOM_STAT, registry -> Stats.JUMP);
+     public static final DefaultedRegistry<ChunkStatus> CHUNK_STATUS = registerDefaulted(Registries.CHUNK_STATUS, "empty", registry -> ChunkStatus.EMPTY);
 @@ -278,7 +_,8 @@
      public static final Registry<MapCodec<? extends DensityFunction>> DENSITY_FUNCTION_TYPE = registerSimple(
          Registries.DENSITY_FUNCTION_TYPE, DensityFunctions::bootstrap
      );
 -    public static final Registry<MapCodec<? extends Block>> BLOCK_TYPE = registerSimple(Registries.BLOCK_TYPE, BlockTypes::bootstrap);
-+    public static final Registry<org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec<?>> FIDDLE_BLOCK_TYPE = registerSimple(Registries.FIDDLE_BLOCK_TYPE, BlockTypes::bootstrap); // Fiddle - More data-driven - Minecraft registries - Types - Adapt existing block type registry
-+    public static final Registry<org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.nms.WrappedItemCodec<?>> FIDDLE_ITEM_TYPE = registerSimple(Registries.FIDDLE_ITEM_TYPE, org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.ItemTypes::bootstrap); // Fiddle - More data-driven - Minecraft registries - Types - Add item type registry
++    public static final Registry<org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec<?>> FIDDLE_BLOCK_TYPE = BuiltInRegistries.<org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec<?>>registerSimple(Registries.FIDDLE_BLOCK_TYPE, BlockTypes::bootstrap); // Fiddle - More data-driven - Minecraft registries - Types - Adapt existing block type registry
++    public static final Registry<org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.nms.WrappedItemCodec<?>> FIDDLE_ITEM_TYPE = BuiltInRegistries.<org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.nms.WrappedItemCodec<?>>registerSimple(Registries.FIDDLE_ITEM_TYPE, org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.ItemTypes::bootstrap); // Fiddle - More data-driven - Minecraft registries - Types - Add item type registry
      public static final Registry<StructureProcessorType<?>> STRUCTURE_PROCESSOR = registerSimple(
          Registries.STRUCTURE_PROCESSOR, registry -> StructureProcessorType.BLOCK_IGNORE
      );

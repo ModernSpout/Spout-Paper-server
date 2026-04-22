@@ -13,6 +13,8 @@ import org.fiddlemc.fiddle.api.bukkit.enuminjection.BukkitEnumNamesComposeEvent;
 import org.fiddlemc.fiddle.api.bukkit.enuminjection.material.MaterialEnumNames;
 import org.fiddlemc.fiddle.api.moredatadriven.paper.registry.BlockRegistryEntry;
 import org.fiddlemc.fiddle.api.moredatadriven.paper.registry.ItemRegistryEntry;
+import org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.BlockEntityType;
+import org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.BlockEntityTypeRegistryEntry;
 import org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.FiddleBlockTypeRegistryEntry;
 import org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.FiddleItemTypeRegistryEntry;
 import org.fiddlemc.fiddle.api.packetmapping.block.BlockMappings;
@@ -43,6 +45,7 @@ public final class FiddleEvents {
     public static final LifecycleEventType.Prioritizable<BootstrapContext, RegistryComposeEvent<?, FiddleItemTypeRegistryEntry.Builder>> ITEM_TYPE = (LifecycleEventType.Prioritizable) RegistryEvents.ITEM_TYPE.compose();
     public static final LifecycleEventType.Prioritizable<BootstrapContext, RegistryComposeEvent<BlockType, BlockRegistryEntry.Builder>> BLOCK = RegistryEvents.BLOCK.compose();
     public static final LifecycleEventType.Prioritizable<BootstrapContext, RegistryComposeEvent<ItemType, ItemRegistryEntry.Builder>> ITEM = RegistryEvents.ITEM.compose();
+    public static final LifecycleEventType.Prioritizable<BootstrapContext, RegistryComposeEvent<BlockEntityType, BlockEntityTypeRegistryEntry.Builder>> BLOCK_ENTITY_TYPE = RegistryEvents.BLOCK_ENTITY_TYPE.compose();
     public static final ComposableEventType<FiddleResourcePackConstructEvent> RESOURCE_PACK_CONSTRUCT = FiddleResourcePackConstruction.get().compose();
     public static final LifecycleEventType<BootstrapContext, FiddleResourcePackConstructFinishEvent, PrioritizedLifecycleEventHandlerConfiguration<BootstrapContext>> RESOURCE_PACK_CONSTRUCT_FINISH = FiddleResourcePackConstruction.get().finish();
     public static final ComposableEventType<BlockMappingsComposeEvent<?>> BLOCK_MAPPING = ((BlockMappings) BlockMappings.get()).compose();
