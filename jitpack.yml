@@ -1,13 +1,14 @@
 jdk:
   - openjdk21
 before_install:
-  - echo "Updating Git"
-  - sudo apt-get update
-  - sudo apt-get install -y software-properties-common
-  - sudo add-apt-repository -y ppa:git-core/ppa
-  - sudo apt-get update
-  - sudo apt-get install -y git
+  - echo "Installing newer Git..."
+  - wget https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.50.1.tar.gz
+  - tar -xzf git-2.50.1.tar.gz
+  - cd git-2.50.1
+  - make prefix=$HOME/git install
+  - export PATH=$HOME/git/bin:$PATH
   - git --version
+  - cd ..
 install:
   - echo "Configuring Git"
   - git --version
