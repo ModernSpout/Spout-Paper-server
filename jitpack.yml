@@ -12,31 +12,30 @@ install:
   - git config --global user.name "Jitpack build"
   - echo "Installing git emulation wrapper"
   - mkdir -p $HOME/bin
-  - |
-    cat > $HOME/bin/git << 'EOF'
-    #!/bin/sh
-    # Capture full argument string
-    FULL="$*"
-    # Detect exact Paperweight fetch pattern
-    case "$FULL" in
-      *"fetch upstream --prune --prune-tags --force"* )
-        # Run equivalent operations for Git 2.7.4
-        /usr/bin/git -c commit.gpgsign=false -c core.safecrlf=false fetch upstream --prune --force
-        FETCH_STATUS=$?
-        # Emulate --prune-tags (best-effort for Git 2.7.4)
-        /usr/bin/git fetch upstream +refs/tags/*:refs/tags/*
-        TAG_STATUS=$?
-        # return failure if either fails
-        if [ $FETCH_STATUS -ne 0 ] || [ $TAG_STATUS -ne 0 ]; then
-          exit 128
-        fi
-        exit 0
-      ;;
-      * )
-        exec /usr/bin/git "$@"
-      ;;
-    esac
-    EOF
+  - printf '%s\n' \
+    '#!/bin/sh' \
+    '' \
+    'FULL="$*"' \
+    '' \
+    'case "$FULL" in' \
+    '  *"fetch upstream --prune --prune-tags --force"*)' \
+    '    /usr/bin/git -c commit.gpgsign=false -c core.safecrlf=false fetch upstream --prune --force' \
+    '    FETCH_STATUS=$?' \
+    '' \
+    '    /usr/bin/git fetch upstream +refs/tags/*:refs/tags/*' \
+    '    TAG_STATUS=$?' \
+    '' \
+    '    if [ $FETCH_STATUS -ne 0 ] || [ $TAG_STATUS -ne 0 ]; then' \
+    '      exit 128' \
+    '    fi' \
+    '' \
+    '    exit 0' \
+    '    ;;' \
+    '  *)' \
+    '    exec /usr/bin/git "$@"' \
+    '    ;;' \
+    'esac' \
+    > $HOME/bin/git
   - chmod +x $HOME/bin/git
   - export PATH=$HOME/bin:$PATH
   - hash -r
