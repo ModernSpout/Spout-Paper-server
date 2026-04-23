@@ -1,10 +1,6 @@
 jdk:
   - openjdk21
 install:
-  - git config --global fetch.prune false
-  - git config --global remote.upstream.fetch "+refs/heads/*:refs/remotes/upstream/*"
-  - git fetch --unshallow || true
-  - git fetch --all --tags
   - echo "Configuring Git"
   - git --version
   - which git
@@ -17,6 +13,9 @@ install:
     '' \
     'FULL="$*"' \
     '' \
+    '# ------------------------------' \
+    '# FETCH (emulate --prune-tags)' \
+    '# ------------------------------' \
     'case "$FULL" in' \
     '  *"fetch upstream --prune --prune-tags --force"*)' \
     '    /usr/bin/git -c commit.gpgsign=false -c core.safecrlf=false fetch upstream --prune --force' \
@@ -25,16 +24,35 @@ install:
     '    /usr/bin/git fetch upstream +refs/tags/*:refs/tags/*' \
     '    TAG_STATUS=$?' \
     '' \
-    '    if [ $FETCH_STATUS -ne 0 ] || [ $TAG_STATUS -ne 0 ]; then' \
-    '      exit 128' \
-    '    fi' \
-    '' \
+    '    [ $FETCH_STATUS -ne 0 ] && exit 128' \
+    '    [ $TAG_STATUS -ne 0 ] && exit 128' \
     '    exit 0' \
     '    ;;' \
-    '  *)' \
+    'esac' \
+    '' \
+    '# ------------------------------' \
+    '# REMOTE ADD UPSTREAM (idempotent)' \
+    '# ------------------------------' \
+    'case "$FULL" in' \
+    '  *"remote add upstream"*)' \
+    '    /usr/bin/git remote get-url upstream >/dev/null 2>&1 && exit 0' \
     '    exec /usr/bin/git "$@"' \
     '    ;;' \
     'esac' \
+    '' \
+    '# ------------------------------' \
+    '# RESET BASE (safe pass-through)' \
+    '# ------------------------------' \
+    'case "$FULL" in' \
+    '  *"reset --hard base"*)' \
+    '    exec /usr/bin/git "$@"' \
+    '    ;;' \
+    'esac' \
+    '' \
+    '# ------------------------------' \
+    '# DEFAULT' \
+    '# ------------------------------' \
+    'exec /usr/bin/git "$@"' \
     > $HOME/bin/git
   - chmod +x $HOME/bin/git
   - export PATH=$HOME/bin:$PATH
@@ -42,8 +60,8 @@ install:
   - which git
   - git --version
   - echo "Applying single file patches"
-  - ./gradlew applyPaperSingleFilePatches --stacktrace --no-daemon
+  - ./gradlew applyPaperSingleFilePatches --stacktrace --no-daemon --debug
   - echo "Applying paper API patches"
-  - ./gradlew applyPaperApiPatches --stacktrace --no-daemon
+  - ./gradlew applyPaperApiPatches --stacktrace --no-daemon --debug
   - echo "Publishing to Maven local"
-  - ./gradlew :spout-api:publishToMavenLocal --stacktrace --no-daemon
+  - ./gradlew :spout-api:publishToMavenLocal --stacktrace --no-daemon --debug
