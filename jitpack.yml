@@ -2,13 +2,10 @@ jdk:
   - openjdk21
 before_install:
   - echo "Installing newer Git..."
-  - wget https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.50.1.tar.gz
-  - tar -xzf git-2.50.1.tar.gz
-  - cd git-2.50.1
-  - make prefix=$HOME/git install
-  - export PATH=$HOME/git/bin:$PATH
+  - wget https://github.com/sgerrand/alpine-pkg-glibc/releases/latest
+  - tar -xf git.tar.gz
+  - export PATH=$PWD/git/bin:$PATH
   - git --version
-  - cd ..
 install:
   - echo "Configuring Git"
   - git --version
