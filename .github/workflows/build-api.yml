@@ -6,7 +6,7 @@ on:
   release:
     types: [created]
 jobs:
-  build-publish-api:
+  build-api:
     # Only runs if the last commit does not start with [ci-skip]
     if: ${{ !contains(github.event.commits[0].message, '[ci-skip]') }}
     runs-on: ubuntu-latest

@@ -1,8 +1,13 @@
 jdk:
   - openjdk21
 install:
-  - git config --global user.email "no-reply@github.com"
-  - git config --global user.name "Github Actions"
-  - ./gradlew applyPaperSingleFilePatches
-  - ./gradlew applyPaperApiPatches
-  - ./gradlew :spout-api:publishToMavenLocal
+  - Echo "Configuring Git"
+  - git --version
+  - git config --global user.email "no-reply@jitpack.io"
+  - git config --global user.name "Jitpack build"
+  - Echo "Applying single file patches"
+  - ./gradlew applyPaperSingleFilePatches --stacktrace
+  - Echo "Applying paper API patches"
+  - ./gradlew applyPaperApiPatches --stacktrace
+  - Echo "Publishing to Maven local"
+  - ./gradlew :spout-api:publishToMavenLocal --stacktrace
