@@ -44,6 +44,16 @@
          }
      }
  }
+@@ -116,6 +_,9 @@
+             }
+             outgoing {
+                 capability(mainCapability)
++                // Conflict with jitpack.io artifact requirements
++                var ownCapability = "com.github.modernspout:spout-api:${project.version}"
++                if (ownCapability != mainCapability) capability(ownCapability)
+                 // Paper-MojangAPI has been merged into Paper-API
+                 capability("io.papermc.paper:paper-mojangapi:${project.version}")
+                 capability("com.destroystokyo.paper:paper-mojangapi:${project.version}")
 @@ -179,11 +_,18 @@
      @get:Inject
      abstract val fileSystemOperations: FileSystemOperations

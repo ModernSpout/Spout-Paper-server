@@ -60,8 +60,8 @@ install:
   - which git
   - git --version
   - echo "Applying single file patches"
-  - ./gradlew applyPaperSingleFilePatches --stacktrace --no-daemon --debug
+  - ./gradlew applyPaperSingleFilePatches --stacktrace --no-daemon
   - echo "Applying paper API patches"
-  - ./gradlew applyPaperApiPatches --stacktrace --no-daemon --debug
+  - ./gradlew applyPaperApiPatches --stacktrace --no-daemon
   - echo "Publishing to Maven local"
-  - ./gradlew :spout-api:publishToMavenLocal --stacktrace --no-daemon --debug
+  - ./gradlew :spout-api:publishToMavenLocal --stacktrace --no-daemon
