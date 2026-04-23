@@ -43,25 +43,16 @@ public interface AutomaticBlockMappings {
 
     /**
      * Attempts to find a proxy state for a single full block state.
-     *
-     * @return The state used as proxy state.
-     * These may be the fallback state if no proxy state was available.
      */
     void fullBlock(Consumer<FullBlockRequestBuilder> builderConsumer);
 
     /**
      * Attempts to find a proxy state for every possible state of a slab.
-     *
-     * @return The states used as proxy states.
-     * These may be the fallback states if no proxy states were available.
      */
     void slab(Consumer<SlabRequestBuilder> builderConsumer);
 
     /**
      * Attempts to find a proxy state for every possible state of stairs.
-     *
-     * @return The states used as proxy states.
-     * These may be the fallback states if no proxy states were available.
      */
     void stairs(Consumer<StairsRequestBuilder> builderConsumer);
 
@@ -74,9 +65,6 @@ public interface AutomaticBlockMappings {
      * The vanilla client generally believes leaves are instabreak when broken with the right tool.
      * In practice, this means you should only use this for server-side leaves.
      * </p>
-     *
-     * @return The states used as proxy states.
-     * These may be the fallback states if no proxy states were available.
      */
     void leaves(Consumer<LeavesRequestBuilder> builderConsumer);
 

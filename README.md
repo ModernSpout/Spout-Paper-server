@@ -10,7 +10,7 @@
     that are automatically sent to connecting players
   </h3>
 
-[![Discord](https://img.shields.io/discord/1091830813240348732?color=5865F2&label=discord&style=for-the-badge)](https://discord.gg/EduvcVmKS7) [![1.21.11](https://img.shields.io/badge/Latest_version-1.21.11-4fa31a?style=for-the-badge)](https://github.com/ModernSpout/Spout-Paper-server/actions)
+[![Discord](https://img.shields.io/discord/1091830813240348732?color=5865F2&label=discord&style=for-the-badge)](https://discord.gg/EduvcVmKS7) [![1.21.11](https://img.shields.io/badge/Latest_version-1.21.11-4fa31a?style=for-the-badge)](https://github.com/ModernSpout/Spout-Paper-server/actions/workflows/build-server.yml)
 
 </div>
 
@@ -55,11 +55,11 @@ This is the Spout server extension of Paper.
 
 ## Installation
 
-Download the latest JAR from [GitHub Actions](https://github.com/ModernSpout/Spout-Paper-server/actions),
+Download the latest JAR from [GitHub Actions](https://github.com/ModernSpout/Spout-Paper-server/actions/workflows/build-server.yml),
 under **Artifacts**.
 <!--
 You can download the latest stable JAR from [releases](https://github.com/ModernSpout/Spout-Paper-server/releases)
-and the latest development JAR from [actions](https://github.com/ModernSpout/Spout-Paper-server/actions).
+and the latest development JAR from [actions](https://github.com/ModernSpout/Spout-Paper-server/actions/workflows/build-server.yml).
 -->
 
 It is a drop-in replacement for the Paper JAR file, so you can run it the same:

@@ -10,6 +10,7 @@ import java.util.function.Supplier;
  * Don't call {@link Supplier#get} on a field of this class before its item type has been registered.
  */
 public final class PluginItemTypes {
+
     public static Supplier<ItemType> LIT_PAPER_LAMP = itemType("chinese_mythology_mashup:lit_paper_lamp");
     public static Supplier<ItemType> PAPER_LAMP = itemType("chinese_mythology_mashup:paper_lamp");
     public static Supplier<ItemType> YELLOW_MAPLE_LEAVES = itemType("maple_delight:yellow_maple_leaves");
@@ -29,4 +30,5 @@ public final class PluginItemTypes {
     private static Supplier<ItemType> itemType(String key) {
         return Suppliers.memoize(() -> Registry.ITEM.get(Key.key(key)));
     }
+
 }

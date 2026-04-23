@@ -1,0 +1,53 @@
+# Builds and publishes the API JAR
+name: build-publish-api
+on:
+  push:
+    branches: [ "master" ]
+  release:
+    types: [created]
+jobs:
+  build:
+    # Only runs if the last commit does not start with [ci-skip]
+    if: ${{ !contains(github.event.commits[0].message, '[ci-skip]') }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ 21 ]
+      fail-fast: true
+    steps:
+      - name: Checkout Git repository
+        uses: actions/checkout@v6
+      - name: Set up JDK ${{ matrix.java }}
+        uses: actions/setup-java@v5
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: 'temurin'
+      - name: Validate Gradle wrapper
+        uses: gradle/actions/wrapper-validation@v4
+        continue-on-error: true
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v3
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Apply single file patches
+        run: |
+          git config --global user.email "no-reply@github.com"
+          git config --global user.name "Github Actions"
+          ./gradlew applyPaperSingleFilePatches --stacktrace
+      - name: Apply API patches
+        run: |
+          git config --global user.email "no-reply@github.com"
+          git config --global user.name "Github Actions"
+          ./gradlew applyPaperApiPatches --stacktrace
+      - name: Build JAR
+        run: ./gradlew :spout-api:jar --stacktrace
+      - name: Upload JAR
+        uses: actions/upload-artifact@v7
+        with:
+          name: Spout API JAR
+          path: spout-api/build/libs/spout-api-*.jar
+          archive: false
+      - name: Publish JAR
+        run: ./gradlew :spout-api:publishAllPublicationsToGitHubPackagesRepository --stacktrace
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

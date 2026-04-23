@@ -44,6 +44,23 @@
          }
      }
  }
+@@ -135,6 +_,16 @@
+             suppressPomMetadataWarningsFor(it)
+         }
+         from(components["java"])
++        repositories {
++            maven {
++                name = "GitHubPackages"
++                url = uri("https://maven.pkg.github.com/ModernSpout/Spout-Paper-server")
++                credentials {
++                    username = System.getenv("GITHUB_ACTOR")
++                    password = System.getenv("GITHUB_TOKEN")
++                }
++            }
++        }
+     }
+ }
+ 
 @@ -179,11 +_,18 @@
      @get:Inject
      abstract val fileSystemOperations: FileSystemOperations

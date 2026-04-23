@@ -1,9 +1,12 @@
-name: build
-on: [ push ]
+# Builds the server JAR
+name: build-server
+on:
+  push:
+    branches: [ "master" ]
 jobs:
   build:
     # Only runs on master, and if the last commit does not start with [ci-skip]
-    if: ${{ github.ref == 'refs/heads/master' && !contains(github.event.commits[0].message, '[ci-skip]') }}
+    if: ${{ !contains(github.event.commits[0].message, '[ci-skip]') }}
     runs-on: ubuntu-latest
     strategy:
       matrix:

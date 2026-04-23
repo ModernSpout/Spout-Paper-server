@@ -20,6 +20,8 @@ public final class TestPlugin extends JavaPlugin implements Listener {
     public void onEnable() {
         // Get the logger
         this.logger = this.getLogger();
+        // Cancel if the server doesn't support Spout
+        if (!CheckSpout.checkSpout()) return;
         // Register as a listener
         this.getServer().getPluginManager().registerEvents(this, this);
     }

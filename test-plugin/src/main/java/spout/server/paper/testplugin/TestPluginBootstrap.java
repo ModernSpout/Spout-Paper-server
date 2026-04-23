@@ -14,6 +14,7 @@ public class TestPluginBootstrap implements PluginBootstrap {
 
     @Override
     public void bootstrap(@NotNull BootstrapContext context) {
+        if (!CheckSpout.checkSpout()) return; // Cancel if the server doesn't support Spout
         loadIncludedDataPack(context);
         loadIncludedResourcePack(context);
     }
