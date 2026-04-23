@@ -7,7 +7,7 @@ install:
   - git config --global user.email "no-reply@jitpack.io"
   - git config --global user.name "Jitpack build"
   - echo "Installing git wrapper safely (no heredoc)"
-   - mkdir -p $HOME/bin
+  - mkdir -p $HOME/bin
   - printf '%s\n' \
     '#!/bin/sh' \
     'args=""' \
