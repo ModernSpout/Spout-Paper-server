@@ -1,13 +1,21 @@
 jdk:
   - openjdk21
+before_install:
+  - echo "Updating Git"
+  - sudo apt-get update
+  - sudo apt-get install -y software-properties-common
+  - sudo add-apt-repository -y ppa:git-core/ppa
+  - sudo apt-get update
+  - sudo apt-get install -y git
+  - git --version
 install:
-  - Echo "Configuring Git"
+  - echo "Configuring Git"
   - git --version
   - git config --global user.email "no-reply@jitpack.io"
   - git config --global user.name "Jitpack build"
-  - Echo "Applying single file patches"
+  - echo "Applying single file patches"
   - ./gradlew applyPaperSingleFilePatches --stacktrace
-  - Echo "Applying paper API patches"
+  - echo "Applying paper API patches"
   - ./gradlew applyPaperApiPatches --stacktrace
-  - Echo "Publishing to Maven local"
+  - echo "Publishing to Maven local"
   - ./gradlew :spout-api:publishToMavenLocal --stacktrace
