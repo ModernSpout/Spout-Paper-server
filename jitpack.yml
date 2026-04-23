@@ -3,6 +3,7 @@ jdk:
 install:
   - echo "Configuring Git"
   - git --version
+  - which git
   - git config --global user.email "no-reply@jitpack.io"
   - git config --global user.name "Jitpack build"
   - echo "Installing git wrapper (safe, no eval)"
