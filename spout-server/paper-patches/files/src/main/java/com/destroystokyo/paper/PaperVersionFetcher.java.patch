@@ -6,11 +6,11 @@
      private static final int DISTANCE_UNKNOWN = -2;
 -    private static final String DOWNLOAD_PAGE = "https://papermc.io/downloads/paper";
 -    private static final String REPOSITORY = "PaperMC/Paper";
-+    private static final String DOWNLOAD_PAGE = "https://github.com/FiddleMC/Spout-Paper-server/actions"; // Spout - Branding - Version fetcher
-+    private static final String REPOSITORY = "FiddleMC/Spout-Paper-server"; // Spout - Branding - Version fetcher
++    private static final String DOWNLOAD_PAGE = "https://github.com/ModernSpout/Spout-Paper-server/actions"; // Spout - Branding - Version fetcher
++    private static final String REPOSITORY = "ModernSpout/Spout-Paper-server"; // Spout - Branding - Version fetcher
      private static final ServerBuildInfo BUILD_INFO = ServerBuildInfo.buildInfo();
 -    private static final String USER_AGENT = BUILD_INFO.brandName() + "/" + BUILD_INFO.asString(VERSION_SIMPLE) + " (https://papermc.io)";
-+    private static final String USER_AGENT = BUILD_INFO.brandName() + "/" + BUILD_INFO.asString(VERSION_SIMPLE) + " (https://github.com/FiddleMC/Spout-Paper-server)"; // Spout - Branding - Version fetcher
++    private static final String USER_AGENT = BUILD_INFO.brandName() + "/" + BUILD_INFO.asString(VERSION_SIMPLE) + " (https://github.com/ModernSpout/Spout-Paper-server)"; // Spout - Branding - Version fetcher
      private static final Gson GSON = new Gson();
  
      @Override

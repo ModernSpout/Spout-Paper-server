@@ -21,7 +21,7 @@ if (!file(".git").exists()) {
          zip from GitHub.
          
          Built Spout jars are available for download at
-         https://github.com/FiddleMC/Spout-Paper-server/actions
+         https://github.com/ModernSpout/Spout-Paper-server/actions
          
          See https://github.com/PaperMC/Paper/blob/master/CONTRIBUTING.md
          for further information on building and modifying Paper forks.

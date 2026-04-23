@@ -10,7 +10,7 @@
     that are automatically sent to connecting players
   </h3>
 
-[![Discord](https://img.shields.io/discord/1091830813240348732?color=5865F2&label=discord&style=for-the-badge)](https://discord.gg/EduvcVmKS7) [![1.21.11](https://img.shields.io/badge/Latest_version-1.21.11-4fa31a?style=for-the-badge)](https://github.com/FiddleMC/Spout-Paper-server/actions)
+[![Discord](https://img.shields.io/discord/1091830813240348732?color=5865F2&label=discord&style=for-the-badge)](https://discord.gg/EduvcVmKS7) [![1.21.11](https://img.shields.io/badge/Latest_version-1.21.11-4fa31a?style=for-the-badge)](https://github.com/ModernSpout/Spout-Paper-server/actions)
 
 </div>
 
@@ -51,15 +51,15 @@ This is the Spout server extension of Paper.
 &nbsp;&nbsp;&nbsp;&nbsp;✓&nbsp;&nbsp;Add Spout plugins just like Paper plugins
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;✓&nbsp;&nbsp;Works with the
-<a href="https://github.com/FiddleMC/Spout-Fabric-client">Spout client mod</a> and vanilla clients
+<a href="https://github.com/ModernSpout/Spout-Fabric-client">Spout client mod</a> and vanilla clients
 
 ## Installation
 
-Download the latest JAR from [GitHub Actions](https://github.com/FiddleMC/Spout-Paper-server/actions),
+Download the latest JAR from [GitHub Actions](https://github.com/ModernSpout/Spout-Paper-server/actions),
 under **Artifacts**.
 <!--
-You can download the latest stable JAR from [releases](https://github.com/FiddleMC/Spout-Paper-server/releases)
-and the latest development JAR from [actions](https://github.com/FiddleMC/Spout-Paper-server/actions).
+You can download the latest stable JAR from [releases](https://github.com/ModernSpout/Spout-Paper-server/releases)
+and the latest development JAR from [actions](https://github.com/ModernSpout/Spout-Paper-server/actions).
 -->
 
 It is a drop-in replacement for the Paper JAR file, so you can run it the same:
@@ -92,13 +92,13 @@ You can place Spout/Paper/Bukkit plugins in the `plugins` folder.
 You can easily run a test server (
 which [includes some example blocks and items](test-plugin/src/main/java/spout/server/paper/testplugin/data/PluginBlockTypes.java)):
 
-* `git clone https://github.com/FiddleMC/Spout-Paper-server.git`
+* `git clone https://github.com/ModernSpout/Spout-Paper-server.git`
 * `./gradlew applyAllPatches`
 * `./gradlew runDevServer`
 
 ## Making a Spout plugin that adds new blocks/items
 
-Read <a href="https://github.com/FiddleMC/Spout-Paper-server/wiki">here</a>.
+Read <a href="https://github.com/ModernSpout/Spout-Paper-server/wiki">here</a>.
 
 ## Next
 
