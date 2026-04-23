@@ -15,26 +15,27 @@ install:
   - |
     cat > $HOME/bin/git << 'EOF'
     #!/bin/sh
-    if [ "$1" = "fetch" ]; then
-      shift
-      PRUNE=0
-      FORCE=0
-      ARGS=""
-      for a in "$@"; do
-        case "$a" in
-          --prune) PRUNE=1 ;;
-          --force) FORCE=1 ;;
-          --prune-tags) ;; # ignore
-          *) ARGS="$ARGS $a" ;;
-        esac
-      done
-      # run base fetch
-      /usr/bin/git fetch "$ARGS"
-      # emulate prune-tags
-      /usr/bin/git fetch upstream +refs/tags/*:refs/tags/*
-      exit $?
-    fi
-    exec /usr/bin/git "$@"
+    # Capture full argument string
+    FULL="$*"
+    # Detect exact Paperweight fetch pattern
+    case "$FULL" in
+      *"fetch upstream --prune --prune-tags --force"* )
+        # Run equivalent operations for Git 2.7.4
+        /usr/bin/git -c commit.gpgsign=false -c core.safecrlf=false fetch upstream --prune --force
+        FETCH_STATUS=$?
+        # Emulate --prune-tags (best-effort for Git 2.7.4)
+        /usr/bin/git fetch upstream +refs/tags/*:refs/tags/*
+        TAG_STATUS=$?
+        # return failure if either fails
+        if [ $FETCH_STATUS -ne 0 ] || [ $TAG_STATUS -ne 0 ]; then
+          exit 128
+        fi
+        exit 0
+      ;;
+      * )
+        exec /usr/bin/git "$@"
+      ;;
+    esac
     EOF
   - chmod +x $HOME/bin/git
   - export PATH=$HOME/bin:$PATH
