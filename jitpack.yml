@@ -5,15 +5,26 @@ install:
   - git --version
   - git config --global user.email "no-reply@jitpack.io"
   - git config --global user.name "Jitpack build"
-  - echo "Creating safer git wrapper..."
-  - mkdir -p $HOME/bin
+  - echo "Overriding git with wrapper via symlink + argument filter"
+  - mkdir -p $HOME/git-bin
   - |
-    cat > $HOME/bin/git << 'EOF'
+    cat > $HOME/git-bin/git << 'EOF'
     #!/bin/sh
-    exec /usr/bin/git "$@"
+    args=""
+    for a in "$@"; do
+      case "$a" in
+        --prune-tags)
+          ;;
+        *)
+          args="$args \"$a\""
+          ;;
+      esac
+    done
+    eval /usr/bin/git $args
     EOF
-  - chmod +x $HOME/bin/git
-  - export PATH=$HOME/bin:$PATH
+  - chmod +x $HOME/git-bin/git
+  - export PATH=$HOME/git-bin:$PATH
+  - hash -r
   - which git
   - git --version
   - echo "Applying single file patches"
