@@ -25,7 +25,7 @@
  idea {
      module {
          generatedSourceDirs.add(generatedDir.toFile())
-@@ -101,6 +_,18 @@
+@@ -101,9 +_,26 @@
      main {
          java {
              srcDir(generatedDir)
@@ -44,16 +44,39 @@
          }
      }
  }
-@@ -116,6 +_,9 @@
++
++fun getGitHashProvider(length: Int?) = providers.exec {
++    workingDir = rootProject.projectDir
++    commandLine(*(listOfNotNull("git", "rev-parse", length?.let { "--short=$it" }, "HEAD").toTypedArray()))
++}.standardOutput.asText.map { it.trim() }
+ 
+ val outgoingVariants = arrayOf("runtimeElements", "apiElements", "sourcesElements", "javadocElements")
+ val mainCapability = "${project.group}:${project.name}:${project.version}"
+@@ -116,10 +_,24 @@
              }
              outgoing {
                  capability(mainCapability)
++                // Spout start - Project setup - Extend module capabilities
 +                // Conflict with jitpack.io artifact requirements
-+                var ownCapability = "com.github.modernspout:spout-api:${project.version}"
-+                if (ownCapability != mainCapability) capability(ownCapability)
++                for (coordinates in arrayOf(
++                    "com.github.modernspout:spout-api",
++                    "com.github.ModernSpout:Spout-Paper-server"
++                )) {
++                    for (version in arrayOf(project.version, getGitHashProvider(null).get(), getGitHashProvider(7).get(), getGitHashProvider(8).get(), getGitHashProvider(10).get())) {
++                        val alternativeCapability = "$coordinates:$version"
++                        println("Alternative capability: $alternativeCapability")
++                        if (alternativeCapability != mainCapability) capability(alternativeCapability)
++                    }
++                }
++                // Spout end - Project setup - Extend module capabilities
                  // Paper-MojangAPI has been merged into Paper-API
                  capability("io.papermc.paper:paper-mojangapi:${project.version}")
                  capability("com.destroystokyo.paper:paper-mojangapi:${project.version}")
+                 // Conflict with old coordinates
++                capability("io.papermc.paper:paper-api:${project.version}") // Spout - Project setup - Extend module capabilities
+                 capability("com.destroystokyo.paper:paper-api:${project.version}")
+                 capability("org.spigotmc:spigot-api:${project.version}")
+                 capability("org.bukkit:bukkit:${project.version}")
 @@ -179,11 +_,18 @@
      @get:Inject
      abstract val fileSystemOperations: FileSystemOperations
@@ -74,7 +97,7 @@
      options.use()
      options.isDocFilesSubDirs = true
      options.links(
-@@ -212,16 +_,17 @@
+@@ -212,16 +_,18 @@
      doFirst {
          options.addStringOption(
              "sourcepath",
@@ -86,7 +109,8 @@
  
      // workaround for https://github.com/gradle/gradle/issues/4046
 -    inputs.dir("src/main/javadoc").withPropertyName("javadoc-sourceset")
-+    inputs.dir("../spout-api/src/main/javadoc").withPropertyName("javadoc-sourceset") // Spout start - Project setup - Update fix to fork directory
++    inputs.dir("../spout-api/src/main/javadoc")
++        .withPropertyName("javadoc-sourceset") // Spout start - Project setup - Update fix to fork directory
      val fsOps = services.fileSystemOperations
      doLast {
          fsOps.copy {
