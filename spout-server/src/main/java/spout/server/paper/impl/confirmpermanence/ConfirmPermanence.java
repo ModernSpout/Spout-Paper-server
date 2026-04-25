@@ -18,7 +18,7 @@ public final class ConfirmPermanence {
             return true;
         }
         if (Boolean.getBoolean("spout.server.paper.enabled")) {
-            logger.warn("You have used the Spout command line to enable Spout.");
+            logger.warn("You have used the command line flag to enable Spout.");
             logger.warn("The '_enabled' setting in config/spout-global.yml will be ignored.");
             logger.warn("If you do not wish to run Spout, please stop your server and set it to false immediately.");
             return true;
