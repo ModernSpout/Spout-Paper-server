@@ -1,8 +1,7 @@
 package spout.common.moredatadriven.clientmodprotocol;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.google.gson.JsonElement;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BlockTypes;
@@ -10,18 +9,30 @@ import spout.common.moredatadriven.minecraft.type.ItemTypes;
 import java.util.List;
 
 /**
- * An encodable object containing all custom content sent to the client.
+ * Contains all custom content sent by a Spout server.
  */
-public record ClientModCustomContent(
-    List<Block> blocks,
-    List<Item> items
-) {
+public class ClientModCustomContent {
 
-    public static final MapCodec<ClientModCustomContent> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        BlockTypes.CODEC.codec().listOf().fieldOf("blocks").forGetter(ClientModCustomContent::blocks),
-        ItemTypes.CODEC.codec().listOf().fieldOf("items").forGetter(ClientModCustomContent::items)
-    ).apply(instance, ClientModCustomContent::new));
+    /**
+     * The block JSONs.
+     */
+    final List<JsonElement> blockJSONs;
 
-    public static final Codec<ClientModCustomContent> CODEC = MAP_CODEC.codec();
+    /**
+     * The item JSONs.
+     */
+    final List<JsonElement> itemJSONs;
+
+    private ClientModCustomContent(List<JsonElement> blockJSONs, List<JsonElement> itemJSONs) {
+        this.blockJSONs = blockJSONs;
+        this.itemJSONs = itemJSONs;
+    }
+
+    static ClientModCustomContent create(List<Block> blocks, List<Item> items) {
+        return new ClientModCustomContent(
+            blocks.stream().map(block -> BlockTypes.CODEC.codec().encodeStart(JsonOps.INSTANCE, block).getOrThrow()).toList(),
+            items.stream().map(item -> ItemTypes.CODEC.codec().encodeStart(JsonOps.INSTANCE, item).getOrThrow()).toList()
+        );
+    }
 
 }

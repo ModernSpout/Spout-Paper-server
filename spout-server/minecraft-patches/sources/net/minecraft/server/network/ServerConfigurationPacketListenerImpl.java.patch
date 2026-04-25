@@ -6,7 +6,7 @@
          this.send(new ClientboundCustomPayloadPacket(new BrandPayload(this.server.getServerModName())));
 +        // Spout start - Client view - Set - Send custom content - Send packet
 +        if (this.connection.clientViewSetter.hasClientMod()) {
-+            spout.common.moredatadriven.clientmodprotocol.ClientModCustomContentPacketPayload.send(this.connection);
++            spout.common.moredatadriven.clientmodprotocol.ClientModCustomContentSending.sendAllPackets(this.connection);
 +        }
 +        // Spout end - Client view - Set - Send custom content - Send packet
 +        // Spout start - Client view - Set - Offer resource pack

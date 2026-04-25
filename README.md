@@ -11,7 +11,7 @@
   </h3>
 
 [![Discord](https://img.shields.io/discord/1091830813240348732?color=5865F2&label=discord&style=for-the-badge)](https://discord.gg/EduvcVmKS7)
-[![1.21.11](https://img.shields.io/badge/Latest_version-1.21.11-4fa31a?style=for-the-badge)](https://github.com/ModernSpout/Spout-Paper-server/releases/download/1.21.11-R0.5/spout-1.21.11-R0.5.jar)
+[![1.21.11](https://img.shields.io/badge/Latest_version-1.21.11-4fa31a?style=for-the-badge)](https://github.com/ModernSpout/Spout-Paper-server/releases/download/1.21.11-R0.6/spout-1.21.11-R0.6.jar)
 
 </div>
 
@@ -56,7 +56,7 @@ This is the Spout server extension of Paper.
 
 ## Download
 
-* [Latest version: 1.21.11-R0.5](https://github.com/ModernSpout/Spout-Paper-server/releases/download/1.21.11-R0.5/spout-1.21.11-R0.5.jar)
+* [Latest version: 1.21.11-R0.6](https://github.com/ModernSpout/Spout-Paper-server/releases/download/1.21.11-R0.6/spout-1.21.11-R0.6.jar)
 * Development versions: download from
   [Actions](https://github.com/ModernSpout/Spout-Paper-server/actions/workflows/build-server.yml),
   under **Artifacts**
@@ -67,7 +67,7 @@ This is the Spout server extension of Paper.
 The `.jar` file is a drop-in replacement for the Paper server JAR, you can run it the same:
 
 ```sh
-java -jar spout-1.21.11-R0.5.jar
+java -jar spout-1.21.11-R0.6.jar
 ```
 
 You can place Spout/Paper/Bukkit plugins in the `plugins` folder.
@@ -120,14 +120,14 @@ or ask to join the project as a developer.
 * Custom block display entities and falling custom block entities are not displayed correctly
 * Stonecutter recipes work, but do not display correctly
 
-<!--
 ## Acknowledgements
 
-This project has been made possible by:
-* the contributions of [Alvinn8](https://github.com/Alvinn8/) and [SoSeDiK](https://github.com/SoSeDiK)
-* the generous donation from <a href="https://github.com/pontaoski">Janet&nbsp;Blackquill</a>
-* the authors and maintainers of the Bukkit,
-  [Spigot](https://www.spigotmc.org/) and [Paper](https://github.com/PaperMC/Paper) projects
-* everyone on GitHub and the [Discord](https://discord.gg/EduvcVmKS7)
-  server who helps test Spout and provide feedback and suggestions
--->
+This project is heavily inspired by the original
+[Spoutcraft / BukkitContrib](https://github.com/spoutcraft) project.
+This project would not exist without the ideas and work that those who worked on it put forward.
+Additionally, this project builds on top of the work of the contributors to
+[Paper](https://github.com/PaperMC/Paper) and [Spigot](https://www.spigotmc.org/), and
+[Fabric](https://fabricmc.net/) and [Sponge](https://spongepowered.org/).
+
+Also, thanks go out to [Alvinn8](https://github.com/Alvinn8/) and [SoSeDiK](https://github.com/SoSeDiK)
+for their significant contributions to this project.

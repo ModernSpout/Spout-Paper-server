@@ -1,16 +1,14 @@
 package spout.common.moredatadriven.clientmodprotocol;
 
-import net.minecraft.network.Connection;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
+import org.jspecify.annotations.Nullable;
 import spout.common.branding.SpoutNamespace;
-import spout.server.paper.api.clientview.ClientView;
-import spout.server.paper.impl.clientview.JavaWithClientModClientViewImpl;
-import spout.server.paper.impl.moredatadriven.minecraft.BlockRegistry;
-import spout.server.paper.impl.moredatadriven.minecraft.ItemRegistry;
+import java.nio.charset.StandardCharsets;
 
 public final class ClientModCustomContentPacketPayload implements CustomPacketPayload {
 
@@ -19,45 +17,113 @@ public final class ClientModCustomContentPacketPayload implements CustomPacketPa
     private static final StreamCodec<FriendlyByteBuf, ClientModCustomContentPacketPayload> STREAM_CODEC = CustomPacketPayload.codec(ClientModCustomContentPacketPayload::write, ClientModCustomContentPacketPayload::new);
     public static final CustomPacketPayload.TypeAndCodec<FriendlyByteBuf, ?> TYPE_AND_CODEC = new CustomPacketPayload.TypeAndCodec<>(TYPE, ClientModCustomContentPacketPayload.STREAM_CODEC);
 
-    private static final ClientModCustomContentPacketPayload INSTANCE = new ClientModCustomContentPacketPayload();
-    private static final ClientboundCustomPayloadPacket PACKET_INSTANCE = new ClientboundCustomPayloadPacket(INSTANCE);
-
-    private ClientModCustomContentPacketPayload() {
-    }
-
-    private ClientModCustomContentPacketPayload(FriendlyByteBuf buffer) {
-        // No need to parse: only needs to happen on the client
-    }
+    private static final Gson GSON = new Gson();
 
     @Override
-    public Type<ClientModCustomContentPacketPayload> type() {
+    public CustomPacketPayload.Type<ClientModCustomContentPacketPayload> type() {
         return TYPE;
     }
 
-    private void write(FriendlyByteBuf buffer) {
+    private final Element[] elements;
 
-        // Set a client mod client view to prevent any mapping
-        spout.server.paper.impl.clientview.lookup.packethandling.ClientViewLookupThreadLocal.THREAD_LOCAL.set(new java.lang.ref.WeakReference<>(new spout.server.paper.impl.clientview.lookup.ClientViewLookup() {
-            @Override
-            public ClientView getClientView() {
-                return new JavaWithClientModClientViewImpl(null);
-            }
-        }));
-
-        // Write the custom content
-        ClientModCustomContent customContent = new ClientModCustomContent(
-            BlockRegistry.get().stream().filter(block -> !block.isVanilla()).toList(),
-            ItemRegistry.get().stream().filter(item -> !item.isVanilla()).toList()
-        );
-        buffer.writeJsonWithCodec(ClientModCustomContent.CODEC, customContent);
-
-        // Remove the temporary client view
-        spout.server.paper.impl.clientview.lookup.packethandling.ClientViewLookupThreadLocal.THREAD_LOCAL.remove();
-
+    ClientModCustomContentPacketPayload(Element[] elements) {
+        this.elements = elements;
     }
 
-    public static void send(Connection connection) {
-        connection.send(PACKET_INSTANCE);
+    ClientModCustomContentPacketPayload(FriendlyByteBuf buffer) {
+        this.elements = new Element[buffer.readVarInt()];
+        for (int i = 0; i < this.elements.length; i++) {
+            this.elements[i] = new Element(buffer);
+        }
+    }
+
+    private void write(FriendlyByteBuf buffer) {
+        buffer.writeVarInt(this.elements.length);
+        for (Element element : this.elements) {
+            element.write(buffer);
+        }
+    }
+
+    static class Element {
+
+        static final Element END = new Element(Type.END);
+
+        /**
+         * The {@link Type} of this payload element.
+         */
+        private final Type type;
+
+        /**
+         * The content, {@linkplain Gson#toJson encoded} as a string,
+         * then converted to {@link StandardCharsets#UTF_8} bytes.
+         * or null if the current {@link #type} is {@link Type#END}.
+         */
+        final byte @Nullable [] content;
+
+        Element(Type type, JsonElement content) {
+            this(type, GSON.toJson(content));
+        }
+
+        Element(Type type, String content) {
+            this(type, content.getBytes(StandardCharsets.UTF_8));
+        }
+
+        Element(Type type, byte[] content) {
+            this.type = type;
+            this.content = content;
+        }
+
+        private Element(Type type) {
+            this.type = type;
+            this.content = null;
+        }
+
+        Element(FriendlyByteBuf buffer) {
+            // Read the type
+            this.type = Type.VALUES[buffer.readByte()];
+            // Read the content
+            this.content = this.type == Type.END ? null : buffer.readByteArray();
+        }
+
+        private void write(FriendlyByteBuf buffer) {
+            // Write the type
+            buffer.writeByte(this.type.ordinal());
+            // Write the content
+            if (this.content != null) {
+                buffer.writeByteArray(this.content);
+            }
+        }
+
+        String getContentAsString() {
+            return new String(this.content, StandardCharsets.UTF_8);
+        }
+
+        JsonElement getContentAsJsonElement() {
+            return GSON.fromJson(this.getContentAsString(), JsonElement.class);
+        }
+
+        /**
+         * The content type for an element.
+         */
+        public enum Type {
+
+            /**
+             * A custom block.
+             */
+            BLOCK,
+            /**
+             * A custom item.
+             */
+            ITEM,
+            /**
+             * A special type indicating the end of the custom content.
+             */
+            END;
+
+            private static final Type[] VALUES = values();
+
+        }
+
     }
 
 }
