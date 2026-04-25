@@ -1,21 +1,6 @@
 --- a/paper-api/build.gradle.kts
 +++ b/paper-api/build.gradle.kts
-@@ -31,6 +_,7 @@
- 
- // Configure mockito agent that is needed in newer Java versions
- val mockitoAgent = configurations.register("mockitoAgent")
-+
- abstract class MockitoAgentProvider : CommandLineArgumentProvider {
-     @get:CompileClasspath
-     abstract val fileCollection: ConfigurableFileCollection
-@@ -87,11 +_,14 @@
-     testImplementation("org.hamcrest:hamcrest:2.2")
-     testImplementation("org.mockito:mockito-core:5.14.1")
-     testImplementation("org.ow2.asm:asm-tree:9.8")
--    mockitoAgent("org.mockito:mockito-core:5.14.1") { isTransitive = false } // configure mockito agent that is needed in newer java versions
-+    mockitoAgent("org.mockito:mockito-core:5.14.1") {
-+        isTransitive = false
-+    } // configure mockito agent that is needed in newer java versions
+@@ -91,7 +_,8 @@
      testRuntimeOnly("org.junit.platform:junit-platform-launcher")
  }
  

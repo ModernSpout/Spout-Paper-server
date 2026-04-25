@@ -39,14 +39,6 @@
      spigot {
          enabled = true
          buildDataRef = "17f77cee7117ab9d6175f088ae8962bfd04e61a9"
-@@ -56,6 +_,7 @@
-     @get:Inject
-     abstract val archiveOperations: ArchiveOperations
- }
-+
- val services = objects.newInstance<Services>()
- 
- if (project.providers.gradleProperty("publishDevBundle").isPresent) {
 @@ -104,7 +_,21 @@
      }
  }
@@ -70,14 +62,6 @@
  configurations.named(log4jPlugins.compileClasspathConfigurationName) {
      extendsFrom(configurations.compileClasspath.get())
  }
-@@ -117,6 +_,7 @@
- 
- // Configure mockito agent that is needed in newer java versions
- val mockitoAgent = configurations.register("mockitoAgent")
-+
- abstract class MockitoAgentProvider : CommandLineArgumentProvider {
-     @get:CompileClasspath
-     abstract val fileCollection: ConfigurableFileCollection
 @@ -127,7 +_,7 @@
  }
  
@@ -87,17 +71,6 @@
      implementation("ca.spottedleaf:concurrentutil:0.0.8")
      implementation("org.jline:jline-terminal-ffm:3.27.1") // use ffm on java 22+
      implementation("org.jline:jline-terminal-jni:3.27.1") // fall back to jni on java 21
-@@ -168,7 +_,9 @@
-     testImplementation("org.junit.platform:junit-platform-suite-engine:1.12.2")
-     testImplementation("org.hamcrest:hamcrest:2.2")
-     testImplementation("org.mockito:mockito-core:5.14.1")
--    mockitoAgent("org.mockito:mockito-core:5.14.1") { isTransitive = false } // Configure mockito agent that is needed in newer java versions
-+    mockitoAgent("org.mockito:mockito-core:5.14.1") {
-+        isTransitive = false
-+    } // Configure mockito agent that is needed in newer java versions
-     testImplementation("org.ow2.asm:asm-tree:9.8")
-     testImplementation("org.junit-pioneer:junit-pioneer:2.2.0") // CartesianTest
- 
 @@ -191,21 +_,24 @@
          val git = Git(rootProject.layout.projectDirectory.path)
          val mcVersion = rootProject.providers.gradleProperty("mcVersion").get()
