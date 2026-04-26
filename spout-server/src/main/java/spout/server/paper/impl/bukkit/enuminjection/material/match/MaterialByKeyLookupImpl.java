@@ -153,6 +153,7 @@ public final class MaterialByKeyLookupImpl implements MaterialByKeyLookup {
             Material[] materials = Material.values();
             this.byLowerCasePathMap = new HashMap<>(materials.length * 3);
             for (Material material : materials) {
+                if (material.isLegacy()) continue;
                 this.byLowerCaseKeyMap.putIfAbsent(material.getKey().getKey().toLowerCase(Locale.ROOT), material);
             }
         }
@@ -249,6 +250,7 @@ public final class MaterialByKeyLookupImpl implements MaterialByKeyLookup {
             Material[] materials = Material.values();
             this.byLowerCaseKeyMap = new HashMap<>(materials.length * 3);
             for (Material material : materials) {
+                if (material.isLegacy()) continue;
                 this.byLowerCaseKeyMap.put(material.getKey().asString().toLowerCase(Locale.ROOT), material);
             }
         }
