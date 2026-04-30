@@ -8,7 +8,7 @@ import spout.server.paper.impl.packetmapping.block.BlockMappingsComposeEventImpl
 import org.jspecify.annotations.Nullable;
 
 /**
- * A {@link RequestProcessor} for {@link StairsRequestBuilderImpl}s.
+ * A {@link RequestProcessor} for {@link AutomaticBlockMappingsImpl#slab}.
  */
 public class SlabRequestProcessor extends MatchingBlockStateClaimAttemptsRequestProcessor<UsedStates.Slab, SlabRequestBuilderImpl> {
 
@@ -23,7 +23,7 @@ public class SlabRequestProcessor extends MatchingBlockStateClaimAttemptsRequest
 
     @Override
     protected UsedStates.Slab createUsedStates(BlockState @Nullable [] result) {
-        return result != null ? new UsedStatesImpl.SlabImpl(result[0].getBlock(), false) : new UsedStatesImpl.SlabImpl(this.request.fallback, true);
+        return new UsedStates.Slab(result != null ? new UsedStatesInternalImpls.Slab<>(result[0].getBlock(), false) : new UsedStatesInternalImpls.Slab<>(this.request.fallback, true));
     }
 
     /**

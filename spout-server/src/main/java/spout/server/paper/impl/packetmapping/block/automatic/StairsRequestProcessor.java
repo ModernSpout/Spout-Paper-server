@@ -8,11 +8,11 @@ import spout.server.paper.impl.packetmapping.block.BlockMappingsComposeEventImpl
 import org.jspecify.annotations.Nullable;
 
 /**
- * A {@link RequestProcessor} for {@link StairsRequestBuilderImpl}s.
+ * A {@link RequestProcessor} for {@link AutomaticBlockMappingsImpl#stairs}.
  */
-public class StairsRequestProcessor extends MatchingBlockStateClaimAttemptsRequestProcessor<UsedStates.Stairs, StairsRequestBuilderImpl> {
+public class StairsRequestProcessor extends MatchingBlockStateClaimAttemptsRequestProcessor<UsedStates.Stairs, FromToBlockTypeRequestBuilderImpl<UsedStates.Stairs>> {
 
-    public StairsRequestProcessor(StairsRequestBuilderImpl request, BlockMappingsComposeEventImpl event) {
+    public StairsRequestProcessor(FromToBlockTypeRequestBuilderImpl<UsedStates.Stairs> request, BlockMappingsComposeEventImpl event) {
         super(request, event);
     }
 
@@ -23,7 +23,8 @@ public class StairsRequestProcessor extends MatchingBlockStateClaimAttemptsReque
 
     @Override
     protected UsedStates.Stairs createUsedStates(BlockState @Nullable [] result) {
-        return result != null ? new UsedStatesImpl.StairsImpl(result[0].getBlock(), false) : new UsedStatesImpl.StairsImpl(this.request.fallback, true);
+        boolean isFallback = result == null;
+        return new UsedStates.Stairs(new UsedStatesInternalImpls.BlockStairs<>(isFallback ? this.request.fallback : result[0].getBlock(), isFallback));
     }
 
     /**

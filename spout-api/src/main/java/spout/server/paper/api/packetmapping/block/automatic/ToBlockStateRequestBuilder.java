@@ -5,12 +5,6 @@ import org.bukkit.block.data.BlockData;
 
 /**
  * A {@link ProxyStatesRequestBuilder} that maps to a single {@linkplain BlockData block state}.
- *
- * <p>
- * By default:
- * <ul>
- *     <li>{@link #fallback()} is the default block state of {@link BlockType#STONE}.</li>
- * </ul>
  */
 public interface ToBlockStateRequestBuilder<US extends UsedStates> extends ToItemRequestBuilder<US> {
 

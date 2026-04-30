@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
- * A {@link RequestProcessor} for {@link LeavesRequestBuilderImpl}s.
+ * A {@link RequestProcessor} for {@link AutomaticBlockMappingsImpl#leaves}.
  */
 public class LeavesRequestProcessor extends ArrayBlockStateClaimAttemptsRequestProcessor<UsedStates.Waterlogged, LeavesRequestBuilderImpl> {
 
@@ -30,7 +30,7 @@ public class LeavesRequestProcessor extends ArrayBlockStateClaimAttemptsRequestP
 
     @Override
     protected UsedStates.Waterlogged createUsedStates(BlockState @Nullable [] result) {
-        return result != null ? new UsedStatesImpl.WaterloggedImpl(result[0], result[1], false, false) : new UsedStatesImpl.WaterloggedImpl(this.request.fallbackNonWaterloggedState(), this.request.fallbackWaterloggedState(), true, true);
+        return new UsedStates.Waterlogged(result != null ? new UsedStatesInternalImpls.DirectWaterlogged<>(result[0], result[1], false, false) : new UsedStatesInternalImpls.DirectWaterlogged<>(this.request.fallbackNonWaterloggedState(), this.request.fallbackWaterloggedState(), true, true));
     }
 
     @Override

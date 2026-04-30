@@ -1,6 +1,5 @@
 package spout.server.paper.impl.packetmapping.block.automatic;
 
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
@@ -17,7 +16,6 @@ public class SlabRequestBuilderImpl extends FromToBlockTypeRequestBuilderImpl<Us
 
     public SlabRequestBuilderImpl() {
         super();
-        this.fallback = Blocks.STONE_SLAB;
     }
 
     @Override

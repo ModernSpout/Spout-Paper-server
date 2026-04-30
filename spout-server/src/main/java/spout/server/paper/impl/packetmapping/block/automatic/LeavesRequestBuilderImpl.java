@@ -17,7 +17,6 @@ public class LeavesRequestBuilderImpl extends FromToBlockTypeRequestBuilderImpl<
 
     public LeavesRequestBuilderImpl() {
         super();
-        this.fallback = Blocks.OAK_LEAVES;
     }
 
     @Override

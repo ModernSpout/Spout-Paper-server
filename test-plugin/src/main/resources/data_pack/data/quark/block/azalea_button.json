@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:button",
+  "block_set_type": "birch",
+  "ticks_to_stay_pressed": 30,
+  "properties": {
+    "map_color": "minecraft:color_light_green",
+    "has_collision": false,
+    "sound_type": "minecraft:wood",
+    "explosion_resistance": 0.5,
+    "destroy_time": 0.5,
+    "ignited_by_lava": true,
+    "push_reaction": "minecraft:destroy"
+  },
+  "mappings": [
+    {
+      "type": "button",
+      "fallback": "minecraft:birch_button"
+    }
+  ]
+}

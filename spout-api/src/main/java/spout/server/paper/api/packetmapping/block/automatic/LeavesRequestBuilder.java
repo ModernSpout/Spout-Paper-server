@@ -1,16 +1,9 @@
 package spout.server.paper.api.packetmapping.block.automatic;
 
-import org.bukkit.block.BlockType;
 import org.jspecify.annotations.Nullable;
 
 /**
  * A {@link ProxyStatesRequestBuilder} for {@link AutomaticBlockMappings#leaves}.
- *
- * <p>
- * By default:
- * <ul>
- *     <li>{@link #fallback()} is {@link BlockType#OAK_LEAVES}.</li>
- * </ul>
  */
 public interface LeavesRequestBuilder extends FromBlockTypeRequestBuilder<UsedStates.Waterlogged>, ToBlockTypeRequestBuilder<UsedStates.Waterlogged> {
 

@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "ingredients": [
+    "quark:azalea_planks"
+  ],
+  "result": {
+    "count": 1,
+    "id": "quark:azalea_button"
+  }
+}

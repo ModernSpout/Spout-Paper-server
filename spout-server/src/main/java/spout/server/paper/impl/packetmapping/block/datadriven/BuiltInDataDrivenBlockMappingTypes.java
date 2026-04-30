@@ -15,6 +15,7 @@ import org.bukkit.craftbukkit.block.data.CraftBlockData;
 import spout.server.paper.api.clientview.ClientView;
 import spout.server.paper.api.packetmapping.block.automatic.FromBlockStateRequestBuilder;
 import spout.server.paper.api.packetmapping.block.automatic.FromBlockTypeRequestBuilder;
+import spout.server.paper.api.packetmapping.block.automatic.ProxyStatesRequestBuilder;
 import spout.server.paper.api.packetmapping.block.automatic.ToBlockStateRequestBuilder;
 import spout.server.paper.api.packetmapping.block.automatic.ToBlockTypeRequestBuilder;
 import spout.common.branding.SpoutNamespace;
@@ -24,6 +25,8 @@ import spout.server.paper.impl.moredatadriven.minecraft.BlockRegistry;
 import spout.server.paper.impl.packetmapping.block.BlockMappingsComposeEventImpl;
 import org.jspecify.annotations.Nullable;
 import spout.server.paper.impl.packetmapping.block.automatic.AutomaticBlockMappingsImpl;
+import spout.server.paper.impl.packetmapping.block.automatic.FromToBlockTypeRequestBuilderImpl;
+import spout.server.paper.impl.packetmapping.block.automatic.LeavesRequestBuilderImpl;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -46,21 +49,49 @@ public final class BuiltInDataDrivenBlockMappingTypes {
 
     }
 
-    public static class MultiStateBuiltInDataDrivenBlockMappingType<US extends UsedStates, B extends FromBlockTypeRequestBuilder<US> & ToBlockTypeRequestBuilder<US>> extends BuiltInDataDrivenBlockMappingType {
+    private static class SimpleBuiltInDataDrivenBlockMappingType<US extends UsedStates, B extends ProxyStatesRequestBuilder<US>> extends BuiltInDataDrivenBlockMappingType {
 
-        private final BiConsumer<AutomaticBlockMappingsImpl, Consumer<B>> mappingFunction;
+        private final BiConsumer<AutomaticBlockMappingsImpl, Consumer<? extends B>> mappingFunction;
+        private final BuilderConsumer<US, B> builderConsumer;
 
-        private MultiStateBuiltInDataDrivenBlockMappingType(String key, BiConsumer<AutomaticBlockMappingsImpl, Consumer<B>> mappingFunction) {
+        SimpleBuiltInDataDrivenBlockMappingType(String key, BiConsumer<AutomaticBlockMappingsImpl, Consumer<? extends B>> mappingFunction, BuilderConsumer<US, B> builderConsumer) {
             super(key);
             this.mappingFunction = mappingFunction;
+            this.builderConsumer = builderConsumer;
         }
 
         @Override
         public <T> void apply(BlockMappingsComposeEventImpl event, @Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike) {
-            this.mappingFunction.accept(event.automaticMappings(), builder -> {
-                parseFromBlockType(builder, block, ops, mapLike, null);
-                parseToBlockType(builder, block, ops, mapLike, null);
+            this.mappingFunction.accept(event.automaticMappings(), builder -> this.builderConsumer.accept(builder, block, ops, mapLike));
+        }
+
+        public interface BuilderConsumer<US extends UsedStates, B extends ProxyStatesRequestBuilder<US>> {
+
+            <T> void accept(B builder, @Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike);
+
+        }
+
+    }
+
+    private static class MultiStateBuiltInDataDrivenBlockMappingType<US extends UsedStates, B extends FromBlockTypeRequestBuilder<US> & ToBlockTypeRequestBuilder<US>> extends SimpleBuiltInDataDrivenBlockMappingType<US, B> {
+
+        MultiStateBuiltInDataDrivenBlockMappingType(String key, BiConsumer<AutomaticBlockMappingsImpl, Consumer<? extends B>> mappingFunction, @Nullable BuilderConsumer<US, B> additionalBuilderConsumer) {
+            super(key, mappingFunction, new BuilderConsumer<>() {
+
+                @Override
+                public <T> void accept(B builder, @Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike) {
+                    parseFromBlockType(builder, block, ops, mapLike, null);
+                    parseToBlockType(builder, block, ops, mapLike, null);
+                    if (additionalBuilderConsumer != null) {
+                        additionalBuilderConsumer.accept(builder, block, ops, mapLike);
+                    }
+                }
+
             });
+        }
+
+        MultiStateBuiltInDataDrivenBlockMappingType(String key, BiConsumer<AutomaticBlockMappingsImpl, Consumer<? extends B>> mappingFunction) {
+            this(key, mappingFunction, null);
         }
 
     }
@@ -195,6 +226,8 @@ public final class BuiltInDataDrivenBlockMappingTypes {
 
     };
 
+    public static final DataDrivenBlockMappingType BUTTON = new MultiStateBuiltInDataDrivenBlockMappingType<UsedStates.Switch, FromToBlockTypeRequestBuilderImpl<UsedStates.Switch>>("button", AutomaticBlockMappingsImpl::button);
+
     public static final DataDrivenBlockMappingType FULL_BLOCK = new BuiltInDataDrivenBlockMappingType("full_block") {
 
         @Override
@@ -211,23 +244,19 @@ public final class BuiltInDataDrivenBlockMappingTypes {
 
     };
 
-    public static final DataDrivenBlockMappingType LEAVES = new BuiltInDataDrivenBlockMappingType("leaves") {
+    public static final DataDrivenBlockMappingType LEAVES = new MultiStateBuiltInDataDrivenBlockMappingType<UsedStates.Waterlogged, LeavesRequestBuilderImpl>("leaves", AutomaticBlockMappingsImpl::leaves, new SimpleBuiltInDataDrivenBlockMappingType.BuilderConsumer<>() {
 
         @Override
-        public <T> void apply(BlockMappingsComposeEventImpl event, @Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike) {
-            event.automaticMappings().leaves(builder -> {
-                parseFromBlockType(builder, block, ops, mapLike, null);
-                parseToBlockType(builder, block, ops, mapLike, null);
-                T tintedInput = mapLike.get("tinted");
-                if (tintedInput != null) {
-                    builder.tinted(ops.getBooleanValue(tintedInput).getOrThrow());
-                }
-            });
+        public <T> void accept(LeavesRequestBuilderImpl builder, @Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike) {
+            T tintedInput = mapLike.get("tinted");
+            if (tintedInput != null) {
+                builder.tinted(ops.getBooleanValue(tintedInput).getOrThrow());
+            }
         }
 
-    };
+    });
 
-    public static final DataDrivenBlockMappingType PRESSURE_PLATE = new MultiStateBuiltInDataDrivenBlockMappingType<>("pressure_plate", AutomaticBlockMappingsImpl::pressurePlate);
+    public static final DataDrivenBlockMappingType PRESSURE_PLATE = new MultiStateBuiltInDataDrivenBlockMappingType<UsedStates.Powerable, FromToBlockTypeRequestBuilderImpl<UsedStates.Powerable>>("pressure_plate", AutomaticBlockMappingsImpl::pressurePlate);
 
     public static final DataDrivenBlockMappingType SLAB = new BuiltInDataDrivenBlockMappingType("slab") {
 
@@ -245,7 +274,7 @@ public final class BuiltInDataDrivenBlockMappingTypes {
 
     };
 
-    public static final DataDrivenBlockMappingType STAIRS = new MultiStateBuiltInDataDrivenBlockMappingType<>("stairs", AutomaticBlockMappingsImpl::stairs);
+    public static final DataDrivenBlockMappingType STAIRS = new MultiStateBuiltInDataDrivenBlockMappingType<UsedStates.Stairs, FromToBlockTypeRequestBuilderImpl<UsedStates.Stairs>>("stairs", AutomaticBlockMappingsImpl::stairs);
 
     private static boolean bootstrapped = false;
 

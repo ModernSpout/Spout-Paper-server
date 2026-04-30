@@ -1,5 +1,6 @@
 package spout.server.paper.api.packetmapping.block.automatic;
 
+import org.bukkit.block.BlockType;
 import spout.server.paper.api.clientview.ClientView;
 import spout.server.paper.api.packetmapping.block.BlockMappingsComposeEvent;
 import java.util.function.Consumer;
@@ -42,9 +43,26 @@ import java.util.function.Consumer;
 public interface AutomaticBlockMappings {
 
     /**
-     * Attempts to find a proxy state for a single full block state.
+     * Attempts to find a proxy state for every possible state of a button.
+     *
+     * <p>
+     * By default:
+     * <ul>
+     *     <li>{@link ToBlockTypeRequestBuilder#fallback()} is {@link BlockType#STONE_BUTTON}.</li>
+     * </ul>
      */
-    void fullBlock(Consumer<FullBlockRequestBuilder> builderConsumer);
+    <B extends FromBlockTypeRequestBuilder<UsedStates.Switch> & ToBlockTypeRequestBuilder<UsedStates.Switch>> void button(Consumer<? extends B> builderConsumer);
+
+    /**
+     * Attempts to find a proxy state for a single full block state.
+     *
+     * <p>
+     * By default:
+     * <ul>
+     *     <li>{@link ToBlockStateRequestBuilder#fallback()} is the default block state of {@link BlockType#STONE}.</li>
+     * </ul>
+     */
+    <B extends FromBlockStateRequestBuilder<UsedStates.Single> & ToBlockStateRequestBuilder<UsedStates.Single>> void fullBlock(Consumer<? extends B> builderConsumer);
 
     /**
      * Attempts to find proxy states for 2 leaves block states:
@@ -55,22 +73,46 @@ public interface AutomaticBlockMappings {
      * The vanilla client generally believes leaves are instabreak when broken with the right tool.
      * In practice, this means you should only use this for server-side leaves.
      * </p>
+     *
+     * <p>
+     * By default:
+     * <ul>
+     *     <li>{@link ToBlockTypeRequestBuilder#fallback()} is {@link BlockType#OAK_LEAVES}.</li>
+     * </ul>
      */
-    void leaves(Consumer<LeavesRequestBuilder> builderConsumer);
+    <B extends LeavesRequestBuilder> void leaves(Consumer<? extends B> builderConsumer);
 
     /**
      * Attempts to find a proxy state for every possible state of a pressure plate.
+     *
+     * <p>
+     * By default:
+     * <ul>
+     *     <li>{@link ToBlockTypeRequestBuilder#fallback()} is {@link BlockType#STONE_PRESSURE_PLATE}.</li>
+     * </ul>
      */
-    void pressurePlate(Consumer<PressurePlateRequestBuilder> builderConsumer);
+    <B extends FromBlockTypeRequestBuilder<UsedStates.Powerable> & ToBlockTypeRequestBuilder<UsedStates.Powerable>> void pressurePlate(Consumer<? extends B> builderConsumer);
 
     /**
      * Attempts to find a proxy state for every possible state of a slab.
+     *
+     * <p>
+     * By default:
+     * <ul>
+     *     <li>{@link ToBlockTypeRequestBuilder#fallback()} is {@link BlockType#STONE_SLAB}.</li>
+     * </ul>
      */
-    void slab(Consumer<SlabRequestBuilder> builderConsumer);
+    <B extends SlabRequestBuilder> void slab(Consumer<? extends B> builderConsumer);
 
     /**
      * Attempts to find a proxy state for every possible state of stairs.
+     *
+     * <p>
+     * By default:
+     * <ul>
+     *     <li>{@link ToBlockTypeRequestBuilder#fallback()} is {@link BlockType#STONE_STAIRS}.</li>
+     * </ul>
      */
-    void stairs(Consumer<StairsRequestBuilder> builderConsumer);
+    <B extends FromBlockTypeRequestBuilder<UsedStates.Stairs> & ToBlockTypeRequestBuilder<UsedStates.Stairs>> void stairs(Consumer<? extends B> builderConsumer);
 
 }

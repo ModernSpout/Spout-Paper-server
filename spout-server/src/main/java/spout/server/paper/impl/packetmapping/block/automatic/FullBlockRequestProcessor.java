@@ -13,11 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A {@link RequestProcessor} for {@link FullBlockRequestBuilderImpl}s.
+ * A {@link RequestProcessor} for {@link AutomaticBlockMappingsImpl#fullBlock}.
  */
-public class FullBlockRequestProcessor extends ArrayBlockStateClaimAttemptsRequestProcessor<UsedStates.Single, FullBlockRequestBuilderImpl> {
+public class FullBlockRequestProcessor extends ArrayBlockStateClaimAttemptsRequestProcessor<UsedStates.Single, FromToBlockStateRequestBuilderImpl<UsedStates.Single>> {
 
-    public FullBlockRequestProcessor(FullBlockRequestBuilderImpl request, BlockMappingsComposeEventImpl event) {
+    public FullBlockRequestProcessor(FromToBlockStateRequestBuilderImpl<UsedStates.Single> request, BlockMappingsComposeEventImpl event) {
         super(request, event);
     }
 
@@ -41,7 +41,7 @@ public class FullBlockRequestProcessor extends ArrayBlockStateClaimAttemptsReque
 
     @Override
     protected UsedStates.Single createUsedStates(BlockState @Nullable [] result) {
-        return result != null ? new UsedStatesImpl.SingleImpl(result[0], false) : new UsedStatesImpl.SingleImpl(this.request.fallback, true);
+        return new UsedStates.Single(result != null ? new UsedStatesInternalImpls.Single(result[0], false) : new UsedStatesInternalImpls.Single(this.request.fallback, true));
     }
 
     @Override

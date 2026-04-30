@@ -14,7 +14,7 @@ import java.util.Objects;
 /**
  * A base implementation of {@link FromBlockStateRequestBuilder} and {@link ToBlockStateRequestBuilder}.
  */
-public abstract class FromToBlockStateRequestBuilderImpl<US extends UsedStates> extends FromToItemRequestBuilderImpl<US> implements FromBlockStateRequestBuilder<US>, ToBlockStateRequestBuilder<US>, FromToBlockStatesRequestBuilder {
+public class FromToBlockStateRequestBuilderImpl<US extends UsedStates> extends FromToItemRequestBuilderImpl<US> implements FromBlockStateRequestBuilder<US>, ToBlockStateRequestBuilder<US>, FromToBlockStatesRequestBuilder {
 
     public @Nullable BlockState from;
     public BlockState fallback;
@@ -24,7 +24,6 @@ public abstract class FromToBlockStateRequestBuilderImpl<US extends UsedStates> 
 
     public FromToBlockStateRequestBuilderImpl() {
         super();
-        this.fallback = Blocks.STONE.defaultBlockState();
     }
 
     @Override

@@ -7,11 +7,11 @@ import spout.server.paper.api.packetmapping.block.automatic.UsedStates;
 import spout.server.paper.impl.packetmapping.block.BlockMappingsComposeEventImpl;
 
 /**
- * A {@link RequestProcessor} for {@link PressurePlateRequestBuilderImpl}s.
+ * A {@link RequestProcessor} for {@link AutomaticBlockMappingsImpl#pressurePlate}.
  */
-public class PressurePlateRequestProcessor extends MatchingBlockStateClaimAttemptsRequestProcessor<UsedStates.PressurePlate, PressurePlateRequestBuilderImpl> {
+public class PressurePlateRequestProcessor extends MatchingBlockStateClaimAttemptsRequestProcessor<UsedStates.Powerable, FromToBlockTypeRequestBuilderImpl<UsedStates.Powerable>> {
 
-    public PressurePlateRequestProcessor(PressurePlateRequestBuilderImpl request, BlockMappingsComposeEventImpl event) {
+    public PressurePlateRequestProcessor(FromToBlockTypeRequestBuilderImpl<UsedStates.Powerable> request, BlockMappingsComposeEventImpl event) {
         super(request, event);
     }
 
@@ -21,8 +21,9 @@ public class PressurePlateRequestProcessor extends MatchingBlockStateClaimAttemp
     }
 
     @Override
-    protected UsedStates.PressurePlate createUsedStates(BlockState @Nullable [] result) {
-        return result != null ? new UsedStatesImpl.PressurePlateImpl(result[0].getBlock(), false) : new UsedStatesImpl.PressurePlateImpl(this.request.fallback, true);
+    protected UsedStates.Powerable createUsedStates(BlockState @Nullable [] result) {
+        boolean isFallback = result == null;
+        return new UsedStates.Powerable(new UsedStatesInternalImpls.BlockPowerable<>(isFallback ? this.request.fallback : result[0].getBlock(), isFallback));
     }
 
 }
