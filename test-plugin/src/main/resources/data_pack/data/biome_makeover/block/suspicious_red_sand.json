@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:brushable",
+  "turns_into": "minecraft:red_sand",
+  "brush_sound": "minecraft:item.brush.brushing.sand",
+  "brush_completed_sound": "minecraft:item.brush.brushing.sand",
+  "properties": {
+    "map_color": "minecraft:color_orange",
+    "sound_type": "minecraft:suspicious_sand",
+    "explosion_resistance": 0.25,
+    "destroy_time": 0.25,
+    "push_reaction": "minecraft:destroy",
+    "instrument": "minecraft:snare"
+  },
+  "mappings": [
+    {
+      "type": "brushable",
+      "fallback": "minecraft:red_sand"
+    }
+  ]
+}

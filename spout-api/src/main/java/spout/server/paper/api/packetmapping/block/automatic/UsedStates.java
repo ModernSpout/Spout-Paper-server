@@ -42,6 +42,28 @@ public interface UsedStates {
 
     }
 
+    class Brushable extends Wrapper {
+
+        public Brushable(UsedStates internal) {
+            super(internal);
+        }
+
+        private BlockData createReference(int dusted) {
+            return BlockType.SUSPICIOUS_SAND.createBlockData(data -> {
+                data.setDusted(dusted);
+            });
+        }
+
+        public org.bukkit.block.data.Brushable get(int dusted) {
+            return (org.bukkit.block.data.Brushable) this.get(this.createReference(dusted));
+        }
+
+        public boolean isFallback(int dusted) {
+            return this.isFallback(this.createReference(dusted));
+        }
+
+    }
+
     class Door extends Wrapper {
 
         public Door(UsedStates internal) {

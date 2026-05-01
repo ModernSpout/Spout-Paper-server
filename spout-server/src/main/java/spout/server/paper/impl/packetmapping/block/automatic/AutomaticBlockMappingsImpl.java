@@ -24,6 +24,14 @@ public final class AutomaticBlockMappingsImpl implements AutomaticBlockMappings 
     }
 
     @Override
+    public <B extends FromBlockTypeRequestBuilder<UsedStates.Brushable> & ToBlockTypeRequestBuilder<UsedStates.Brushable>> void brushable(Consumer<? extends B> builderConsumer) {
+        FromToBlockTypeRequestBuilderImpl<UsedStates.Brushable> builder = new FromToBlockTypeRequestBuilderImpl<>();
+        builder.fallback(BlockType.SUSPICIOUS_SAND);
+        ((Consumer) builderConsumer).accept(builder);
+        new BrushableRequestProcessor(builder, this.event).process();
+    }
+
+    @Override
     public <B extends FromBlockTypeRequestBuilder<UsedStates.Switch> & ToBlockTypeRequestBuilder<UsedStates.Switch>> void button(Consumer<? extends B> builderConsumer) {
         FromToBlockTypeRequestBuilderImpl<UsedStates.Switch> builder = new FromToBlockTypeRequestBuilderImpl<>();
         builder.fallback(BlockType.STONE_BUTTON);

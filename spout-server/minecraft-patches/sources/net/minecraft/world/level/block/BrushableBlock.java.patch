@@ -1,0 +1,40 @@
+--- a/net/minecraft/world/level/block/BrushableBlock.java
++++ b/net/minecraft/world/level/block/BrushableBlock.java
+@@ -25,19 +_,26 @@
+ import net.minecraft.world.phys.Vec3;
+ import org.jspecify.annotations.Nullable;
+ 
+-public class BrushableBlock extends BaseEntityBlock implements Fallable {
+-    public static final MapCodec<BrushableBlock> CODEC = RecordCodecBuilder.mapCodec(
+-        instance -> instance.group(
+-                BuiltInRegistries.BLOCK.byNameCodec().fieldOf("turns_into").forGetter(BrushableBlock::getTurnsInto),
+-                BuiltInRegistries.SOUND_EVENT.byNameCodec().fieldOf("brush_sound").forGetter(BrushableBlock::getBrushSound),
+-                BuiltInRegistries.SOUND_EVENT.byNameCodec().fieldOf("brush_completed_sound").forGetter(BrushableBlock::getBrushCompletedSound),
+-                propertiesCodec()
+-            )
+-            .apply(instance, BrushableBlock::new)
+-    );
++// Spout start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Initialize some references late
++public class BrushableBlock extends BaseEntityBlock implements Fallable, spout.common.moredatadriven.minecraft.type.TurnsIntoIdentifierBlock {
++    public static final MapCodec<BrushableBlock> CODEC = spout.common.moredatadriven.minecraft.type.BlockCodecs.brushableCodec(BrushableBlock::new);
++    // Spout end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Initialize some references late
+     private static final IntegerProperty DUSTED = BlockStateProperties.DUSTED;
+     public static final int TICK_DELAY = 2;
+-    private final Block turnsInto;
++    // Spout start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Initialize some references late
++    public net.minecraft.resources.@org.jspecify.annotations.Nullable Identifier spout$turnsIntoIdentifier;
++    public Block turnsInto;
++
++    @Override
++    public net.minecraft.resources.@org.jspecify.annotations.Nullable Identifier spout$getTurnsIntoIdentifier() {
++        return this.spout$turnsIntoIdentifier;
++    }
++
++    @Override
++    public void spout$setTurnsIntoIdentifier(net.minecraft.resources.@org.jspecify.annotations.Nullable Identifier turnsIntoIdentifier) {
++        this.spout$turnsIntoIdentifier = turnsIntoIdentifier;
++    }
++    // Spout end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Initialize some references late
+     private final SoundEvent brushSound;
+     private final SoundEvent brushCompletedSound;
+ 

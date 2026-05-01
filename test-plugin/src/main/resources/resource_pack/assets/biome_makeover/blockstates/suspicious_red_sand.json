@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "dusted=0": {
+      "model": "biome_makeover:block/suspicious_red_sand_0"
+    },
+    "dusted=1": {
+      "model": "biome_makeover:block/suspicious_red_sand_1"
+    },
+    "dusted=2": {
+      "model": "biome_makeover:block/suspicious_red_sand_2"
+    },
+    "dusted=3": {
+      "model": "biome_makeover:block/suspicious_red_sand_3"
+    }
+  }
+}

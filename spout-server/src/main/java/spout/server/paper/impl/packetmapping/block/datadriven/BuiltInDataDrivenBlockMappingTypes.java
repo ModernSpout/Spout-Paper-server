@@ -226,6 +226,8 @@ public final class BuiltInDataDrivenBlockMappingTypes {
 
     };
 
+    public static final DataDrivenBlockMappingType BRUSHABLE = new MultiStateBuiltInDataDrivenBlockMappingType<UsedStates.Brushable, FromToBlockTypeRequestBuilderImpl<UsedStates.Brushable>>("brushable", AutomaticBlockMappingsImpl::brushable);
+
     public static final DataDrivenBlockMappingType BUTTON = new MultiStateBuiltInDataDrivenBlockMappingType<UsedStates.Switch, FromToBlockTypeRequestBuilderImpl<UsedStates.Switch>>("button", AutomaticBlockMappingsImpl::button);
 
     public static final DataDrivenBlockMappingType DOOR = new MultiStateBuiltInDataDrivenBlockMappingType<UsedStates.Door, FromToBlockTypeRequestBuilderImpl<UsedStates.Door>>("door", AutomaticBlockMappingsImpl::door);

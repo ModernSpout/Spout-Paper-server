@@ -1,11 +1,14 @@
-The following files (referenced relative to the parent folder of the folder this file is in) are/were part of [Maple Delight](https://github.com/HLHT-Studios/maple-delight), which is/was maintained by [HLHT Studios](https://github.com/HLHT-Studios):
-* `assets/maple_delight/textures/block/yellow_maple_leaves.png`
+The following files (referenced relative to the parent folder of the folder this file is in) are/were part of [Biome Makeover](https://github.com/Lemonszz/Biome-Makeover), which is/was maintained by LASER KNIGHTS:
+* `assets/biome_makeover/textures/block/suspicious_red_sand_0.png`
+* `assets/biome_makeover/textures/block/suspicious_red_sand_1.png`
+* `assets/biome_makeover/textures/block/suspicious_red_sand_2.png`
+* `assets/biome_makeover/textures/block/suspicious_red_sand_3.png`
 
 These files are provided under an `MIT` license, which is included below.
 
 # MIT License
 
-Copyright (c) 2024 HLHT Studios
+Copyright (c) 2022 LASER KNIGHTS
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

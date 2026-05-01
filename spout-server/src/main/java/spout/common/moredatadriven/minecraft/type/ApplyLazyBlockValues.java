@@ -1,7 +1,10 @@
 package spout.common.moredatadriven.minecraft.type;
 
 import java.util.stream.Stream;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BrushableBlock;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -17,7 +20,16 @@ public final class ApplyLazyBlockValues {
 
     public static void apply(Stream<Block> blocks) {
         blocks.forEach(block -> {
-            // Set base state for stairs
+            // Set turnsInto for BrushableBlock
+            if (block instanceof BrushableBlock brushableBlock) {
+                Identifier turnsIntoIdentifier = brushableBlock.spout$getTurnsIntoIdentifier();
+                if (turnsIntoIdentifier != null) {
+                    Block turnsInto = BuiltInRegistries.BLOCK.getValue(turnsIntoIdentifier);
+                    brushableBlock.turnsInto = turnsInto;
+                    brushableBlock.spout$setTurnsIntoIdentifier(null);
+                }
+            }
+            // Set baseState for StairBlock
             if (block instanceof StairBlock stairBlock) {
                 String baseStateString = stairBlock.spout$getBaseStateString();
                 if (baseStateString != null) {

@@ -1,0 +1,11 @@
+--- a/src/main/java/org/bukkit/craftbukkit/block/CraftBlockStates.java
++++ b/src/main/java/org/bukkit/craftbukkit/block/CraftBlockStates.java
+@@ -147,7 +_,7 @@
+             BiFunction<World, T, B> blockStateConstructor
+     ) {
+         BlockStateFactory<B> factory = new BlockEntityStateFactory<>(blockStateType, blockStateConstructor, blockEntityType);
+-        for (net.minecraft.world.level.block.Block block : blockEntityType.validBlocks) {
++        for (net.minecraft.world.level.block.Block block : blockEntityType.spout$getValidBlocks()) { // Spout start - More data-driven - Minecraft registries - Block entities - Also allow data-driven valid blocks
+             CraftBlockStates.register(CraftBlockType.minecraftToBukkit(block), factory);
+         }
+         CraftBlockStates.register(blockEntityType, factory);

@@ -43,6 +43,17 @@ import java.util.function.Consumer;
 public interface AutomaticBlockMappings {
 
     /**
+     * Attempts to find a proxy state for every possible state of a brushable block.
+     *
+     * <p>
+     * By default:
+     * <ul>
+     *     <li>{@link ToBlockTypeRequestBuilder#fallback()} is {@link BlockType#SUSPICIOUS_SAND}.</li>
+     * </ul>
+     */
+    <B extends FromBlockTypeRequestBuilder<UsedStates.Brushable> & ToBlockTypeRequestBuilder<UsedStates.Brushable>> void brushable(Consumer<? extends B> builderConsumer);
+
+    /**
      * Attempts to find a proxy state for every possible state of a button.
      *
      * <p>

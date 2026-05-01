@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "biome_makeover:block/suspicious_red_sand_2"
+  }
+}

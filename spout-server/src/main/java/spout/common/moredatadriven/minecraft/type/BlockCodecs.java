@@ -2,6 +2,7 @@ package spout.common.moredatadriven.minecraft.type;
 
 import com.mojang.datafixers.kinds.App;
 import com.mojang.datafixers.util.Function3;
+import com.mojang.datafixers.util.Function4;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
@@ -12,9 +13,11 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BrushableBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.WeatheringCopper;
@@ -369,6 +372,35 @@ public final class BlockCodecs {
             t2,
             BlockBehaviour.propertiesCodec()
         ).apply(instance, factory));
+    }
+
+    private static <B extends Block, T1, T2, T3> MapCodec<B> simpleCodec(
+        App<RecordCodecBuilder.Mu<B>, T1> t1,
+        App<RecordCodecBuilder.Mu<B>, T2> t2,
+        App<RecordCodecBuilder.Mu<B>, T3> t3,
+        Function4<T1, T2, T3, BlockBehaviour.Properties, B> factory
+    ) {
+        return RecordCodecBuilder.mapCodec(instance -> instance.group(
+            t1,
+            t2,
+            t3,
+            BlockBehaviour.propertiesCodec()
+        ).apply(instance, factory));
+    }
+
+    public static <B extends BrushableBlock> MapCodec<B> brushableCodec(
+        Function4<Block, SoundEvent, SoundEvent, BlockBehaviour.Properties, B> factory
+    ) {
+        return simpleCodec(
+            Identifier.CODEC.fieldOf("turns_into").forGetter(brushableBlock -> brushableBlock.turnsInto.keyInBlockRegistry),
+            BuiltInRegistries.SOUND_EVENT.byNameCodec().fieldOf("brush_sound").forGetter(BrushableBlock::getBrushSound),
+            BuiltInRegistries.SOUND_EVENT.byNameCodec().fieldOf("brush_completed_sound").forGetter(BrushableBlock::getBrushCompletedSound),
+            (turnsIntoIdentifier, brushSound, brushCompletedSound, properties) -> {
+                B block = factory.apply(Blocks.STONE /* We replace it later */, brushSound, brushCompletedSound, properties);
+                block.spout$setTurnsIntoIdentifier(turnsIntoIdentifier);
+                return block;
+            }
+        );
     }
 
     private static <B extends StairBlock> App<RecordCodecBuilder.Mu<B>, String> stairBaseStateApp() {

@@ -1,13 +1,13 @@
 The following files (referenced relative to the parent folder of the folder this file is in) are/were part of [Quark](https://quarkmod.net/), which is/was maintained by [Violet Moon](https://violetmoon.org/):
-* `assets/quark/texture/block/azalea_door_bottom.png`
-* `assets/quark/texture/block/azalea_door_top.png`
-* `assets/quark/texture/block/azalea_ladder.png`
-* `assets/quark/texture/block/azalea_planks.png`
-* `assets/quark/texture/block/azalea_trapdoor.png`
-* `assets/quark/texture/block/birch_bookshelf.png`
-* `assets/quark/texture/block/diorite_bricks.png`
-* `assets/quark/texture/item/azalea_door.png`
-* `assets/quark/texture/item/glass_shard.png`
+* `assets/quark/textures/block/azalea_door_bottom.png`
+* `assets/quark/textures/block/azalea_door_top.png`
+* `assets/quark/textures/block/azalea_ladder.png`
+* `assets/quark/textures/block/azalea_planks.png`
+* `assets/quark/textures/block/azalea_trapdoor.png`
+* `assets/quark/textures/block/birch_bookshelf.png`
+* `assets/quark/textures/block/diorite_bricks.png`
+* `assets/quark/textures/item/azalea_door.png`
+* `assets/quark/textures/item/glass_shard.png`
 
 These files are provided under an `Attribution-NonCommercial-ShareAlike 3.0 Unported` license, which is included below.
 
