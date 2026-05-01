@@ -10,23 +10,17 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import spout.common.moredatadriven.minecraft.type.BlockCodecs;
 
 /**
  * A union of {@link StairBlock} and {@link TransparentBlock}.
  */
 public class TransparentStairBlock extends HalfTransparentStairBlock {
 
-    public static final MapCodec<TransparentStairBlock> CODEC = RecordCodecBuilder.mapCodec(
-        instance -> instance.group(com.mojang.serialization.Codec.STRING.fieldOf("base_state").forGetter(stairBlock -> stairBlock.baseStateString), propertiesCodec())
-            .apply(instance, TransparentStairBlock::new)
-    );
+    public static final MapCodec<TransparentStairBlock> CODEC = BlockCodecs.stairCodec(TransparentStairBlock::new);
 
     protected TransparentStairBlock(BlockState baseState, Properties properties) {
         super(baseState, properties);
-    }
-
-    protected TransparentStairBlock(String baseStateString, Properties properties) {
-        super(baseStateString, properties);
     }
 
     @Override

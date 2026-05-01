@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
+import spout.common.moredatadriven.minecraft.type.ApplyLazyBlockValues;
 
 /**
  * An implementation of {@link Registry} specially for {@link BuiltInRegistries#BLOCK}.
@@ -90,6 +91,12 @@ public final class BlockRegistry extends DefaultedMappedRegistry<Block> {
     @Override
     public boolean isFreezingDelayed() {
         return true;
+    }
+
+    @Override
+    public Registry<Block> freeze() {
+        ApplyLazyBlockValues.apply(this.stream());
+        return super.freeze();
     }
 
 }

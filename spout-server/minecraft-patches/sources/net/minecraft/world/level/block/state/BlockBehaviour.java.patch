@@ -39,11 +39,13 @@
          this.explosionResistance = properties.explosionResistance;
          this.isRandomlyTicking = properties.isRandomlyTicking;
          this.soundType = properties.soundType;
-@@ -123,7 +_,7 @@
+@@ -122,8 +_,8 @@
+ 
      protected abstract MapCodec<? extends Block> codec();
  
-     protected static <B extends Block> RecordCodecBuilder<B, BlockBehaviour.Properties> propertiesCodec() {
+-    protected static <B extends Block> RecordCodecBuilder<B, BlockBehaviour.Properties> propertiesCodec() {
 -        return BlockBehaviour.Properties.CODEC.fieldOf("properties").forGetter(BlockBehaviour::properties);
++    public static <B extends Block> RecordCodecBuilder<B, BlockBehaviour.Properties> propertiesCodec() { // Spout - More data-driven - Minecraft registries - Types - Make properties codec public
 +        return spout.common.util.mojang.codec.CodecUtil.optionalFieldOf(BlockBehaviour.Properties.CODEC,"properties", BlockBehaviour.Properties::new).forGetter(BlockBehaviour::properties); // Spout - More data-driven - Minecraft registries - Types - Adapt existing block type registry - Make properties optional in block codec
      }
  

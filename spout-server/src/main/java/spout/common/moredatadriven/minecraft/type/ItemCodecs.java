@@ -1,6 +1,7 @@
 package spout.common.moredatadriven.minecraft.type;
 
 import com.mojang.datafixers.kinds.App;
+import com.mojang.datafixers.util.Function3;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -69,6 +70,18 @@ public final class ItemCodecs {
     ) {
         return RecordCodecBuilder.mapCodec(instance -> instance.group(
             t1,
+            propertiesCodec()
+        ).apply(instance, factory));
+    }
+
+    private static <I extends Item, T1, T2> MapCodec<I> simpleCodec(
+        App<RecordCodecBuilder.Mu<I>, T1> t1,
+        App<RecordCodecBuilder.Mu<I>, T2> t2,
+        Function3<T1, T2, Item.Properties, I> factory
+    ) {
+        return RecordCodecBuilder.mapCodec(instance -> instance.group(
+            t1,
+            t2,
             propertiesCodec()
         ).apply(instance, factory));
     }

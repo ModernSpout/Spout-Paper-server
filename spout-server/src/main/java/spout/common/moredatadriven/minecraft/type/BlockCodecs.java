@@ -1,22 +1,33 @@
 package spout.common.moredatadriven.minecraft.type;
 
+import com.mojang.datafixers.kinds.App;
+import com.mojang.datafixers.util.Function3;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.RecordBuilder;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.flag.FeatureFlagSet;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.WeatheringCopper;
+import net.minecraft.world.level.block.WeatheringCopperStairBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import spout.common.util.mojang.codec.EnumViaIdentifierCodec;
 import spout.common.util.mojang.codec.StaticFieldViaIdentifierCodec;
 import spout.server.paper.impl.moredatadriven.minecraft.type.ChunkSectionLayer;
+import java.util.function.BiFunction;
 
 /**
  * Holder for codecs related to blocks.
@@ -337,5 +348,58 @@ public final class BlockCodecs {
         }
 
     };
+
+    private static <B extends Block, T1> MapCodec<B> simpleCodec(
+        App<RecordCodecBuilder.Mu<B>, T1> t1,
+        BiFunction<T1, BlockBehaviour.Properties, B> factory
+    ) {
+        return RecordCodecBuilder.mapCodec(instance -> instance.group(
+            t1,
+            BlockBehaviour.propertiesCodec()
+        ).apply(instance, factory));
+    }
+
+    private static <B extends Block, T1, T2> MapCodec<B> simpleCodec(
+        App<RecordCodecBuilder.Mu<B>, T1> t1,
+        App<RecordCodecBuilder.Mu<B>, T2> t2,
+        Function3<T1, T2, BlockBehaviour.Properties, B> factory
+    ) {
+        return RecordCodecBuilder.mapCodec(instance -> instance.group(
+            t1,
+            t2,
+            BlockBehaviour.propertiesCodec()
+        ).apply(instance, factory));
+    }
+
+    private static <B extends StairBlock> App<RecordCodecBuilder.Mu<B>, String> stairBaseStateApp() {
+        return Codec.STRING.fieldOf("base_state").forGetter(stairBlock -> BlockStateStringConversion.blockStateToString(stairBlock.baseState));
+    }
+
+    public static <B extends StairBlock> MapCodec<B> stairCodec(
+        BiFunction<BlockState, BlockBehaviour.Properties, B> factory
+    ) {
+        return simpleCodec(
+            stairBaseStateApp(),
+            (baseStateString, properties) -> {
+                B block = factory.apply(Blocks.STONE.defaultBlockState() /* We replace it later */, properties);
+                block.spout$setBaseStateString(baseStateString);
+                return block;
+            }
+        );
+    }
+
+    public static <B extends WeatheringCopperStairBlock> MapCodec<B> weatheringCopperStairCodec(
+        Function3<WeatheringCopper.WeatherState, BlockState, BlockBehaviour.Properties, B> factory
+    ) {
+        return simpleCodec(
+            WeatheringCopper.WeatherState.CODEC.fieldOf("weathering_state").forGetter(WeatheringCopperStairBlock::getAge),
+            stairBaseStateApp(),
+            (weatherState, baseStateString, properties) -> {
+                B block = factory.apply(weatherState, Blocks.STONE.defaultBlockState() /* We replace it later */, properties);
+                block.spout$setBaseStateString(baseStateString);
+                return block;
+            }
+        );
+    }
 
 }
