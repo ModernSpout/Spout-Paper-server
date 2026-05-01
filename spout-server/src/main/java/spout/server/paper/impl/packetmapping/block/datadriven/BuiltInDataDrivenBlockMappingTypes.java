@@ -228,6 +228,10 @@ public final class BuiltInDataDrivenBlockMappingTypes {
 
     public static final DataDrivenBlockMappingType BUTTON = new MultiStateBuiltInDataDrivenBlockMappingType<UsedStates.Switch, FromToBlockTypeRequestBuilderImpl<UsedStates.Switch>>("button", AutomaticBlockMappingsImpl::button);
 
+    public static final DataDrivenBlockMappingType DOOR = new MultiStateBuiltInDataDrivenBlockMappingType<UsedStates.Door, FromToBlockTypeRequestBuilderImpl<UsedStates.Door>>("door", AutomaticBlockMappingsImpl::door);
+
+    public static final DataDrivenBlockMappingType FENCE_GATE = new MultiStateBuiltInDataDrivenBlockMappingType<UsedStates.Gate, FromToBlockTypeRequestBuilderImpl<UsedStates.Gate>>("fence_gate", AutomaticBlockMappingsImpl::fenceGate);
+
     public static final DataDrivenBlockMappingType FULL_BLOCK = new BuiltInDataDrivenBlockMappingType("full_block") {
 
         @Override
@@ -243,6 +247,8 @@ public final class BuiltInDataDrivenBlockMappingTypes {
         }
 
     };
+
+    public static final DataDrivenBlockMappingType LADDER = new MultiStateBuiltInDataDrivenBlockMappingType<UsedStates.Ladder, FromToBlockTypeRequestBuilderImpl<UsedStates.Ladder>>("ladder", AutomaticBlockMappingsImpl::ladder);
 
     public static final DataDrivenBlockMappingType LEAVES = new MultiStateBuiltInDataDrivenBlockMappingType<UsedStates.Waterlogged, LeavesRequestBuilderImpl>("leaves", AutomaticBlockMappingsImpl::leaves, new SimpleBuiltInDataDrivenBlockMappingType.BuilderConsumer<>() {
 
@@ -276,11 +282,13 @@ public final class BuiltInDataDrivenBlockMappingTypes {
 
     public static final DataDrivenBlockMappingType STAIRS = new MultiStateBuiltInDataDrivenBlockMappingType<UsedStates.Stairs, FromToBlockTypeRequestBuilderImpl<UsedStates.Stairs>>("stairs", AutomaticBlockMappingsImpl::stairs);
 
+    public static final DataDrivenBlockMappingType TRAPDOOR = new MultiStateBuiltInDataDrivenBlockMappingType<UsedStates.TrapDoor, FromToBlockTypeRequestBuilderImpl<UsedStates.TrapDoor>>("trapdoor", AutomaticBlockMappingsImpl::trapdoor);
+
     private static boolean bootstrapped = false;
 
     static void bootstrapIfNecessary() {
         if (!bootstrapped) {
-            List.of(STAIRS);
+            List.of(TRAPDOOR);
             bootstrapped = true;
         }
     }

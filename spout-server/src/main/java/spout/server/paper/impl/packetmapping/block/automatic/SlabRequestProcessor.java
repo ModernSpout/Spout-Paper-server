@@ -10,7 +10,7 @@ import org.jspecify.annotations.Nullable;
 /**
  * A {@link RequestProcessor} for {@link AutomaticBlockMappingsImpl#slab}.
  */
-public class SlabRequestProcessor extends MatchingBlockStateClaimAttemptsRequestProcessor<UsedStates.Slab, SlabRequestBuilderImpl> {
+public class SlabRequestProcessor extends MatchingBlockStateClaimAttemptsRequestProcessor<UsedStates.Slab, SlabRequestBuilderImpl> { // TODO try to claim full block fallback states
 
     public SlabRequestProcessor(SlabRequestBuilderImpl request, BlockMappingsComposeEventImpl event) {
         super(request, event);

@@ -1,0 +1,8 @@
+{
+    "parent": "minecraft:block/ladder",
+    "textures": {
+        "particle": "quark:block/azalea_ladder",
+        "texture": "quark:block/azalea_ladder"
+    }
+}
+

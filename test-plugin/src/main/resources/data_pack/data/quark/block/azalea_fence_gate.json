@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:fence_gate",
+  "wood_type": "birch",
+  "properties": {
+    "map_color": "minecraft:color_light_green",
+    "sound_type": "minecraft:wood",
+    "explosion_resistance": 3.0,
+    "destroy_time": 2.0,
+    "ignited_by_lava": true,
+    "force_solid_on": true,
+    "instrument": "minecraft:bass"
+  },
+  "mappings": [
+    {
+      "type": "fence_gate",
+      "fallback": "minecraft:birch_fence_gate"
+    }
+  ]
+}

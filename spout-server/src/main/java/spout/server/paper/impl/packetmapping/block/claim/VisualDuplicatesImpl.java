@@ -5,7 +5,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.GrowingPlantHeadBlock;
@@ -16,7 +15,6 @@ import net.minecraft.world.level.block.ShelfBlock;
 import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
@@ -221,20 +219,6 @@ public final class VisualDuplicatesImpl implements VisualDuplicates {
         }
         // Bell
         unionFind.mergeAllStatesWithOtherValuesOfProperties(Blocks.BELL, BlockStateProperties.POWERED);
-        // Button
-        getBlocksOfType(ButtonBlock.class).forEach(block -> {
-            for (BlockState state : block.getStateDefinition().getPossibleStates()) {
-                AttachFace face = state.getValue(BlockStateProperties.ATTACH_FACE);
-                if (face == AttachFace.FLOOR || face == AttachFace.CEILING) {
-                    Direction facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
-                    if (facing == Direction.SOUTH) {
-                        unionFind.merge(state, state.setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH));
-                    } else if (facing == Direction.WEST) {
-                        unionFind.merge(state, state.setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.EAST));
-                    }
-                }
-            }
-        });
         // Cave vines, kelp, twisting vines and weeping vines
         for (Block block : new Block[]{Blocks.CAVE_VINES, Blocks.KELP, Blocks.TWISTING_VINES, Blocks.WEEPING_VINES}) {
             unionFind.mergeAllStatesWithOtherValuesOfProperties(block, BlockStateProperties.AGE_25);

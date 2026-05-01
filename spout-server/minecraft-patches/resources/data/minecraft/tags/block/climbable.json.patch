@@ -1,0 +1,10 @@
+--- a/data/minecraft/tags/block/climbable.json
++++ b/data/minecraft/tags/block/climbable.json
+@@ -1,6 +_,6 @@
+ {
+   "values": [
+-    "minecraft:ladder",
++    "#c:ladders",
+     "minecraft:vine",
+     "minecraft:scaffolding",
+     "minecraft:weeping_vines",

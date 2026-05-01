@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "quark:block/azalea_ladder",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "quark:block/azalea_ladder"
+    },
+    "facing=south": {
+      "model": "quark:block/azalea_ladder",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "quark:block/azalea_ladder",
+      "y": 270
+    }
+  }
+}

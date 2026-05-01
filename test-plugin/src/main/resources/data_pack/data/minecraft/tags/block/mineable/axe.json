@@ -1,8 +1,12 @@
 {
   "values": [
     "quark:azalea_button",
+    "quark:azalea_door",
+    "quark:azalea_fence_gate",
+    "quark:azalea_ladder",
     "quark:azalea_planks",
     "quark:azalea_pressure_plate",
+    "quark:azalea_trapdoor",
     "quark:birch_bookshelf"
   ]
 }

@@ -12,6 +12,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
 import org.jspecify.annotations.Nullable;
 import spout.server.paper.api.packetmapping.block.automatic.UsedStates;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -273,6 +274,51 @@ public final class UsedStatesInternalImpls {
         }
     }
 
+    public static class BlockDoor<B extends CraftBlockData & org.bukkit.block.data.type.Door> extends AbstractBlockMultiProperty<B> {
+
+        private static final List<Property<?>> PROPERTIES = new ArrayList<>(Blocks.OAK_DOOR.getStateDefinition().getProperties());
+
+        public BlockDoor(Block block, boolean isFallback) {
+            super(block, isFallback);
+        }
+
+        @Override
+        protected List<Property<?>> getProperties() {
+            return PROPERTIES;
+        }
+
+    }
+
+    public static class BlockGate<B extends CraftBlockData & org.bukkit.block.data.type.Gate> extends AbstractBlockMultiProperty<B> {
+
+        private static final List<Property<?>> PROPERTIES = new ArrayList<>(Blocks.OAK_FENCE_GATE.getStateDefinition().getProperties());
+
+        public BlockGate(Block block, boolean isFallback) {
+            super(block, isFallback);
+        }
+
+        @Override
+        protected List<Property<?>> getProperties() {
+            return PROPERTIES;
+        }
+
+    }
+
+    public static class BlockLadder<B extends CraftBlockData & org.bukkit.block.data.type.Ladder> extends AbstractBlockMultiProperty<B> {
+
+        private static final List<Property<?>> PROPERTIES = new ArrayList<>(Blocks.LADDER.getStateDefinition().getProperties());
+
+        public BlockLadder(Block block, boolean isFallback) {
+            super(block, isFallback);
+        }
+
+        @Override
+        protected List<Property<?>> getProperties() {
+            return PROPERTIES;
+        }
+
+    }
+
     public static class BlockPowerable<B extends CraftBlockData & org.bukkit.block.data.Powerable> extends AbstractBlockBooleanProperty<B> {
 
         public BlockPowerable(Block block, boolean falseIsFallback, boolean trueIsFallback) {
@@ -363,7 +409,7 @@ public final class UsedStatesInternalImpls {
 
     public static class BlockStairs<B extends CraftBlockData & org.bukkit.block.data.type.Stairs> extends AbstractBlockMultiProperty<B> {
 
-        private static final List<Property<?>> PROPERTIES = List.of(BlockStateProperties.HORIZONTAL_FACING, BlockStateProperties.HALF, BlockStateProperties.STAIRS_SHAPE, BlockStateProperties.WATERLOGGED);
+        private static final List<Property<?>> PROPERTIES = new ArrayList<>(Blocks.OAK_STAIRS.getStateDefinition().getProperties());
 
         public BlockStairs(Block block, boolean isFallback) {
             super(block, isFallback);
@@ -373,13 +419,29 @@ public final class UsedStatesInternalImpls {
         protected List<Property<?>> getProperties() {
             return PROPERTIES;
         }
+
     }
 
     public static class BlockSwitch<B extends CraftBlockData & org.bukkit.block.data.type.Switch> extends AbstractBlockMultiProperty<B> {
 
-        private static final List<Property<?>> PROPERTIES = List.of(BlockStateProperties.ATTACH_FACE, BlockStateProperties.HORIZONTAL_FACING, BlockStateProperties.POWERED);
+        private static final List<Property<?>> PROPERTIES = new ArrayList<>(Blocks.OAK_BUTTON.getStateDefinition().getProperties());
 
         public BlockSwitch(Block block, boolean isFallback) {
+            super(block, isFallback);
+        }
+
+        @Override
+        protected List<Property<?>> getProperties() {
+            return PROPERTIES;
+        }
+
+    }
+
+    public static class BlockTrapDoor<B extends CraftBlockData & org.bukkit.block.data.type.TrapDoor> extends AbstractBlockMultiProperty<B> {
+
+        private static final List<Property<?>> PROPERTIES = new ArrayList<>(Blocks.OAK_TRAPDOOR.getStateDefinition().getProperties());
+
+        public BlockTrapDoor(Block block, boolean isFallback) {
             super(block, isFallback);
         }
 

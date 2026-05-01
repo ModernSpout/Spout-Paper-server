@@ -10,6 +10,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.DoubleHighBlockItem;
 import net.minecraft.world.item.EggItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -72,22 +73,18 @@ public final class ItemCodecs {
         ).apply(instance, factory));
     }
 
-    /**
-     * Based on {@link Block#CODEC}.
-     */
+    private static <I extends BlockItem> MapCodec<I> blockCodec(
+        BiFunction<Block, Item.Properties, I> factory
+    ) {
+        return simpleCodec(
+            BuiltInRegistries.BLOCK.byNameCodec().fieldOf("block").forGetter(BlockItem::getBlock),
+            (block, properties) -> factory.apply(block, properties.useBlockDescriptionPrefix())
+        );
+    }
+
     public static final MapCodec<Item> ITEM_CODEC = simpleCodec(Item::new);
-
-    /**
-     * Based on {@link Block#CODEC}.
-     */
-    public static final MapCodec<BlockItem> BLOCK_ITEM_CODEC = simpleCodec(
-        BuiltInRegistries.BLOCK.byNameCodec().fieldOf("block").forGetter(BlockItem::getBlock),
-        (block, properties) -> new BlockItem(block, properties.useBlockDescriptionPrefix())
-    );
-
-    /**
-     * Based on {@link Block#CODEC}.
-     */
+    public static final MapCodec<BlockItem> BLOCK_ITEM_CODEC = blockCodec(BlockItem::new);
+    public static final MapCodec<BlockItem> DOUBLE_HIGH_BLOCK_ITEM_CODEC = blockCodec(DoubleHighBlockItem::new);
     public static final MapCodec<EggItem> EGG_ITEM_CODEC = simpleCodec(EggItem::new);
 
 }

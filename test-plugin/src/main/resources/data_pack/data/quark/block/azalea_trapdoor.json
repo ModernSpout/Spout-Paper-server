@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:trapdoor",
+  "block_set_type": "birch",
+  "properties": {
+    "chunk_section_layer": "minecraft:cutout",
+    "map_color": "minecraft:color_light_green",
+    "sound_type": "minecraft:wood",
+    "explosion_resistance": 3.0,
+    "destroy_time": 3.0,
+    "can_occlude": false,
+    "instrument": "minecraft:bass",
+    "is_valid_spawn": "minecraft:never"
+  },
+  "mappings": [
+    {
+      "type": "trapdoor",
+      "fallback": "minecraft:birch_trapdoor"
+    }
+  ]
+}

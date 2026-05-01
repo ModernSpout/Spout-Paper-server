@@ -8,8 +8,8 @@ import org.bukkit.block.data.BlockData;
  * requested proxy mapping.
  *
  * <p>
- *     Some of the states may be the fallback state instead of the desired proxy state,
- *     in which case the respective {@code isFallback} method will return true.
+ * Some of the states may be the fallback state instead of the desired proxy state,
+ * in which case the respective {@code isFallback} method will return true.
  * </p>
  */
 public interface UsedStates {
@@ -38,6 +38,80 @@ public interface UsedStates {
         @Override
         public boolean isFallback(BlockData reference) {
             return this.internal.isFallback(reference);
+        }
+
+    }
+
+    class Door extends Wrapper {
+
+        public Door(UsedStates internal) {
+            super(internal);
+        }
+
+        private BlockData createReference(org.bukkit.block.BlockFace facing, org.bukkit.block.data.Bisected.Half half, org.bukkit.block.data.type.Door.Hinge hinge, boolean open, boolean powered) {
+            return BlockType.OAK_DOOR.createBlockData(data -> {
+                data.setFacing(facing);
+                data.setHalf(half);
+                data.setHinge(hinge);
+                data.setOpen(open);
+                data.setPowered(open);
+            });
+        }
+
+        public org.bukkit.block.data.type.Door get(org.bukkit.block.BlockFace facing, org.bukkit.block.data.Bisected.Half half, org.bukkit.block.data.type.Door.Hinge hinge, boolean open, boolean powered) {
+            return (org.bukkit.block.data.type.Door) this.get(this.createReference(facing, half, hinge, open, powered));
+        }
+
+        public boolean isFallback(org.bukkit.block.BlockFace facing, org.bukkit.block.data.Bisected.Half half, org.bukkit.block.data.type.Door.Hinge hinge, boolean open, boolean powered) {
+            return this.isFallback(this.createReference(facing, half, hinge, open, powered));
+        }
+
+    }
+
+    class Gate extends Wrapper {
+
+        public Gate(UsedStates internal) {
+            super(internal);
+        }
+
+        private BlockData createReference(org.bukkit.block.BlockFace facing, boolean inWall, boolean open, boolean powered) {
+            return BlockType.OAK_FENCE_GATE.createBlockData(data -> {
+                data.setFacing(facing);
+                data.setInWall(inWall);
+                data.setOpen(open);
+                data.setPowered(open);
+            });
+        }
+
+        public org.bukkit.block.data.type.Gate get(org.bukkit.block.BlockFace facing, boolean inWall, boolean open, boolean powered) {
+            return (org.bukkit.block.data.type.Gate) this.get(this.createReference(facing, inWall, open, powered));
+        }
+
+        public boolean isFallback(org.bukkit.block.BlockFace facing, boolean inWall, boolean open, boolean powered) {
+            return this.isFallback(this.createReference(facing, inWall, open, powered));
+        }
+
+    }
+
+    class Ladder extends Wrapper {
+
+        public Ladder(UsedStates internal) {
+            super(internal);
+        }
+
+        private BlockData createReference(org.bukkit.block.BlockFace facing, boolean waterlogged) {
+            return BlockType.LADDER.createBlockData(data -> {
+                data.setFacing(facing);
+                data.setWaterlogged(waterlogged);
+            });
+        }
+
+        public org.bukkit.block.data.type.Ladder get(org.bukkit.block.BlockFace facing, boolean waterlogged) {
+            return (org.bukkit.block.data.type.Ladder) this.get(this.createReference(facing, waterlogged));
+        }
+
+        public boolean isFallback(org.bukkit.block.BlockFace facing, boolean waterlogged) {
+            return this.isFallback(this.createReference(facing, waterlogged));
         }
 
     }
@@ -150,6 +224,32 @@ public interface UsedStates {
 
         public boolean isFallback(org.bukkit.block.data.FaceAttachable.AttachedFace face, org.bukkit.block.BlockFace facing, boolean powered) {
             return this.isFallback(this.createReference(face, facing, powered));
+        }
+
+    }
+
+    class TrapDoor extends Wrapper {
+
+        public TrapDoor(UsedStates internal) {
+            super(internal);
+        }
+
+        private BlockData createReference(org.bukkit.block.BlockFace facing, org.bukkit.block.data.Bisected.Half half, boolean open, boolean powered, boolean waterlogged) {
+            return BlockType.OAK_TRAPDOOR.createBlockData(data -> {
+                data.setFacing(facing);
+                data.setHalf(half);
+                data.setOpen(open);
+                data.setPowered(open);
+                data.setWaterlogged(waterlogged);
+            });
+        }
+
+        public org.bukkit.block.data.type.TrapDoor get(org.bukkit.block.BlockFace facing, org.bukkit.block.data.Bisected.Half half, boolean open, boolean powered, boolean waterlogged) {
+            return (org.bukkit.block.data.type.TrapDoor) this.get(this.createReference(facing, half, open, powered,  waterlogged));
+        }
+
+        public boolean isFallback(org.bukkit.block.BlockFace facing, org.bukkit.block.data.Bisected.Half half, boolean open, boolean powered, boolean waterlogged) {
+            return this.isFallback(this.createReference(facing, half, open, powered, waterlogged));
         }
 
     }

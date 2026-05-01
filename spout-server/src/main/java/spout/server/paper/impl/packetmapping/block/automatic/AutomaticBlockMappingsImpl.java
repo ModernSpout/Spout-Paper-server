@@ -32,11 +32,35 @@ public final class AutomaticBlockMappingsImpl implements AutomaticBlockMappings 
     }
 
     @Override
+    public <B extends FromBlockTypeRequestBuilder<UsedStates.Door> & ToBlockTypeRequestBuilder<UsedStates.Door>> void door(Consumer<? extends B> builderConsumer) {
+        FromToBlockTypeRequestBuilderImpl<UsedStates.Door> builder = new FromToBlockTypeRequestBuilderImpl<>();
+        builder.fallback(BlockType.OAK_DOOR);
+        ((Consumer) builderConsumer).accept(builder);
+        new DoorRequestProcessor(builder, this.event).process();
+    }
+
+    @Override
+    public <B extends FromBlockTypeRequestBuilder<UsedStates.Gate> & ToBlockTypeRequestBuilder<UsedStates.Gate>> void fenceGate(Consumer<? extends B> builderConsumer) {
+        FromToBlockTypeRequestBuilderImpl<UsedStates.Gate> builder = new FromToBlockTypeRequestBuilderImpl<>();
+        builder.fallback(BlockType.OAK_FENCE_GATE);
+        ((Consumer) builderConsumer).accept(builder);
+        new FenceGateRequestProcessor(builder, this.event).process();
+    }
+
+    @Override
     public <B extends FromBlockStateRequestBuilder<UsedStates.Single> & ToBlockStateRequestBuilder<UsedStates.Single>> void fullBlock(Consumer<? extends B> builderConsumer) {
         FromToBlockStateRequestBuilderImpl<UsedStates.Single> builder = new FromToBlockStateRequestBuilderImpl<>();
         builder.fallbackDefaultStateOf(BlockType.STONE);
         ((Consumer) builderConsumer).accept(builder);
         new FullBlockRequestProcessor(builder, this.event).process();
+    }
+
+    @Override
+    public <B extends FromBlockTypeRequestBuilder<UsedStates.Ladder> & ToBlockTypeRequestBuilder<UsedStates.Ladder>> void ladder(Consumer<? extends B> builderConsumer) {
+        FromToBlockTypeRequestBuilderImpl<UsedStates.Ladder> builder = new FromToBlockTypeRequestBuilderImpl<>();
+        builder.fallback(BlockType.LADDER);
+        ((Consumer) builderConsumer).accept(builder);
+        new LadderRequestProcessor(builder, this.event).process();
     }
 
     @Override
@@ -69,6 +93,14 @@ public final class AutomaticBlockMappingsImpl implements AutomaticBlockMappings 
         builder.fallback(BlockType.STONE_STAIRS);
         ((Consumer) builderConsumer).accept(builder);
         new StairsRequestProcessor(builder, this.event).process();
+    }
+
+    @Override
+    public <B extends FromBlockTypeRequestBuilder<UsedStates.TrapDoor> & ToBlockTypeRequestBuilder<UsedStates.TrapDoor>> void trapdoor(Consumer<? extends B> builderConsumer) {
+        FromToBlockTypeRequestBuilderImpl<UsedStates.TrapDoor> builder = new FromToBlockTypeRequestBuilderImpl<>();
+        builder.fallback(BlockType.OAK_TRAPDOOR);
+        ((Consumer) builderConsumer).accept(builder);
+        new TrapdoorRequestProcessor(builder, this.event).process();
     }
 
 }
