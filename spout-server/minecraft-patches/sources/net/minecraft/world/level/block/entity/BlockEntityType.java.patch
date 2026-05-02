@@ -1,29 +1,20 @@
 --- a/net/minecraft/world/level/block/entity/BlockEntityType.java
 +++ b/net/minecraft/world/level/block/entity/BlockEntityType.java
-@@ -274,7 +_,27 @@
+@@ -274,7 +_,18 @@
      );
      private static final Set<BlockEntityType<?>> OP_ONLY_CUSTOM_DATA = Set.of(COMMAND_BLOCK, LECTERN, SIGN, HANGING_SIGN, MOB_SPAWNER, TRIAL_SPAWNER);
      private final BlockEntityType.BlockEntitySupplier<? extends T> factory;
 -    public final Set<Block> validBlocks;
 +    // Spout start - More data-driven - Minecraft registries - Block entities - Also allow data-driven valid blocks
-+    private final Set<Block> validBlocks;
-+    public net.minecraft.tags.@Nullable TagKey<net.minecraft.world.level.block.Block> spout$cachedValidBlocksTag;
-+    public net.minecraft.tags.TagKey<Block> spout$getValidBlocksTag() {
-+        if (this.spout$cachedValidBlocksTag == null) {
-+            Identifier key = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(this);
-+            this.spout$cachedValidBlocksTag = net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.BLOCK, Identifier.fromNamespaceAndPath(key.getNamespace(), "entity/" + key.getPath()));
-+        }
-+        return this.spout$cachedValidBlocksTag;
-+    }
++    private Set<Block> validBlocks;
++    private boolean addedAlternativeValidBlocks;
 +    public Set<Block> spout$getValidBlocks() {
-+        Set<Block> validBlocksIncludingDataDriven = null;
-+        for (Holder<Block> holder : BuiltInRegistries.BLOCK.getTagOrEmpty(this.spout$getValidBlocksTag())) {
-+            if (validBlocksIncludingDataDriven == null) {
-+                validBlocksIncludingDataDriven = new java.util.HashSet<>(this.validBlocks);
-+            }
-+            validBlocksIncludingDataDriven.add(holder.value());
++        if (!this.addedAlternativeValidBlocks) {
++            this.addedAlternativeValidBlocks = true;
++            this.validBlocks = new java.util.HashSet<>(this.validBlocks);
++            this.validBlocks.addAll(spout.common.moredatadriven.minecraft.BlockEntityAlternativeValidation.getAlternativelyValidBlocks(this));
 +        }
-+        return validBlocksIncludingDataDriven != null ? validBlocksIncludingDataDriven : this.validBlocks;
++        return this.validBlocks;
 +    }
 +    // Spout end - More data-driven - Minecraft registries - Block entities - Also allow data-driven valid blocks
      private final Holder.Reference<BlockEntityType<?>> builtInRegistryHolder = BuiltInRegistries.BLOCK_ENTITY_TYPE.createIntrusiveHolder(this);
@@ -48,7 +39,7 @@
      }
  
      public boolean isValid(BlockState state) {
-+        if (state.is(this.spout$getValidBlocksTag())) return true; // Spout - More data-driven - Minecraft registries - Block entities - Also allow data-driven valid blocks
++        if (spout.common.moredatadriven.minecraft.BlockEntityAlternativeValidation.isAlternativelyValid(this, state)) return true; // Spout - More data-driven - Minecraft registries - Block entities - Also allow data-driven valid blocks
          return this.validBlocks.contains(state.getBlock());
      }
  

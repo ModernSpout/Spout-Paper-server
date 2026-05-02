@@ -9,7 +9,7 @@
      private @Nullable Map<T, Holder.Reference<T>> unregisteredIntrusiveHolders;
      // Paper start - support pre-filling in registry mod API
      private final Map<Identifier, T> temporaryUnfrozenMap = new HashMap<>();
-@@ -287,6 +_,12 @@
+@@ -287,9 +_,20 @@
  
      @Override
      public Registry<T> freeze() {
@@ -18,7 +18,24 @@
 +            spout.server.paper.impl.moredatadriven.datapack.delayedfrozenregistries.DelayedRegistryFreezing.freezeLater(this);
 +            return this;
 +        }
-+        // Spout end - More data-driven - Data pack - Delayed frozen registries - Delay freezing registries
          if (this.frozen) {
              return this;
          } else {
++            return this.actuallyFreeze();
++        }
++    }
++
++    protected Registry<T> actuallyFreeze() {
++        // Spout end - More data-driven - Data pack - Delayed frozen registries - Delay freezing registries
+             this.frozen = true;
+             this.temporaryUnfrozenMap.clear(); // Paper - support pre-filling in registry mod API
+             this.byValue.forEach((object, reference) -> reference.bindValue((T)object));
+@@ -330,7 +_,7 @@
+                     }
+                 }
+             }
+-        }
++        // } // Spout - More data-driven - Data pack - Delayed frozen registries - Delay freezing registries
+     }
+ 
+     @Override

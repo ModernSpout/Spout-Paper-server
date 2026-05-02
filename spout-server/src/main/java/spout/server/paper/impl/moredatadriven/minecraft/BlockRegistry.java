@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
+import spout.common.moredatadriven.minecraft.BlockEntityAlternativeValidation;
 import spout.common.moredatadriven.minecraft.type.ApplyLazyBlockValues;
 
 /**
@@ -94,9 +95,13 @@ public final class BlockRegistry extends DefaultedMappedRegistry<Block> {
     }
 
     @Override
-    public Registry<Block> freeze() {
+    protected Registry<Block> actuallyFreeze() {
+        // Apply lazy values
         ApplyLazyBlockValues.apply(this.stream());
-        return super.freeze();
+        // Update alternatively valid block entities
+        BlockEntityAlternativeValidation.update(this.stream());
+        // Freeze
+        return super.actuallyFreeze();
     }
 
 }

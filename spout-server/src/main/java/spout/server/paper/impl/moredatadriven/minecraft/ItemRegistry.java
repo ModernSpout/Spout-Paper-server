@@ -74,9 +74,11 @@ public final class ItemRegistry extends DefaultedMappedRegistry<Item> {
     }
 
     @Override
-    public Registry<Item> freeze() {
+    protected Registry<Item> actuallyFreeze() {
+        // Apply lazy values
         ApplyLazyItemValues.apply(this.stream());
-        return super.freeze();
+        // Freeze
+        return super.actuallyFreeze();
     }
 
 }
