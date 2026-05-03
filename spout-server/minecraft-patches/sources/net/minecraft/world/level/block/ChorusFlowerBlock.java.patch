@@ -1,0 +1,21 @@
+--- a/net/minecraft/world/level/block/ChorusFlowerBlock.java
++++ b/net/minecraft/world/level/block/ChorusFlowerBlock.java
+@@ -23,16 +_,11 @@
+ import org.jspecify.annotations.Nullable;
+ 
+ public class ChorusFlowerBlock extends Block {
+-    public static final MapCodec<ChorusFlowerBlock> CODEC = RecordCodecBuilder.mapCodec(
+-        instance -> instance.group(
+-                BuiltInRegistries.BLOCK.byNameCodec().fieldOf("plant").forGetter(chorusFlowerBlock -> chorusFlowerBlock.plant), propertiesCodec()
+-            )
+-            .apply(instance, ChorusFlowerBlock::new)
+-    );
++    public static final MapCodec<ChorusFlowerBlock> CODEC = spout.common.moredatadriven.minecraft.type.BlockCodecs.chorusFlowerCodec(ChorusFlowerBlock::new); // Spout - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Initialize some references late
+     public static final int DEAD_AGE = 5;
+     public static final IntegerProperty AGE = BlockStateProperties.AGE_5;
+     private static final VoxelShape SHAPE_BLOCK_SUPPORT = Block.column(14.0, 0.0, 15.0);
+-    private final Block plant;
++    public Block plant; // Spout - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Initialize some references late
+ 
+     @Override
+     public MapCodec<ChorusFlowerBlock> codec() {

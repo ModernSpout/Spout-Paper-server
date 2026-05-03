@@ -1,0 +1,23 @@
+--- a/net/minecraft/world/level/block/CandleCakeBlock.java
++++ b/net/minecraft/world/level/block/CandleCakeBlock.java
+@@ -31,17 +_,12 @@
+ import net.minecraft.world.phys.shapes.VoxelShape;
+ 
+ public class CandleCakeBlock extends AbstractCandleBlock {
+-    public static final MapCodec<CandleCakeBlock> CODEC = RecordCodecBuilder.mapCodec(
+-        instance -> instance.group(
+-                BuiltInRegistries.BLOCK.byNameCodec().fieldOf("candle").forGetter(candleCakeBlock -> candleCakeBlock.candleBlock), propertiesCodec()
+-            )
+-            .apply(instance, CandleCakeBlock::new)
+-    );
++    public static final MapCodec<CandleCakeBlock> CODEC = spout.common.moredatadriven.minecraft.type.BlockCodecs.candleCakeCodec(CandleCakeBlock::new); // Spout - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Initialize some references late
+     public static final BooleanProperty LIT = AbstractCandleBlock.LIT;
+     private static final VoxelShape SHAPE = Shapes.or(Block.column(2.0, 8.0, 14.0), Block.column(14.0, 0.0, 8.0));
+-    private static final Map<CandleBlock, CandleCakeBlock> BY_CANDLE = Maps.newHashMap();
++    public static final Map<CandleBlock, CandleCakeBlock> BY_CANDLE = Maps.newHashMap(); // Spout - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Initialize some references late
+     private static final Iterable<Vec3> PARTICLE_OFFSETS = List.of(new Vec3(8.0, 16.0, 8.0).scale(0.0625));
+-    private final CandleBlock candleBlock;
++    public CandleBlock candleBlock; // Spout - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Initialize some references late
+ 
+     @Override
+     public MapCodec<CandleCakeBlock> codec() {

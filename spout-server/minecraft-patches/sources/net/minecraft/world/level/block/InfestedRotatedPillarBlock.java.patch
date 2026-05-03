@@ -1,0 +1,14 @@
+--- a/net/minecraft/world/level/block/InfestedRotatedPillarBlock.java
++++ b/net/minecraft/world/level/block/InfestedRotatedPillarBlock.java
+@@ -10,10 +_,7 @@
+ import net.minecraft.world.level.block.state.StateDefinition;
+ 
+ public class InfestedRotatedPillarBlock extends InfestedBlock {
+-    public static final MapCodec<InfestedRotatedPillarBlock> CODEC = RecordCodecBuilder.mapCodec(
+-        instance -> instance.group(BuiltInRegistries.BLOCK.byNameCodec().fieldOf("host").forGetter(InfestedBlock::getHostBlock), propertiesCodec())
+-            .apply(instance, InfestedRotatedPillarBlock::new)
+-    );
++    public static final MapCodec<InfestedRotatedPillarBlock> CODEC = spout.common.moredatadriven.minecraft.type.BlockCodecs.infestedCodec(InfestedRotatedPillarBlock::new); // Spout - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Initialize some references late
+ 
+     @Override
+     public MapCodec<InfestedRotatedPillarBlock> codec() {

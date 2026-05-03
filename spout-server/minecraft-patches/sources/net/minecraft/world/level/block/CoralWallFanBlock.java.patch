@@ -1,0 +1,18 @@
+--- a/net/minecraft/world/level/block/CoralWallFanBlock.java
++++ b/net/minecraft/world/level/block/CoralWallFanBlock.java
+@@ -14,11 +_,10 @@
+ import net.minecraft.world.level.material.Fluids;
+ 
+ public class CoralWallFanBlock extends BaseCoralWallFanBlock {
+-    public static final MapCodec<CoralWallFanBlock> CODEC = RecordCodecBuilder.mapCodec(
+-        instance -> instance.group(CoralBlock.DEAD_CORAL_FIELD.forGetter(coralWallFanBlock -> coralWallFanBlock.deadBlock), propertiesCodec())
+-            .apply(instance, CoralWallFanBlock::new)
+-    );
+-    private final Block deadBlock;
++    // Spout start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Initialize some references late
++    public static final MapCodec<CoralWallFanBlock> CODEC = spout.common.moredatadriven.minecraft.type.BlockCodecs.coralWallFanCodec(CoralWallFanBlock::new);
++    public Block deadBlock;
++    // Spout end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Initialize some references late
+ 
+     @Override
+     public MapCodec<CoralWallFanBlock> codec() {

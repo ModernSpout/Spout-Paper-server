@@ -1,0 +1,23 @@
+--- a/net/minecraft/world/level/block/FlowerPotBlock.java
++++ b/net/minecraft/world/level/block/FlowerPotBlock.java
+@@ -30,15 +_,12 @@
+ import net.minecraft.world.phys.shapes.VoxelShape;
+ 
+ public class FlowerPotBlock extends Block {
+-    public static final MapCodec<FlowerPotBlock> CODEC = RecordCodecBuilder.mapCodec(
+-        instance -> instance.group(
+-                BuiltInRegistries.BLOCK.byNameCodec().fieldOf("potted").forGetter(flowerPotBlock -> flowerPotBlock.potted), propertiesCodec()
+-            )
+-            .apply(instance, FlowerPotBlock::new)
+-    );
+-    private static final Map<Block, Block> POTTED_BY_CONTENT = Maps.newHashMap();
++    // Spout start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Initialize some references late
++    public static final MapCodec<FlowerPotBlock> CODEC = spout.common.moredatadriven.minecraft.type.BlockCodecs.flowerPotCodec(FlowerPotBlock::new);
++    public static final Map<Block, Block> POTTED_BY_CONTENT = Maps.newHashMap();
++    // Spout end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Initialize some references late
+     private static final VoxelShape SHAPE = Block.column(6.0, 0.0, 6.0);
+-    private final Block potted;
++    public Block potted; // Spout - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Initialize some references late
+ 
+     @Override
+     public MapCodec<FlowerPotBlock> codec() {

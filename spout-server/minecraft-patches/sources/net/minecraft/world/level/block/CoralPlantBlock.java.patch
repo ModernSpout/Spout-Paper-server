@@ -1,0 +1,18 @@
+--- a/net/minecraft/world/level/block/CoralPlantBlock.java
++++ b/net/minecraft/world/level/block/CoralPlantBlock.java
+@@ -17,11 +_,10 @@
+ import net.minecraft.world.phys.shapes.VoxelShape;
+ 
+ public class CoralPlantBlock extends BaseCoralPlantTypeBlock {
+-    public static final MapCodec<CoralPlantBlock> CODEC = RecordCodecBuilder.mapCodec(
+-        instance -> instance.group(CoralBlock.DEAD_CORAL_FIELD.forGetter(coralPlantBlock -> coralPlantBlock.deadBlock), propertiesCodec())
+-            .apply(instance, CoralPlantBlock::new)
+-    );
+-    private final Block deadBlock;
++    // Spout start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Initialize some references late
++    public static final MapCodec<CoralPlantBlock> CODEC = spout.common.moredatadriven.minecraft.type.BlockCodecs.coralPlantCodec(CoralPlantBlock::new);
++    public Block deadBlock;
++    // Spout end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Initialize some references late
+     private static final VoxelShape SHAPE = Block.column(12.0, 0.0, 15.0);
+ 
+     @Override

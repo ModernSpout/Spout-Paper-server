@@ -1,41 +1,26 @@
 --- a/net/minecraft/world/level/block/StairBlock.java
 +++ b/net/minecraft/world/level/block/StairBlock.java
-@@ -26,11 +_,10 @@
- import net.minecraft.world.phys.shapes.Shapes;
+@@ -27,10 +_,7 @@
  import net.minecraft.world.phys.shapes.VoxelShape;
  
--public class StairBlock extends Block implements SimpleWaterloggedBlock {
+ public class StairBlock extends Block implements SimpleWaterloggedBlock {
 -    public static final MapCodec<StairBlock> CODEC = RecordCodecBuilder.mapCodec(
 -        instance -> instance.group(BlockState.CODEC.fieldOf("base_state").forGetter(stairBlock -> stairBlock.baseState), propertiesCodec())
 -            .apply(instance, StairBlock::new)
 -    );
-+// Spout start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Initialize some references late
-+public class StairBlock extends Block implements SimpleWaterloggedBlock, spout.common.moredatadriven.minecraft.type.BaseStateStringBlock {
-+    public static final MapCodec<StairBlock> CODEC = spout.common.moredatadriven.minecraft.type.BlockCodecs.stairCodec(StairBlock::new);
-+    // Spout end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Initialize some references late
++    public static final MapCodec<StairBlock> CODEC = spout.common.moredatadriven.minecraft.type.BlockCodecs.stairCodec(StairBlock::new); // Spout - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Initialize some references late
      public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
      public static final EnumProperty<Half> HALF = BlockStateProperties.HALF;
      public static final EnumProperty<StairsShape> SHAPE = BlockStateProperties.STAIRS_SHAPE;
-@@ -44,8 +_,21 @@
+@@ -44,8 +_,10 @@
      private static final Map<Direction, VoxelShape> SHAPE_TOP_OUTER = Shapes.rotateHorizontal(SHAPE_OUTER, OctahedralGroup.INVERT_Y);
      private static final Map<Direction, VoxelShape> SHAPE_TOP_STRAIGHT = Shapes.rotateHorizontal(SHAPE_STRAIGHT, OctahedralGroup.INVERT_Y);
      private static final Map<Direction, VoxelShape> SHAPE_TOP_INNER = Shapes.rotateHorizontal(SHAPE_INNER, OctahedralGroup.INVERT_Y);
 -    private final Block base;
 -    protected final BlockState baseState;
 +    // Spout start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Initialize some references late
-+    public @org.jspecify.annotations.Nullable String spout$baseStateString;
 +    public Block base;
 +    public BlockState baseState;
-+
-+    @Override
-+    public @org.jspecify.annotations.Nullable String spout$getBaseStateString() {
-+        return this.spout$baseStateString;
-+    }
-+
-+    @Override
-+    public void spout$setBaseStateString(@org.jspecify.annotations.Nullable String baseStateString) {
-+        this.spout$baseStateString = baseStateString;
-+    }
 +    // Spout end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Initialize some references late
  
      @Override

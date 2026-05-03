@@ -18,6 +18,15 @@ import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BrushableBlock;
+import net.minecraft.world.level.block.CandleCakeBlock;
+import net.minecraft.world.level.block.ChorusFlowerBlock;
+import net.minecraft.world.level.block.ConcretePowderBlock;
+import net.minecraft.world.level.block.CoralBlock;
+import net.minecraft.world.level.block.CoralFanBlock;
+import net.minecraft.world.level.block.CoralPlantBlock;
+import net.minecraft.world.level.block.CoralWallFanBlock;
+import net.minecraft.world.level.block.FlowerPotBlock;
+import net.minecraft.world.level.block.InfestedBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.WeatheringCopper;
@@ -31,6 +40,7 @@ import spout.common.util.mojang.codec.EnumViaIdentifierCodec;
 import spout.common.util.mojang.codec.StaticFieldViaIdentifierCodec;
 import spout.server.paper.impl.moredatadriven.minecraft.type.ChunkSectionLayer;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  * Holder for codecs related to blocks.
@@ -388,6 +398,50 @@ public final class BlockCodecs {
         ).apply(instance, factory));
     }
 
+    public static <B extends Block> MapCodec<B> simpleCodecWithTemporaryBlockIdentifier(
+        App<RecordCodecBuilder.Mu<B>, Identifier> app,
+        BiFunction<Block, BlockBehaviour.Properties, B> factory,
+        Block placeholder
+    ) {
+        return simpleCodec(
+            app,
+            (temporaryValue, properties) -> {
+                B block = factory.apply(placeholder /* We replace it later */, properties);
+                TemporaryValuesForLazyValues.setBlockIdentifier(block, temporaryValue);
+                return block;
+            }
+        );
+    }
+
+    public static <B extends Block> MapCodec<B> simpleCodecWithTemporaryBlockIdentifier(
+        App<RecordCodecBuilder.Mu<B>, Identifier> app,
+        BiFunction<Block, BlockBehaviour.Properties, B> factory
+    ) {
+        return simpleCodecWithTemporaryBlockIdentifier(app, factory, Blocks.STONE);
+    }
+
+    public static <B extends Block> MapCodec<B> simpleCodecWithTemporaryBlockStateString(
+        App<RecordCodecBuilder.Mu<B>, String> app,
+        BiFunction<BlockState, BlockBehaviour.Properties, B> factory,
+        BlockState placeholder
+    ) {
+        return simpleCodec(
+            app,
+            (temporaryValue, properties) -> {
+                B block = factory.apply(placeholder /* We replace it later */, properties);
+                TemporaryValuesForLazyValues.setBlockString(block, temporaryValue);
+                return block;
+            }
+        );
+    }
+
+    public static <B extends Block> MapCodec<B> simpleCodecWithTemporaryBlockStateString(
+        App<RecordCodecBuilder.Mu<B>, String> app,
+        BiFunction<BlockState, BlockBehaviour.Properties, B> factory
+    ) {
+        return simpleCodecWithTemporaryBlockStateString(app, factory, Blocks.STONE.defaultBlockState());
+    }
+
     public static <B extends BrushableBlock> MapCodec<B> brushableCodec(
         Function4<Block, SoundEvent, SoundEvent, BlockBehaviour.Properties, B> factory
     ) {
@@ -395,11 +449,95 @@ public final class BlockCodecs {
             Identifier.CODEC.fieldOf("turns_into").forGetter(brushableBlock -> brushableBlock.turnsInto.keyInBlockRegistry),
             BuiltInRegistries.SOUND_EVENT.byNameCodec().fieldOf("brush_sound").forGetter(BrushableBlock::getBrushSound),
             BuiltInRegistries.SOUND_EVENT.byNameCodec().fieldOf("brush_completed_sound").forGetter(BrushableBlock::getBrushCompletedSound),
-            (turnsIntoIdentifier, brushSound, brushCompletedSound, properties) -> {
+            (temporaryValue, brushSound, brushCompletedSound, properties) -> {
                 B block = factory.apply(Blocks.STONE /* We replace it later */, brushSound, brushCompletedSound, properties);
-                block.spout$setTurnsIntoIdentifier(turnsIntoIdentifier);
+                TemporaryValuesForLazyValues.setBlockIdentifier(block, temporaryValue);
                 return block;
             }
+        );
+    }
+
+    public static <B extends CandleCakeBlock> MapCodec<B> candleCakeCodec(
+        BiFunction<Block, BlockBehaviour.Properties, B> factory
+    ) {
+        return simpleCodecWithTemporaryBlockIdentifier(
+            Identifier.CODEC.fieldOf("candle").forGetter(candleCakeBlock -> candleCakeBlock.candleBlock.keyInBlockRegistry),
+            factory,
+            Blocks.WHITE_CANDLE
+        );
+    }
+
+    public static <B extends ChorusFlowerBlock> MapCodec<B> chorusFlowerCodec(
+        BiFunction<Block, BlockBehaviour.Properties, B> factory
+    ) {
+        return simpleCodecWithTemporaryBlockIdentifier(
+            Identifier.CODEC.fieldOf("plant").forGetter(chorusFlowerBlock -> chorusFlowerBlock.plant.keyInBlockRegistry),
+            factory
+        );
+    }
+
+    public static <B extends ConcretePowderBlock> MapCodec<B> concretePowderCodec(
+        BiFunction<Block, BlockBehaviour.Properties, B> factory
+    ) {
+        return simpleCodecWithTemporaryBlockIdentifier(
+            Identifier.CODEC.fieldOf("concrete").forGetter(concretePowderBlock -> concretePowderBlock.concrete.keyInBlockRegistry),
+            factory
+        );
+    }
+
+    private static MapCodec<Identifier> coralDeadBlockAppCodec() {
+        return Identifier.CODEC.fieldOf("dead");
+    }
+
+    public static <B extends Block> MapCodec<B> abstractCoralCodec(
+        Function<B, Block> deadBlockGetter,
+        BiFunction<Block, BlockBehaviour.Properties, B> factory
+    ) {
+        return simpleCodecWithTemporaryBlockIdentifier(
+            coralDeadBlockAppCodec().forGetter(block -> deadBlockGetter.apply(block).keyInBlockRegistry),
+            factory
+        );
+    }
+
+    public static <B extends CoralBlock> MapCodec<B> coralCodec(
+        BiFunction<Block, BlockBehaviour.Properties, B> factory
+    ) {
+        return abstractCoralCodec(coralBlock -> coralBlock.deadBlock, factory);
+    }
+
+    public static <B extends CoralFanBlock> MapCodec<B> coralFanCodec(
+        BiFunction<Block, BlockBehaviour.Properties, B> factory
+    ) {
+        return abstractCoralCodec(coralFanBlock -> coralFanBlock.deadBlock, factory);
+    }
+
+    public static <B extends CoralPlantBlock> MapCodec<B> coralPlantCodec(
+        BiFunction<Block, BlockBehaviour.Properties, B> factory
+    ) {
+        return abstractCoralCodec(coralPlantBlock -> coralPlantBlock.deadBlock, factory);
+    }
+
+    public static <B extends CoralWallFanBlock> MapCodec<B> coralWallFanCodec(
+        BiFunction<Block, BlockBehaviour.Properties, B> factory
+    ) {
+        return abstractCoralCodec(coralWallFanBlock -> coralWallFanBlock.deadBlock, factory);
+    }
+
+    public static <B extends FlowerPotBlock> MapCodec<B> flowerPotCodec(
+        BiFunction<Block, BlockBehaviour.Properties, B> factory
+    ) {
+        return simpleCodecWithTemporaryBlockIdentifier(
+            Identifier.CODEC.fieldOf("potted").forGetter(flowerPotBlock -> flowerPotBlock.potted.keyInBlockRegistry),
+            factory
+        );
+    }
+
+    public static <B extends InfestedBlock> MapCodec<B> infestedCodec(
+        BiFunction<Block, BlockBehaviour.Properties, B> factory
+    ) {
+        return simpleCodecWithTemporaryBlockIdentifier(
+            Identifier.CODEC.fieldOf("host").forGetter(infestedBlock -> infestedBlock.hostBlock.keyInBlockRegistry),
+            factory
         );
     }
 
@@ -410,13 +548,9 @@ public final class BlockCodecs {
     public static <B extends StairBlock> MapCodec<B> stairCodec(
         BiFunction<BlockState, BlockBehaviour.Properties, B> factory
     ) {
-        return simpleCodec(
+        return simpleCodecWithTemporaryBlockStateString(
             stairBaseStateApp(),
-            (baseStateString, properties) -> {
-                B block = factory.apply(Blocks.STONE.defaultBlockState() /* We replace it later */, properties);
-                block.spout$setBaseStateString(baseStateString);
-                return block;
-            }
+            factory
         );
     }
 
@@ -426,9 +560,9 @@ public final class BlockCodecs {
         return simpleCodec(
             WeatheringCopper.WeatherState.CODEC.fieldOf("weathering_state").forGetter(WeatheringCopperStairBlock::getAge),
             stairBaseStateApp(),
-            (weatherState, baseStateString, properties) -> {
+            (weatherState, temporaryValue, properties) -> {
                 B block = factory.apply(weatherState, Blocks.STONE.defaultBlockState() /* We replace it later */, properties);
-                block.spout$setBaseStateString(baseStateString);
+                TemporaryValuesForLazyValues.setBlockString(block, temporaryValue);
                 return block;
             }
         );
